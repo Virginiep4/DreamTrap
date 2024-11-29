@@ -4,7 +4,7 @@ public class Game implements Runnable {
 	private Window window;
 	private Screen screen;
 	private Thread gameThread; // is used to handle the game loop
-	private final int fpsLimit = 60;
+	private final int FPS_LIMIT = 60;
 	
 	public Game() {
 		screen = new Screen();
@@ -29,7 +29,7 @@ public class Game implements Runnable {
 	 */
 	@Override
 	public void run() {
-		double timePerFrame = 1000000000.0 / fpsLimit;
+		double timePerFrame = 1000000000.0 / FPS_LIMIT;
 		long currentFrameStart = System.nanoTime();
 		long crtTime = System.nanoTime();
 		
