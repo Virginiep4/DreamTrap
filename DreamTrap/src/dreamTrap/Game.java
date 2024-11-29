@@ -13,14 +13,23 @@ public class Game implements Runnable {
 		startGameLoop();
 	}
 	
+	/**
+	 * The function create a Thread that will handle the game loop
+	 */
 	private void startGameLoop() {
 		gameThread = new Thread(this);
 		gameThread.start(); // calls run method
 	}
-
+	
+	/**
+	 * this function is called by Thread.start() and repaint the screen
+	 * the amount of time defined by fps_limit if the program is fast enough
+	 * 
+	 * timePerFrame is the duration of a frame in nanosecond
+	 */
 	@Override
 	public void run() {
-		double timePerFrame = 1000000000.0 / fpsLimit; // duration of a frame in nanosecond
+		double timePerFrame = 1000000000.0 / fpsLimit;
 		long currentFrameStart = System.nanoTime();
 		long crtTime = System.nanoTime();
 		

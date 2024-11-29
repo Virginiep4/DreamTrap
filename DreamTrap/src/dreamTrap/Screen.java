@@ -14,68 +14,116 @@ import inputs.KeyboardInputs;
 public class Screen extends JPanel {
 	private int posX = 0;
 	private int posY = 0;
-	private BufferedImage character;
-	
-	public int getPosX() {
-		return posX;
-	}
-	public void setPosX(int x) {
-		posX = x;
-	}
-	public int getPosY() {
-		return posY;
-	}
-	public void setPosY(int y) {
-		posY = y;
-	}
-	
+	private BufferedImage character[];
+	// determines where we change, which img is displayed and how fast to change the
+	// animations
+	private int aniTick, aniIndex = 0, aniSpeed = 15; // aniSpeed = changes per second SO need to be change according to
+														// fps
+	private boolean jumping = false; // true if the character is jumping
+	private int jumpingPhase = 0;
+
 	public Screen() {
-		importImg();
-		
+		importCharac();
+
 		setScreenSize();
 		addKeyListener(new KeyboardInputs(this));
 	}
-	
-	private void importImg() {
-		InputStream is = getClass().getResourceAsStream("/powder.png");
-		
-		try {
-			character = ImageIO.read(is);
-			is.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+
 	/**
-	* The function that will allow to draw on the created screen
-	* It is never called on the code because it is automatically done
-	*
-	* @param g  you don't have to care about this argument because this is 
-	* 			created by the extensions used
-	*/
+	 * The function that will allow to draw on the created screen It is never called
+	 * on the code because it is automatically done
+	 *
+	 * @param g you don't have to care about this argument because this is created
+	 *          by the extensions used
+	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g); // clean and allow to draw on the screen
-		
+
+		updateCharacAnimationTick();
+
 		// could be optimized by loading all sprite on same image and use getSubimage()
-		g.drawImage(character, 150 + posX, 600 + posY, null);
+		g.drawImage(character[aniIndex], 150 + posX, 600 + posY, null);
 	}
-	
+
+	/**
+	 * Puts all the frame of the basic character animation in character
+	 */
+	private void importCharac() {
+		character = new BufferedImage[2];
+		character[0] = importImg("/powder.png");
+		character[1] = importImg("/powderPlaned.png");
+	}
+
+	/**
+	 * Load an image on stream and return it if is gotten
+	 *
+	 * @param path is the path of the image to load
+	 */
+	private BufferedImage importImg(String path) {
+		InputStream is = getClass().getResourceAsStream(path);
+
+		try {
+			BufferedImage img = ImageIO.read(is);
+			is.close();
+			return img;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Where the screen size is determined : (1280x720) or (1920x1080)
+	 */
 	private void setScreenSize() {
 		Dimension size = new Dimension(1280, 720); // Screen resolution
 		setPreferredSize(size);
 	}
+
+	/**
+	 * Where the animation of the character are handled
+	 */
+	public void updateCharacAnimationTick() {
+		aniTick++;
+		if (aniTick >= aniSpeed) {
+			// two cases : character is jumping or basic animation
+			if (!jumping) {
+				aniIndex = ++aniIndex % character.length; // Iterates through all the images in screen.character
+				aniTick = 0;
+			} else {
+				// 16 phases for jumping : 8 going up and 8 going down 
+				// this will probably change to make the jump more smooth
+				if (jumpingPhase < 8) {
+					jumpingPhase++;
+					yMovement(-12);
+				} else if (jumpingPhase == 16) {
+					jumpingPhase = 0;
+					jumping = false;
+				} else {
+					jumpingPhase++;
+					yMovement(12);
+				}
+			}
+		}
+	}
 	
+	/**
+	 * Make the character move
+	 *
+	 * @param move is the amount of pixels that move will be done and the sign determine the direction
+	 */
 	public void xMovement(int move) {
 		posX += move;
 	}
-	
+
 	public void yMovement(int move) {
 		posY += move;
 	}
-	
-	public void jump() throws InterruptedException {
-		yMovement(-20);
-		Thread.sleep(100);
-		yMovement(20);
+
+	/**
+	 * Allow to enter the jumping animation in updateCharacAnimationTick()
+	 */
+	public void jump() {
+		jumping = true;
 	}
 }

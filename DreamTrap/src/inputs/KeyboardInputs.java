@@ -15,17 +15,18 @@ public class KeyboardInputs implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
-
+	
+	/**
+	 * Handle the Keys pressed
+	 *
+	 * @param e is the KeyEvent detected in the window that have the focus
+	 */
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// whenever a key is pressed we check if it does something for our game
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_SPACE:
-			try {
-				screen.jump();
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
+			screen.jump();
 			break;
 		case KeyEvent.VK_D:
 			screen.xMovement(10);
