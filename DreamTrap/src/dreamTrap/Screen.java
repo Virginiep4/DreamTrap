@@ -12,24 +12,29 @@ import javax.swing.JPanel;
 import inputs.KeyboardInputs;
 
 public class Screen extends JPanel {
-	private int posX = 0;
-	private int posY = 0;
-	
+	private double posX = 0;
+	private double posY = 0;
+
 	private BufferedImage[][] character;
 	private int currentAnimation = 0;
-	
+
 	// determines where we change, which img is displayed and how fast to change the
 	// animations
-	private int aniTick, aniIndex = 0, aniSpeed = 15; // aniSpeed = changes per second SO need to be change according to
-														// fps
+	private int aniTick, aniIndex = 0, aniSpeed = 30; // aniSpeed = amount of updates per changes
 	private boolean jumping = false; // true if the character is jumping
 	private int jumpingPhase = 0;
+	private final int MAX_JUMP_PHASE = 66;
+	private double parablePos = -1; // makes the jump parabolic
 
 	public Screen() {
 		importCharac();
 
 		setScreenSize();
 		addKeyListener(new KeyboardInputs(this));
+	}
+
+	public void updateGame() {
+		updateCharacAnimationTick();
 	}
 
 	/**
@@ -42,10 +47,8 @@ public class Screen extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g); // clean and allow to draw on the screen
 
-		updateCharacAnimationTick();
-
 		// could be optimized by loading all sprite on same image and use getSubimage()
-		g.drawImage(character[currentAnimation][aniIndex], 150 + posX, 600 + posY, null);
+		g.drawImage(character[currentAnimation][aniIndex], 150 + (int) posX, 600 + (int) posY, null);
 	}
 
 	/**
@@ -53,11 +56,11 @@ public class Screen extends JPanel {
 	 */
 	private void importCharac() {
 		character = new BufferedImage[2][]; // amount of different animations
-		
+
 		character[0] = new BufferedImage[2];
 		character[0][0] = importImg("/powder.png");
 		character[0][1] = importImg("/powderPlaned.png");
-		
+
 		character[1] = new BufferedImage[2];
 		character[1][0] = importImg("/powderLeft.png");
 		character[1][1] = importImg("/powderPlanedLeft.png");
@@ -90,6 +93,39 @@ public class Screen extends JPanel {
 	}
 
 	/**
+	 * Where the jump of the character is handled
+	 */
+	public void jumpAnimation() {
+		// 16 phases for jumping : 8 going up and 8 going down
+		// this will probably change to make the jump more smooth
+
+		// ascending phase
+		if ((jumpingPhase < (MAX_JUMP_PHASE / 2)) && (jumpingPhase % 1 == 0)) { // mod 3 to have more delayed updates
+			jumpingPhase++;
+			yMovement(-(parablePos * parablePos) * 20); // 
+			parablePos += 2 / MAX_JUMP_PHASE;
+		}
+
+		else if (jumpingPhase == MAX_JUMP_PHASE) { // jump is over
+			jumpingPhase = 0;
+			parablePos = -1;
+			jumping = false;
+		}
+
+		// descending phase
+		else if (jumpingPhase % 1 == 0) {
+			jumpingPhase++;
+			yMovement((parablePos * parablePos) * 20);
+			parablePos += 2 / MAX_JUMP_PHASE;
+		}
+
+		else {
+			jumpingPhase++;
+			parablePos += 2 / MAX_JUMP_PHASE;
+		}
+	}
+
+	/**
 	 * Where the animation of the character are handled
 	 */
 	public void updateCharacAnimationTick() {
@@ -100,28 +136,18 @@ public class Screen extends JPanel {
 				aniIndex = ++aniIndex % character.length; // Iterates through all the images in screen.character
 				aniTick = 0;
 			} else {
-				// 16 phases for jumping : 8 going up and 8 going down 
-				// this will probably change to make the jump more smooth
-				if (jumpingPhase < 11) {
-					jumpingPhase++;
-					yMovement(-25);
-				} else if (jumpingPhase == 22) {
-					jumpingPhase = 0;
-					jumping = false;
-				} else {
-					jumpingPhase++;
-					yMovement(25);
-				}
+				jumpAnimation();
 			}
 		}
 	}
-	
+
 	/**
 	 * Make the character move
 	 *
-	 * @param move is the amount of pixels that move will be done and the sign determine the direction
+	 * @param move is the amount of pixels that move will be done and the sign
+	 *             determine the direction
 	 */
-	public void xMovement(int move) {
+	public void xMovement(double move) {
 		posX += move;
 		if (move < 0)
 			currentAnimation = 1;
@@ -130,7 +156,7 @@ public class Screen extends JPanel {
 
 	}
 
-	public void yMovement(int move) {
+	public void yMovement(double move) {
 		posY += move;
 	}
 
