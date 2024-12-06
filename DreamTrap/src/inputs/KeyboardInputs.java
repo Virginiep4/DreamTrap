@@ -15,7 +15,7 @@ public class KeyboardInputs implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
-	
+
 	/**
 	 * Handle the Keys pressed
 	 *
@@ -29,16 +29,24 @@ public class KeyboardInputs implements KeyListener {
 			screen.jump();
 			break;
 		case KeyEvent.VK_D:
-			screen.xMovement(10);
+			screen.right(true);
 			break;
 		case KeyEvent.VK_Q:
-			screen.xMovement(-10);
+			screen.left(true);
 			break;
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		// when a key is released it's the end of movement
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_D:
+			screen.right(false);
+			break;
+		case KeyEvent.VK_Q:
+			screen.left(false);
+			break;
+		}
 	}
-
 }

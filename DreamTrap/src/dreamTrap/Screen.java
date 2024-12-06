@@ -18,13 +18,16 @@ public class Screen extends JPanel {
 	private BufferedImage[][] character;
 	private int currentAnimation = 0;
 
-	// determines where we change, which img is displayed and how fast to change the
-	// animations
-	private int aniTick, aniIndex = 0, aniSpeed = 30; // aniSpeed = amount of updates per changes
+	// determines where we change, which img is displayed and how fast to change the animations
+	// walk speed should be a divisor of aniSpeed to have consistent movements
+	private int aniTick, aniIndex = 0, aniSpeed = 30, walkSpeed = 5; // aniSpeed = amount of updates per changes
 	private boolean jumping = false; // true if the character is jumping
 	private int jumpingPhase = 0;
 	private final int MAX_JUMP_PHASE = 66;
 	private double parablePos = -1; // makes the jump parabolic
+
+	private boolean movingRight = false;
+	private boolean movingLeft = false;
 
 	public Screen() {
 		importCharac();
@@ -100,9 +103,9 @@ public class Screen extends JPanel {
 		// this will probably change to make the jump more smooth
 
 		// ascending phase
-		if ((jumpingPhase < (MAX_JUMP_PHASE / 2)) && (jumpingPhase % 1 == 0)) { // mod 3 to have more delayed updates
+		if ((jumpingPhase < (MAX_JUMP_PHASE / 2)) && (jumpingPhase % 3 == 0)) { // mod 3 to have more delayed updates
 			jumpingPhase++;
-			yMovement(-(parablePos * parablePos) * 20); // 
+			yMovement(-(parablePos * parablePos) * 20); //
 			parablePos += 2 / MAX_JUMP_PHASE;
 		}
 
@@ -113,7 +116,7 @@ public class Screen extends JPanel {
 		}
 
 		// descending phase
-		else if (jumpingPhase % 1 == 0) {
+		else if (jumpingPhase % 3 == 0) {
 			jumpingPhase++;
 			yMovement((parablePos * parablePos) * 20);
 			parablePos += 2 / MAX_JUMP_PHASE;
@@ -137,6 +140,15 @@ public class Screen extends JPanel {
 				aniTick = 0;
 			} else {
 				jumpAnimation();
+			}
+		}
+
+		if (aniTick % walkSpeed == 0) {
+			if (movingRight) {
+				xMovement(20);
+			}
+			if (movingLeft) {
+				xMovement(-20);
 			}
 		}
 	}
@@ -165,5 +177,13 @@ public class Screen extends JPanel {
 	 */
 	public void jump() {
 		jumping = true;
+	}
+
+	public void right(boolean b) {
+		movingRight = b;
+	}
+
+	public void left(boolean b) {
+		movingLeft = b;
 	}
 }
