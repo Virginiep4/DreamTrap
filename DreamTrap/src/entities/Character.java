@@ -7,9 +7,8 @@ public class Character extends Entities {
 	private int currentAnimation = 0;
 
 	// aniTick is current tick, aniIndex is the current sub-animation, aniSpeed is
-	// amount of Game.updates(ticks) before changing animation, walkSpeed is amount
-	// of tick between movings IT SHOULD BE A DIVISOR OF aniSpeed !!!
-	private int aniTick, aniIndex = 0, aniSpeed = 30, walkSpeed = 5;
+	// amount of Game.updates(ticks) before changing animation
+	private int aniTick, aniIndex = 0, aniSpeed = 30;
 	private boolean jumping = false; // true if the character is jumping
 	private int jumpingPhase = 0;
 	private final int MAX_JUMP_PHASE = 66;
@@ -27,8 +26,12 @@ public class Character extends Entities {
 	public BufferedImage[][] getCharacter() {
 		return character;
 	}
+
 	public int getCurrentAnimation() {
 		return currentAnimation;
+	}
+	public int getAniIndex() {
+		return aniIndex;
 	}
 
 	/**
@@ -61,13 +64,11 @@ public class Character extends Entities {
 			}
 		}
 
-		if (aniTick % walkSpeed == 0) {
-			if (movingRight) {
-				xMovement(20);
-			}
-			if (movingLeft) {
-				xMovement(-20);
-			}
+		if (movingRight) {
+			xMovement(5);
+		}
+		if (movingLeft) {
+			xMovement(-5);
 		}
 	}
 

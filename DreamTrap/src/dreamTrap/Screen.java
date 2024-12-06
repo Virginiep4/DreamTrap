@@ -37,7 +37,7 @@ public class Screen extends JPanel {
 		super.paintComponent(g); // clean and allow to draw on the screen
 
 		// could be optimized by loading all sprite on same image and use getSubimage()
-		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][0], 150 + (int) character.getPosX(), 600 + (int) character.getPosY(), null);
+		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()], 150 + (int) character.getPosX(), 600 + (int) character.getPosY(), null);
 	}
 
 	/**
