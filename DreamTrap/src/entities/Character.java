@@ -10,9 +10,9 @@ public class Character extends Entities {
 	// amount of Game.updates(ticks) before changing animation
 	private int aniTick, aniIndex = 0, aniSpeed = 30;
 	private boolean jumping = false; // true if the character is jumping
-	private int jumpingPhase = 0;
+	private int jumpingPhase = -1;
 	private final int MAX_JUMP_PHASE = 66;
-	private double parablePos = -1; // makes the jump parabolic
+	private double parablePos = -1; // parable position between -1 and 1
 	private boolean movingRight = false;
 	private boolean movingLeft = false;
 
@@ -22,11 +22,11 @@ public class Character extends Entities {
 	public Character() {
 		super();
 	}
-
+	
+	// getters
 	public BufferedImage[][] getCharacter() {
 		return character;
 	}
-
 	public int getCurrentAnimation() {
 		return currentAnimation;
 	}
@@ -56,7 +56,7 @@ public class Character extends Entities {
 		aniTick++;
 		if (aniTick >= aniSpeed) {
 			// two cases : character is jumping or basic animation
-			if (!jumping) {
+			if (!jumping && (jumpingPhase == -1)) {
 				aniIndex = ++aniIndex % character.length; // Iterates through all the images in screen.character
 				aniTick = 0;
 			} else {
@@ -76,29 +76,27 @@ public class Character extends Entities {
 	 * Where the jump of the character is handled
 	 */
 	public void jumpAnimation() {
-		// 16 phases for jumping : 8 going up and 8 going down
-		// this will probably change to make the jump more smooth
-
-		// ascending phase
+		// ascending phase for the first half of jump phases
 		if ((jumpingPhase < (MAX_JUMP_PHASE / 2)) && (jumpingPhase % 3 == 0)) { // mod 3 to have more delayed updates
 			jumpingPhase++;
 			posY -= parablePos * parablePos * 20; //
 			parablePos += 2 / MAX_JUMP_PHASE;
 		}
-
+		
+		// last phase : jump is over
 		else if (jumpingPhase == MAX_JUMP_PHASE) { // jump is over
-			jumpingPhase = 0;
+			jumpingPhase = -1;
 			parablePos = -1;
-			jumping = false;
 		}
 
-		// descending phase
+		// descending phase 
 		else if (jumpingPhase % 3 == 0) {
 			jumpingPhase++;
 			posY += parablePos * parablePos * 20;
 			parablePos += 2 / MAX_JUMP_PHASE;
 		}
-
+		
+		// when jumpingPhase is not equal to 0 with mod 3
 		else {
 			jumpingPhase++;
 			parablePos += 2 / MAX_JUMP_PHASE;
@@ -122,8 +120,10 @@ public class Character extends Entities {
 	/**
 	 * Allow to enter the jumping animation in updateCharacAnimationTick()
 	 */
-	public void jump() {
-		jumping = true;
+	public void jump(boolean b) {
+		jumping = b;
+		if (b && jumpingPhase == -1)
+			jumpingPhase++;
 	}
 
 	/**

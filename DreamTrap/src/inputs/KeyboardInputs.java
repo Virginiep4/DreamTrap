@@ -27,7 +27,7 @@ public class KeyboardInputs implements KeyListener {
 		// whenever a key is pressed we check if it does something for our game
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_SPACE:
-			character.jump();
+			character.jump(true);
 			break;
 		case KeyEvent.VK_D:
 			character.right(true);
@@ -42,6 +42,9 @@ public class KeyboardInputs implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		// when a key is released it's the end of movement
 		switch (e.getKeyCode()) {
+		case KeyEvent.VK_SPACE:
+			character.jump(false);
+			break;
 		case KeyEvent.VK_D:
 			character.right(false);
 			break;
