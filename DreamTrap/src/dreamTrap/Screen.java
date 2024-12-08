@@ -28,7 +28,6 @@ public class Screen extends JPanel {
 
 	public void updateGame() {
 		character.update();
-		levelManager.update();
 	}
 
 	public Character getCharacter() {
