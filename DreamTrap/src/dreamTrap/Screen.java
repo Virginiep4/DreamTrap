@@ -22,7 +22,7 @@ public class Screen extends JPanel {
 	public Screen() {
 		setScreenSize();
 		character = new Character();
-		levelManager = new LevelManager();
+		levelManager = new LevelManager(this);
 		addKeyListener(new KeyboardInputs(this));
 	}
 
@@ -48,7 +48,7 @@ public class Screen extends JPanel {
 		levelManager.draw(g);
 		// could be optimized by loading all sprite on same image and use getSubimage()
 		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
-				150 + (int) character.getPosX(), (BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE + (int) character.getPosY(), null);
+				150, (BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE + character.getPosY() - 8, null);
 	}
 
 	/**

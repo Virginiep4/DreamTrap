@@ -1,20 +1,23 @@
 package entities;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import static utils.ImageImporter.importImg;
 
 public class Character extends Entities {
 	private BufferedImage[][] character;
 	private int currentAnimation = 0;
+	
+	private Rectangle hitbox;
 
 	// aniTick is current tick, aniIndex is the current sub-animation, aniSpeed is
 	// amount of Game.updates(ticks) before changing animation
 	private int aniTick, aniIndex = 0, aniSpeed = 30;
 	private boolean jumping = false; // true if the character is jumping
 	private int jumpingPhase = -1;
-	private final static int MAX_JUMP_PHASE = 66;
-	private final static int JUMP_DELAY = 3; // how many phase before changing position
-	private final static int JUMP_HEIGHT_FACTOR = 25; // makes character jumps higher
+	private int MAX_JUMP_PHASE = 103;
+	private final static int JUMP_DELAY = 2; // how many phase before changing position
+	private final static int JUMP_HEIGHT_FACTOR = 15; // makes character jumps higher
 	private double parablePos = -1; // parable position between -1 and 1
 	private boolean movingRight = false;
 	private boolean movingLeft = false;
@@ -26,7 +29,7 @@ public class Character extends Entities {
 		super();
 	}
 	
-	// getters
+	// getters + setters
 	public BufferedImage[][] getCharacter() {
 		return character;
 	}
@@ -68,10 +71,12 @@ public class Character extends Entities {
 		}
 
 		if (movingRight) {
-			xMovement(4);
+			// i hope we never reach  2048 * 64...
+			xMovement(2);
 		}
 		if (movingLeft) {
-			xMovement(-4);
+			if (posX > 63) // prevent outOfBounds
+				xMovement(-2);
 		}
 	}
 
@@ -90,6 +95,7 @@ public class Character extends Entities {
 		else if (jumpingPhase == MAX_JUMP_PHASE) { // jump is over
 			jumpingPhase = -1;
 			parablePos = -1;
+			MAX_JUMP_PHASE = 103;
 		}
 
 		// descending phase 
@@ -127,6 +133,11 @@ public class Character extends Entities {
 		jumping = b;
 		if (b && jumpingPhase == -1)
 			jumpingPhase++;
+	}
+	
+	public void releaseJump() {
+		if (jumpingPhase * 2 < 51)
+			MAX_JUMP_PHASE = 51;
 	}
 
 	/**

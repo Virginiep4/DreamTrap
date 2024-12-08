@@ -5,12 +5,13 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import dreamTrap.Screen;
+import entities.Character;
 
 import static utils.ImageImporter.importImg;
 
 public class LevelManager {
 	private Character character;
-	
+
 	private final static int SPRITES_WIDTH = 5; // block width of the image for blocsSpr
 	private final static int SPRITES_HEIGHT = 2;
 	private BufferedImage[] blockSprites;
@@ -18,7 +19,8 @@ public class LevelManager {
 	private int levelHeight;
 	private int levelWidth;
 
-	public LevelManager() {
+	public LevelManager(Screen screen) {
+		character = screen.getCharacter();
 		spritesInitializer();
 		levelInitializer();
 	}
@@ -51,17 +53,18 @@ public class LevelManager {
 	}
 
 	public void update() {
-
+		
 	}
 
 	public void draw(Graphics g) {
+		int x = character.getPosX() / 64;
 		for (int i = levelHeight - 1; i > levelHeight - Screen.BLOCK_PER_HEIGHT - 2; i--)
 			for (int j = 0; j < Screen.BLOCK_PER_WIDTH + 2; j++) {
-				int block = level[i][j];
+				int block = level[i][j + x];
 				if (block != -1) {
-					g.drawImage(blockSprites[block], j * Screen.BLOCK_SIZE,
-							(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
-							Screen.BLOCK_SIZE, null);
+					g.drawImage(blockSprites[block], j * Screen.BLOCK_SIZE - (character.getPosX() % 64),
+							(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE,
+							Screen.BLOCK_SIZE, Screen.BLOCK_SIZE, null);
 				}
 			}
 	}

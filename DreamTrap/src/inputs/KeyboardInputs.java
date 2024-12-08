@@ -44,6 +44,7 @@ public class KeyboardInputs implements KeyListener {
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_SPACE:
 			character.jump(false);
+			character.releaseJump();
 			break;
 		case KeyEvent.VK_D:
 			character.right(false);
