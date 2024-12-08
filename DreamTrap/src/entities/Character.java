@@ -1,6 +1,7 @@
 package entities;
 
 import java.awt.image.BufferedImage;
+import static utils.ImageImporter.importImg;
 
 public class Character extends Entities {
 	private BufferedImage[][] character;
@@ -11,13 +12,15 @@ public class Character extends Entities {
 	private int aniTick, aniIndex = 0, aniSpeed = 30;
 	private boolean jumping = false; // true if the character is jumping
 	private int jumpingPhase = -1;
-	private final int MAX_JUMP_PHASE = 66;
+	private final static int MAX_JUMP_PHASE = 66;
+	private final static int JUMP_DELAY = 3; // how many phase before changing position
+	private final static int JUMP_HEIGHT_FACTOR = 25; // makes character jumps higher
 	private double parablePos = -1; // parable position between -1 and 1
 	private boolean movingRight = false;
 	private boolean movingLeft = false;
 
-	private final int RIGHT = 0;
-	private final int LEFT = 1;
+	private final static int RIGHT = 0;
+	private final static int LEFT = 1;
 
 	public Character() {
 		super();
@@ -52,7 +55,7 @@ public class Character extends Entities {
 	/**
 	 * Where the animation of the character are handled
 	 */
-	public void updateCharacAnimationTick() {
+	public void update() {
 		aniTick++;
 		if (aniTick >= aniSpeed) {
 			// two cases : character is jumping or basic animation
@@ -65,10 +68,10 @@ public class Character extends Entities {
 		}
 
 		if (movingRight) {
-			xMovement(5);
+			xMovement(4);
 		}
 		if (movingLeft) {
-			xMovement(-5);
+			xMovement(-4);
 		}
 	}
 
@@ -77,10 +80,10 @@ public class Character extends Entities {
 	 */
 	public void jumpAnimation() {
 		// ascending phase for the first half of jump phases
-		if ((jumpingPhase < (MAX_JUMP_PHASE / 2)) && (jumpingPhase % 3 == 0)) { // mod 3 to have more delayed updates
+		if ((jumpingPhase < (MAX_JUMP_PHASE / 2)) && (jumpingPhase % JUMP_DELAY == 0)) {
 			jumpingPhase++;
-			posY -= parablePos * parablePos * 20; //
-			parablePos += 2 / MAX_JUMP_PHASE;
+			posY -= parablePos * parablePos * JUMP_HEIGHT_FACTOR;
+			parablePos += 2 / MAX_JUMP_PHASE; // 2 because range between -1 and 1
 		}
 		
 		// last phase : jump is over
@@ -90,13 +93,13 @@ public class Character extends Entities {
 		}
 
 		// descending phase 
-		else if (jumpingPhase % 3 == 0) {
+		else if (jumpingPhase % JUMP_DELAY == 0) {
 			jumpingPhase++;
-			posY += parablePos * parablePos * 20;
-			parablePos += 2 / MAX_JUMP_PHASE;
+			posY += parablePos * parablePos * JUMP_HEIGHT_FACTOR;
+			parablePos += 2 / MAX_JUMP_PHASE; // 2 because range between -1 and 1
 		}
 		
-		// when jumpingPhase is not equal to 0 with mod 3
+		// when jumpingPhase is not equal to 0 with mod JUMP_DELAY
 		else {
 			jumpingPhase++;
 			parablePos += 2 / MAX_JUMP_PHASE;

@@ -6,22 +6,31 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import inputs.KeyboardInputs;
-
+import level.LevelManager;
 import entities.Character;
 
 public class Screen extends JPanel {
+	// screen size parameters
+	public final static int BLOCK_SIZE = 64;
+	public final static int BLOCK_PER_WIDTH = 20;
+	public final static int BLOCK_PER_HEIGHT = 11;
+	private final static float SCALE = 1f;
+
 	private Character character;
+	private LevelManager levelManager;
 
 	public Screen() {
 		setScreenSize();
 		character = new Character();
+		levelManager = new LevelManager();
 		addKeyListener(new KeyboardInputs(this));
 	}
 
 	public void updateGame() {
-		character.updateCharacAnimationTick();
+		character.update();
+		levelManager.update();
 	}
-	
+
 	public Character getCharacter() {
 		return character;
 	}
@@ -35,16 +44,19 @@ public class Screen extends JPanel {
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g); // clean and allow to draw on the screen
-
+		
+		levelManager.draw(g);
 		// could be optimized by loading all sprite on same image and use getSubimage()
-		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()], 150 + (int) character.getPosX(), 600 + (int) character.getPosY(), null);
+		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
+				150 + (int) character.getPosX(), (BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE + (int) character.getPosY(), null);
 	}
 
 	/**
-	 * Where the screen size is determined : (1280x720) or (1920x1080)
+	 * Where the screen size is determined
 	 */
 	private void setScreenSize() {
-		Dimension size = new Dimension(1280, 720); // Screen resolution
+		Dimension size = new Dimension((int) (BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE),
+				(int) (BLOCK_SIZE * BLOCK_PER_HEIGHT * SCALE)); // Screen resolution
 		setPreferredSize(size);
 	}
 }
