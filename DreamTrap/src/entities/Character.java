@@ -7,7 +7,7 @@ import static utils.ImageImporter.importImg;
 public class Character extends Entities {
 	private BufferedImage[][] character;
 	private int currentAnimation = 0;
-	
+
 	private Rectangle hitbox;
 
 	// aniTick is current tick, aniIndex is the current sub-animation, aniSpeed is

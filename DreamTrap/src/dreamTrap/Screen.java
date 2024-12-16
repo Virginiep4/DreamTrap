@@ -11,9 +11,9 @@ import entities.Character;
 
 public class Screen extends JPanel {
 	// screen size parameters
-	public final static int BLOCK_SIZE = 64;
-	public final static int BLOCK_PER_WIDTH = 20;
-	public final static int BLOCK_PER_HEIGHT = 11;
+	public final static int BLOCK_SIZE = 32;
+	public final static int BLOCK_PER_WIDTH = 40;
+	public final static int BLOCK_PER_HEIGHT = 22;
 	private final static float SCALE = 1f;
 
 	private Character character;
@@ -47,7 +47,7 @@ public class Screen extends JPanel {
 		levelManager.draw(g);
 		// could be optimized by loading all sprite on same image and use getSubimage()
 		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
-				150, (BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE + character.getPosY() - 8, null);
+				150, (BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE + character.getPosY() - 40, null);
 	}
 
 	/**
