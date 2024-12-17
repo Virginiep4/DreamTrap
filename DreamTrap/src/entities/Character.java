@@ -2,14 +2,18 @@ package entities;
 
 import java.awt.image.BufferedImage;
 
+import levels.Loadsave;
+
 public class Character extends Entities {
+	
+	
 	private BufferedImage[][] character;
 	private int currentAnimation = 0;
 
 	// aniTick is current tick, aniIndex is the current sub-animation, aniSpeed is
 	// amount of Game.updates(ticks) before changing animation, walkSpeed is amount
 	// of tick between movings IT SHOULD BE A DIVISOR OF aniSpeed !!!
-	private int aniTick, aniIndex = 0, aniSpeed = 30, walkSpeed = 5;
+	private int aniTick, aniIndex = 0, aniSpeed = 40, walkSpeed = 5; //animation speed egal 120 fps / 2 animations
 	private boolean jumping = false; // true if the character is jumping
 	private int jumpingPhase = 0;
 	private final int MAX_JUMP_PHASE = 66;
@@ -19,9 +23,35 @@ public class Character extends Entities {
 
 	private final int RIGHT = 0;
 	private final int LEFT = 1;
+	private String nom ="";
+	private int niv=0;
+	private int etoiles=0;
+	private int id;
+	
 
+	public Character(int id, String nom, int niveau,int etoiles) {
+		this.id=id;
+		this.nom =nom;
+		this.niv =niveau;
+		this.etoiles=etoiles;
+		
+	}
+	public Character( String nom, int niveau,int etoiles) {
+		
+		this.nom =nom;
+		this.niv =niveau;
+		this.etoiles=etoiles;
+		
+	}
 	public Character() {
 		super();
+		
+		
+	}
+	
+	public void update() {
+		updateCharacAnimationTick();
+		
 	}
 
 	public BufferedImage[][] getCharacter() {
@@ -38,12 +68,12 @@ public class Character extends Entities {
 		character = new BufferedImage[2][]; // amount of different animations
 
 		character[0] = new BufferedImage[2];
-		character[0][0] = importImg("/powder.png");
-		character[0][1] = importImg("/powderPlaned.png");
+		character[0][0] = Loadsave.importImg("/powder.png");
+		character[0][1] = Loadsave.importImg("/powderPlaned.png");
 
 		character[1] = new BufferedImage[2];
-		character[1][0] = importImg("/powderLeft.png");
-		character[1][1] = importImg("/powderPlanedLeft.png");
+		character[1][0] = Loadsave.importImg("/powderLeft.png");
+		character[1][1] = Loadsave.importImg("/powderPlanedLeft.png");
 	}
 
 	/**
@@ -81,7 +111,7 @@ public class Character extends Entities {
 		// ascending phase
 		if ((jumpingPhase < (MAX_JUMP_PHASE / 2)) && (jumpingPhase % 3 == 0)) { // mod 3 to have more delayed updates
 			jumpingPhase++;
-			posY -= parablePos * parablePos * 20; //
+			this.posY -= parablePos * parablePos * 20; //
 			parablePos += 2 / MAX_JUMP_PHASE;
 		}
 
@@ -94,7 +124,7 @@ public class Character extends Entities {
 		// descending phase
 		else if (jumpingPhase % 3 == 0) {
 			jumpingPhase++;
-			posY += parablePos * parablePos * 20;
+			this.posY += parablePos * parablePos * 20;
 			parablePos += 2 / MAX_JUMP_PHASE;
 		}
 
@@ -111,7 +141,7 @@ public class Character extends Entities {
 	 *             determine the direction
 	 */
 	public void xMovement(double move) {
-		posX += move;
+		this.posX += move;
 		if (move < 0)
 			currentAnimation = LEFT;
 		else
@@ -138,4 +168,28 @@ public class Character extends Entities {
 	public void left(boolean b) {
 		movingLeft = b;
 	}
+
+	public int getAniIndex() {
+		return aniIndex;
+	}
+	
+	public String getNom() {
+		return nom;
+	}
+	public int getNiv() {
+		return niv;
+	}
+	public int getEtoiles() {
+		return etoiles;
+	}
+	
+	public void setEtoiles(int etoiles) {
+		this.etoiles = etoiles;
+	}
+	public int getId() {
+		return id;
+	}
+	
+	
+	
 }

@@ -1,8 +1,9 @@
 package dreamTrap;
 
 import javax.swing.JFrame;
-
-public class Window {
+@SuppressWarnings("serial")
+public class Window extends JFrame {
+	
 	private JFrame jframe;
 	
 	public Window(Screen screen) {
@@ -11,7 +12,7 @@ public class Window {
 		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jframe.add(screen);
 		jframe.setResizable(false);
-		jframe.pack();
+		jframe.pack(); //choose the preferenced size that I  fix on Screen 
 		jframe.setVisible(true);
 	}
 

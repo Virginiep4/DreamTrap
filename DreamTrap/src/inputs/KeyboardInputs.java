@@ -23,6 +23,8 @@ public class KeyboardInputs implements KeyListener {
 	 * @param e is the KeyEvent detected in the window that have the focus
 	 */
 	@Override
+	
+	//we do expression lambda for manage consequence of keypressed in game vs shop ?
 	public void keyPressed(KeyEvent e) {
 		// whenever a key is pressed we check if it does something for our game
 		switch (e.getKeyCode()) {
@@ -35,7 +37,12 @@ public class KeyboardInputs implements KeyListener {
 		case KeyEvent.VK_Q:
 			character.left(true);
 			break;
+		case KeyEvent.VK_I:
+			// show interface shop
+			break;
 		}
+	
+	
 	}
 
 	@Override
