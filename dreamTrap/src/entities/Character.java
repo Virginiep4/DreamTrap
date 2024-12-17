@@ -16,7 +16,7 @@ public class Character extends Entities {
 	private double parablePos = -1; // makes the jump parabolic
 	private boolean movingRight = false;
 	private boolean movingLeft = false;
-	private static boolean clicking=false;
+	private static boolean clicking = false;
 
 	private final int RIGHT = 0;
 	private final int LEFT = 1;
@@ -25,11 +25,17 @@ public class Character extends Entities {
 		super();
 	}
 
+	// getters and setters
 	public BufferedImage[][] getCharacter() {
 		return character;
 	}
+
 	public int getCurrentAnimation() {
 		return currentAnimation;
+	}
+
+	public int getAniIndex() {
+		return aniIndex;
 	}
 
 	/**
@@ -39,12 +45,12 @@ public class Character extends Entities {
 		character = new BufferedImage[2][]; // amount of different animations
 
 		character[0] = new BufferedImage[2];
-		character[0][0] = importImg("/Powpow.png");
-		character[0][1] = importImg("/Powpow2.png");
+		character[0][0] = importImg("/Powder/Powpow.png");
+		character[0][1] = importImg("/Powder/Powpow2.png");
 
 		character[1] = new BufferedImage[2];
-		character[1][0] = importImg("/Left-Powpow.png");
-		character[1][1] = importImg("/Left-Powpow 2.png");
+		character[1][0] = importImg("/Powder/Left-Powpow.png");
+		character[1][1] = importImg("/Powder/Left-Powpow 2.png");
 	}
 
 	/**
@@ -125,18 +131,19 @@ public class Character extends Entities {
 	public void jump() {
 		jumping = true;
 	}
-	
+
 	public void click() {
 		clicking = true;
 	}
-	
+
 	public static boolean isClicked() {
 		return clicking;
 	}
-	
+
 	public static void setClicked(boolean b) {
-		clicking=b;
+		clicking = b;
 	}
+
 	/**
 	 * Allow to enter the right moving animation in updateCharacAnimationTick()
 	 */
@@ -150,8 +157,5 @@ public class Character extends Entities {
 	public void left(boolean b) {
 		movingLeft = b;
 	}
-	
-	public int getAniIndex() {
-		return aniIndex;
-	}
+
 }

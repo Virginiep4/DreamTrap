@@ -6,36 +6,38 @@ import java.awt.Graphics;
 import javax.swing.JPanel;
 
 import inputs.KeyboardInputs;
-
+import entities.Background;
 import entities.Character;
+import entities.Shop;
 
 public class Screen extends JPanel {
 	private Character character;
-	private entities.shop shop;
-	private entities.backgroundd backgroundd;
+	private Shop shop;
+	private entities.Background background;
+	
+	public static final int BLOCK_SIZE = 32;
+	public static final int BLOCK_PER_HEIGHT = 32;
+	public static final int BLOCK_PER_WIDTH = 32;
 
 	public Screen() {
 		setScreenSize();
 		character = new Character();
-		shop=new entities.shop();
-		backgroundd=new entities.backgroundd();
+		shop = new Shop(character);
+		background = new entities.Background();
 		addKeyListener(new KeyboardInputs(this));
 	}
 
 	public void updateGame() {
 		character.updateAnimationTick();
 		shop.updateAnimationTick();
-		backgroundd.updateAnimationTick();
+		background.updateAnimationTick();
 	}
 	
 	public Character getCharacter() {
 		return character;
 	}
-	public entities.shop getShop() {
+	public Shop getShop() {
 		return shop;
-	}
-	public entities.backgroundd getBackgroundd() {
-		return backgroundd;
 	}
 	
 
@@ -50,7 +52,7 @@ public class Screen extends JPanel {
 		super.paintComponent(g); // clean and allow to draw on the screen
 
 		// could be optimized by loading all sprite on same image and use getSubimage()
-		g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0 , 10 , null);
+		g.drawImage(background.getBackground()[Background.getCurrentAnimation()][background.getAniIndex()], 0 , 10 , null);
 		g.drawImage(shop.getShop()[shop.getCurrentAnimation()][shop.getAniIndex()], 500 , 339 , null);
 		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()], 150 + (int) character.getPosX(), 600 + (int) character.getPosY(), null);
 		

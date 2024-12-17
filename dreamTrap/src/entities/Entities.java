@@ -15,10 +15,10 @@ public abstract class Entities {
 	}
 
 	
-	public static int getPosX() {
+	public int getPosX() {
 		return posX;
 	}
-	public static int getPosY() {
+	public int getPosY() {
 		return posY;
 	}
 	
