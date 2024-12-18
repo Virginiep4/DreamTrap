@@ -6,11 +6,13 @@ import java.awt.image.BufferedImage;
 
 import dreamTrap.Screen;
 import entities.Character;
+import entities.Boss;
 
 import static utils.ImageImporter.importImg;
 
 public class LevelManager {
 	private Character character;
+	private Boss boss;
 
 	private final static int SPRITES_WIDTH = 5; // block width of the image for blocsSpr
 	private final static int SPRITES_HEIGHT = 2;
@@ -21,6 +23,7 @@ public class LevelManager {
 
 	public LevelManager(Screen screen) {
 		character = screen.getCharacter();
+		boss = screen.getBoss();
 		spritesInitializer();
 		levelInitializer();
 	}
@@ -78,10 +81,15 @@ public class LevelManager {
 			for (int j = 0; j < Screen.BLOCK_PER_WIDTH + 2; j++) {
 				int block = level[i][j + x];
 				if (block != -1) {
-					g.drawImage(blockSprites[block], j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
-							(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
-							Screen.BLOCK_SIZE, null);
+						g.drawImage(blockSprites[block], j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
+								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
+								Screen.BLOCK_SIZE, null);
 				}
 			}
+			g.drawImage(boss.getBoss()[boss.getCurrentAnimation()][boss.getAniIndex()],
+					boss.getxBlock() * Screen.BLOCK_SIZE + boss.getmovingXBlock(),
+					boss.getyBlock() * Screen.BLOCK_SIZE + boss.getmovingYBlock(), Screen.BLOCK_SIZE,
+					Screen.BLOCK_SIZE, null);
+		
 	}
 }

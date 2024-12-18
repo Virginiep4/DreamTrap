@@ -14,11 +14,17 @@ public class Boss extends Entities {
 	private int aniTick, aniIndex = 0, aniSpeed = 30;
 	private Character main;
 	public MouvementAiles moving;
+	private int xBlock= 50;
+	private int yBlock= 20;
+	private int movingXBlock;
+	private int movingYBlock;
 
-	public Boss() {
+	public Boss(Character main) {
 		super();
+		setPosX(50*Screen.BLOCK_SIZE);
+		setPosY(20*Screen.BLOCK_SIZE);
 		this.moving = new MouvementAiles(this);
-		main = Screen.character;
+		this.main=main;
 	}
 
 	public BufferedImage[][] getBoss() {return boss;}
@@ -37,42 +43,76 @@ public class Boss extends Entities {
 		boss[1][0] = importImg("/bossLeft.png");
 	}
 	
-	public int toCharacterOnX() {
-		int characX = main.getPosX();
-		int move = (int)Math.sqrt((characX-characX)*(characX-characX));
-		return move;
-	}
-	
-	public int toCharacterOnY() {
-		int characY = main.getPosY();
-		int move = (int)Math.sqrt((characY-characY)*(characY-characY));
-		move = move / 4;
-		return move;
-	}
-	
 	public void aimCharacter() {
+		int characX = main.getPosX();
+		int bossX = this.getPosX();
 		int characY = main.getPosY();
-		int bossY = this.getPosX();
+		int bossY = this.getPosY();
+		if (characX < bossX) {moving.left(true); moving.right(false);}
+		if (characX > bossX) {moving.right(true); moving.left(false);}
+		if (characX==bossX) {moving.right(false); moving.left(false);}
 		if (characY > bossY) {moving.down(true); moving.up(false);}
-		else if (characY < bossY) {moving.up(true); moving.down(false);}
-		else if (characY==bossY) {moving.up(false); moving.down(false);}
+		if (characY < bossY) {moving.up(true); moving.down(false);}
+		if (characY==bossY) {moving.up(false); moving.down(false);}
 	}
 	
 	public void update() {
-		aimCharacter();
 		
+		if (movingYBlock < Screen.BLOCK_SIZE) {
+			movingYBlock+=Screen.BLOCK_SIZE;
+			yBlock-=1;}
+		if (movingYBlock > Screen.BLOCK_SIZE) {
+			movingYBlock-=Screen.BLOCK_SIZE;
+			yBlock+=1;}
+		if (movingXBlock < Screen.BLOCK_SIZE) {
+			movingXBlock+=Screen.BLOCK_SIZE;
+			xBlock-=1;}
+		if (movingXBlock > Screen.BLOCK_SIZE) {
+			movingXBlock-=Screen.BLOCK_SIZE;
+			xBlock+=1;
+		}
+		
+		aimCharacter();
+		System.out.println(this.posX);
+		System.out.println(this.posY);
 		if (moving.isUp()) {
-			moving.yMovement(-toCharacterOnY());
+			moving.yMovement(1);
+			movingYBlock+= 1;
 		}
 		if (moving.isDown()) {
-			moving.yMovement(toCharacterOnY());
+			moving.yMovement(-1);
+			movingYBlock-= 1;
 		}
 		
 		if (moving.isRight()) {
-			moving.xMovement(toCharacterOnX());
+			moving.xMovement(1);
+			movingXBlock+= 1;
 		}
 		if (moving.isLeft()) {
-				moving.xMovement(-toCharacterOnX());
+				moving.xMovement(-1);
+				movingXBlock-= 1;
 		}
+	
+	}
+
+	public int getxBlock() {
+		return xBlock;
+	}
+	public int getmovingXBlock() {
+		return movingXBlock;
+	}
+
+	public void setxBlock(int xBlock) {
+		this.xBlock = xBlock;
+	}
+
+	public int getyBlock() {
+		return yBlock;
+	}
+	public int getmovingYBlock() {
+		return movingYBlock;
+	}
+	public void setyBlock(int yBlock) {
+		this.yBlock = yBlock;
 	}
 }

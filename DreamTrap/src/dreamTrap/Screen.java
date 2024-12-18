@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import inputs.KeyboardInputs;
 import level.LevelManager;
+import entities.Boss;
 import entities.Character;
 
 public class Screen extends JPanel {
@@ -17,21 +18,28 @@ public class Screen extends JPanel {
 	private final static float SCALE = 1f;
 
 	private Character character;
+	private Boss boss;
 	private LevelManager levelManager;
 
 	public Screen() {
 		setScreenSize();
 		character = new Character();
+		boss = new Boss(character);
 		levelManager = new LevelManager(this);
 		addKeyListener(new KeyboardInputs(this));
 	}
 
 	public void updateGame() {
 		character.update();
+		boss.update();
 	}
 
 	public Character getCharacter() {
 		return character;
+	}
+	
+	public Boss getBoss() {
+	    return boss;
 	}
 
 	/**
