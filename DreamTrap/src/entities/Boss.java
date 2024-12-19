@@ -14,19 +14,21 @@ public class Boss extends Entities {
 	private int aniTick, aniIndex = 0, aniSpeed = 30;
 	private Character main;
 	public MouvementAiles moving;
-	private int xBlock= 50;
-	private int yBlock= 20;
+	private float xBlock= 30;
+	private int yBlock= 10;
 	private int movingXBlock;
-	private int movingYBlock;
+	private int movingYBlock;	
 
 	public Boss(Character main) {
 		super();
-		setPosX(50*Screen.BLOCK_SIZE);
-		setPosY(20*Screen.BLOCK_SIZE);
+		setPosX(30*Screen.BLOCK_SIZE);
+		setPosY(-10*Screen.BLOCK_SIZE);
 		this.moving = new MouvementAiles(this);
 		this.main=main;
 	}
-
+	
+	// Animations
+	
 	public BufferedImage[][] getBoss() {return boss;}
 	public int getAniIndex() {return aniIndex;}
 
@@ -43,20 +45,28 @@ public class Boss extends Entities {
 		boss[1][0] = importImg("/bossLeft.png");
 	}
 	
+	// Mouvements
+	
 	public void aimCharacter() {
-		int characX = main.getPosX();
-		int bossX = this.getPosX();
+		
+		// Viser position sur y
+		
 		int characY = main.getPosY();
 		int bossY = this.getPosY();
-		if (characX < bossX) {moving.left(true); moving.right(false);}
-		if (characX > bossX) {moving.right(true); moving.left(false);}
-		if (characX==bossX) {moving.right(false); moving.left(false);}
-		if (characY > bossY) {moving.down(true); moving.up(false);}
-		if (characY < bossY) {moving.up(true); moving.down(false);}
-		if (characY==bossY) {moving.up(false); moving.down(false);}
+		if (characY - Screen.BLOCK_SIZE > bossY) {moving.down(true); moving.up(false);}
+		if (characY - Screen.BLOCK_SIZE < bossY) {moving.up(true); moving.down(false);}
+		if (characY - Screen.BLOCK_SIZE == bossY) {moving.up(false); moving.down(false);}
+		
+		// Viser le print du main sur x
+		
+		float characX = (float)(main.getPosX()) / (float)(Screen.BLOCK_SIZE) - (float)(main.getPosX() % Screen.BLOCK_SIZE) / (float)(Screen.BLOCK_SIZE);
+		if (this.xBlock - characX > 4.0) {moving.left(true); moving.right(false);} // 4 * BLOCK_SIZE sur le print de main dans Screen
+		if (this.xBlock - characX < 4.0) {moving.right(true); moving.left(false);}
+		if (this.xBlock - characX == 4.0) {moving.left(false); moving.right(false);;}
 	}
 	
 	public void update() {
+		
 		
 		if (movingYBlock < Screen.BLOCK_SIZE) {
 			movingYBlock+=Screen.BLOCK_SIZE;
@@ -76,12 +86,12 @@ public class Boss extends Entities {
 		System.out.println(this.posX);
 		System.out.println(this.posY);
 		if (moving.isUp()) {
-			moving.yMovement(1);
-			movingYBlock+= 1;
-		}
-		if (moving.isDown()) {
 			moving.yMovement(-1);
 			movingYBlock-= 1;
+		}
+		if (moving.isDown()) {
+			moving.yMovement(1);
+			movingYBlock+= 1;
 		}
 		
 		if (moving.isRight()) {
@@ -92,11 +102,13 @@ public class Boss extends Entities {
 				moving.xMovement(-1);
 				movingXBlock-= 1;
 		}
+		
+		
 	
 	}
 
 	public int getxBlock() {
-		return xBlock;
+		return (int)xBlock;
 	}
 	public int getmovingXBlock() {
 		return movingXBlock;

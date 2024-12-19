@@ -2,6 +2,9 @@ package entities;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+
+import dreamTrap.Screen;
+
 import static utils.ImageImporter.importImg;
 import mouvement.*;
 
@@ -17,6 +20,7 @@ public class Character extends Entities {
 
 	public Character() {
 		super();
+		setPosX(4 * Screen.BLOCK_SIZE);
 		this.moving = new MouvementAiles(this);
 	}
 
