@@ -9,11 +9,6 @@ import entities.Item;
 
 
 public class JoueurDAO extends DAO {
-	
-	
-
-	
-	
 	@Override
 	public Object create(Object obj) {
 		Character character = (Character)obj;

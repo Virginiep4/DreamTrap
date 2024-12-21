@@ -4,15 +4,10 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
 import javax.swing.JFrame;
-<<<<<<< HEAD
-@SuppressWarnings("serial")
-public class Window extends JFrame {
-	
-=======
 
 import entities.Character;
 
-public class Window {
+public class Window extends JFrame {
 	private JFrame jframe;
 	private Character character;
 	

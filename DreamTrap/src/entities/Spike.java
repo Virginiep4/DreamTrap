@@ -3,13 +3,11 @@ package entities;
 public class Spike extends Entities {
 
 	@Override
-	void importEntity() {
-		
-		
-	}
+	void importEntity() {}
 
 	@Override
-	void updateCharacAnimationTick() {	
+	void update() {
+		// TODO Auto-generated method stub
+		
 	}
-
 }

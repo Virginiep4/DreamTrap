@@ -30,6 +30,11 @@ public class Platform extends Entities  {
 	public int getCurrentAnimation() {
 		return currentAnimation;
 	}
+	@Override
+	void update() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

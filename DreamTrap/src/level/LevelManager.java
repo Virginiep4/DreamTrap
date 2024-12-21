@@ -14,9 +14,14 @@ public class LevelManager {
 	private Character character;
 	private Boss boss;
 
-	private final static int SPRITES_WIDTH = 5; // block width of the image for blocsSpr
-	private final static int SPRITES_HEIGHT = 2;
-	private BufferedImage[] blockSprites;
+	private static final int BLOCKS_SIZE = 32;
+	private static int blocksLength;
+	private BufferedImage[] blocks;
+
+	private static final int OBJECTS_SIZE = 32;
+	private static int objectsLength;
+	private BufferedImage[] objects;
+
 	private int[][] level;
 	private int levelHeight;
 	private int levelWidth;
@@ -33,14 +38,25 @@ public class LevelManager {
 	 * blocks
 	 */
 	private void spritesInitializer() {
-		blockSprites = new BufferedImage[SPRITES_HEIGHT * SPRITES_WIDTH];
-		BufferedImage img = importImg("/blockSprites.png");
+		blocks = fillArray(BLOCKS_SIZE, "/blockSprites.png");
+		blocksLength = blocks.length;
+		objects = fillArray(OBJECTS_SIZE, "/objectSprites.png");
+		objectsLength = objects.length;
+	}
 
-		for (int i = 0; i < SPRITES_HEIGHT; i++)
-			for (int j = 0; j < SPRITES_WIDTH; j++) {
-				blockSprites[i * SPRITES_WIDTH + j] = img.getSubimage(j * 64,
-						i * 64, 64, 64);
+	private BufferedImage[] fillArray(int size, String path) {
+		BufferedImage img = importImg(path);
+		int height = img.getHeight() / size;
+		int width = img.getWidth() / size;
+		BufferedImage[] array = new BufferedImage[height * width]; // initialize the array according to image size
+
+		for (int i = 0; i < height; i++)
+			for (int j = 0; j < width; j++) {
+				// place each square in right index
+				array[i * width + j] = img.getSubimage(j * size, i * size, size, size);
 			}
+
+		return array;
 	}
 
 	/**
@@ -49,19 +65,29 @@ public class LevelManager {
 	 * index is the Green RGB value of the pixel in the imported image
 	 */
 	private void levelInitializer() {
-		BufferedImage levelImage = importImg("/LevelTest.png");
+		BufferedImage levelImage = importImg("/LevelOne.png");
 		levelWidth = levelImage.getWidth();
 		levelHeight = levelImage.getHeight();
 		level = new int[levelHeight][levelWidth];
+		int value;
 
 		for (int i = 0; i < levelHeight; i++)
 			for (int j = 0; j < levelWidth; j++) {
 				Color color = new Color(levelImage.getRGB(j, i));
-				int value = color.getGreen();
+
+				// block test
+				value = color.getGreen();
 				if (value < 128)
 					level[i][j] = -1;
 				else
 					level[i][j] = value - 128;
+
+				// object test
+				value = color.getBlue();
+				if (value > 127)
+					// objects index is always higher than objects and we know blocks length
+					level[i][j] = value - 128 + blocksLength;
+
 			}
 	}
 
@@ -77,19 +103,27 @@ public class LevelManager {
 	 */
 	public void draw(Graphics g) {
 		int x = character.getPosX() / Screen.BLOCK_SIZE;
-		for (int i = levelHeight - 1; i > levelHeight - Screen.BLOCK_PER_HEIGHT; i--)
-			for (int j = 0; j < Screen.BLOCK_PER_WIDTH + 2; j++) {
+
+		for (int i = levelHeight - 1; i > levelHeight - Screen.BLOCK_PER_HEIGHT - 1; i--)
+			for (int j = 0; j < Screen.BLOCK_PER_WIDTH + 1; j++) {
 				int block = level[i][j + x];
 				if (block != -1) {
-						g.drawImage(blockSprites[block], j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
+					if (block < blocksLength) {
+						g.drawImage(blocks[block], j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
 								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
 								Screen.BLOCK_SIZE, null);
+					} else if (block < blocksLength + objectsLength) {
+						g.drawImage(objects[block - blocksLength],
+								j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
+								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
+								Screen.BLOCK_SIZE, null);
+					}
 				}
 			}
-			g.drawImage(boss.getBoss()[boss.getCurrentAnimation()][boss.getAniIndex()],
-					boss.getxBlock() * Screen.BLOCK_SIZE + boss.getmovingXBlock(),
-					boss.getyBlock() * Screen.BLOCK_SIZE + boss.getmovingYBlock(), Screen.BLOCK_SIZE,
-					Screen.BLOCK_SIZE, null);
-		
+		g.drawImage(boss.getBoss()[boss.getCurrentAnimation()][boss.getAniIndex()],
+				boss.getxBlock() * Screen.BLOCK_SIZE + boss.getmovingXBlock(),
+				boss.getyBlock() * Screen.BLOCK_SIZE + boss.getmovingYBlock(), Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
+				null);
+
 	}
 }

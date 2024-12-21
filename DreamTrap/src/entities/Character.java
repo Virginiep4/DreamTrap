@@ -2,6 +2,7 @@ package entities;
 
 import java.awt.image.BufferedImage;
 
+import dreamTrap.Screen;
 import level.Loadsave;
 
 import java.awt.Rectangle;
@@ -18,11 +19,39 @@ public class Character extends Entities {
 
 	public Character() {
 		super();
-		this.moving = new MouvementAiles(this);
+		this.moving = new MouvementNormal(this);
+	}
+
+	public Character(int id, String nom, int niveau, int etoiles) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Character(String string, int i, int j) {
+		// TODO Auto-generated constructor stub
 	}
 
 	public BufferedImage[][] getCharacter() {return character;}
 	public int getAniIndex() {return aniIndex;}
+	
+	public int getEtoiles() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getNiv() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public String getNom() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/**
 	 * Puts all the frame of character animation in each character array
@@ -66,8 +95,13 @@ public class Character extends Entities {
 			moving.xMovement(2);
 		}
 		if (moving.isLeft()) {
-			if (posX > 63) // évite les outOfBounds
+			if (posX > 0) // évite les outOfBounds
 				moving.xMovement(-2);
 		}
+	}
+
+	public void setEtoiles(int etoile) {
+		// TODO Auto-generated method stub
+		
 	}
 }

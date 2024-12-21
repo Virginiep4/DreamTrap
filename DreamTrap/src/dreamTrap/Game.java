@@ -2,18 +2,15 @@ package dreamTrap;
 
 
 public class Game implements Runnable {
-	private Window window;
 	private Screen screen;
 	private Thread gameThread; // is used to handle the game loop
 	private final static int FPS_LIMIT = 60;
 	private final static int UPS_LIMIT = 150; // updates per second
 	
 	public Game() {
-		
-		
 		screen = new Screen();
-		window = new Window(screen);
-		screen.requestFocus();//ask jpanel to be ready to recieve at any time input from keyboard
+		new Window(screen);
+		screen.requestFocus();//ask jpanel to be ready to receive at any time input from keyboard
 		startGameLoop();
 	}
 	
@@ -23,7 +20,7 @@ public class Game implements Runnable {
 	
 	
 	private void startGameLoop() {
-		gameThread = new Thread(this);//independant sequence of instruction
+		gameThread = new Thread(this); // independant sequence of instruction
 		gameThread.start(); // calls run method
 	}
 	

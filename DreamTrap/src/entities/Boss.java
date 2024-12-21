@@ -73,8 +73,6 @@ public class Boss extends Entities {
 		}
 		
 		aimCharacter();
-		System.out.println(this.posX);
-		System.out.println(this.posY);
 		if (moving.isUp()) {
 			moving.yMovement(1);
 			movingYBlock+= 1;

@@ -1,24 +1,33 @@
 package dreamTrap;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
+
+import javax.swing.JPanel;
+
+import entities.Boss;
+import entities.Character;
+import inputs.KeyboardInputs;
+import level.LevelManager;
 
 public class Screen extends JPanel {
 	public final static int BLOCK_SIZE = 64;
-	public final static int BLOCK_PER_WIDTH = 20;
-	public final static int BLOCK_PER_HEIGHT = 11;
+	public final static int BLOCK_PER_WIDTH = 29;
+	public final static int BLOCK_PER_HEIGHT = 12;
 	private final static float SCALE = 1f;
-	
+
 	private Character character;
 	private Boss boss;
 	private LevelManager levelManager;
-	
-	//getters and setters
+
+	// getters and setters
 	public Character getCharacter() {
 		return character;
 	}
-	
+
 	public Boss getBoss() {
-	    return boss;
+		return boss;
+	}
 
 	public Screen() {
 		setScreenSize();
@@ -33,10 +42,6 @@ public class Screen extends JPanel {
 		boss.update();
 	}
 
-	
-	}
-	
-	
 	/**
 	 * The function that will allow to draw on the created screen It is never called
 	 * on the code because it is automatically done
@@ -46,15 +51,13 @@ public class Screen extends JPanel {
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g); // constructor of Jpanel clean and allow to draw on the screen
-		
-		// paintComponent is called when Jpanel is created 
-		// could be optimized by loading all sprite on same image and use getSubimage()
-		
-		//levelmanager.draw(g);
-		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()], 150 + (int) character.getPosX(), 600 + (int) character.getPosY(), null);
-		character.drawHitbox(g);
-		
 
+		// paintComponent is called when Jpanel is created
+		// could be optimized by loading all sprite on same image and use getSubimage()
+
+		levelManager.draw(g);
+		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
+				4 * Screen.BLOCK_SIZE, (BLOCK_PER_HEIGHT - 5) * Screen.BLOCK_SIZE + (int) character.getPosY(), null);
 	}
 
 	/**
@@ -64,10 +67,6 @@ public class Screen extends JPanel {
 		Dimension size = new Dimension((int) (BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE),
 				(int) (BLOCK_SIZE * BLOCK_PER_HEIGHT * SCALE)); // Screen resolution
 		setPreferredSize(size);
-		
-	}
-	
-	public Character getCharacter() {
-		return character;
+
 	}
 }

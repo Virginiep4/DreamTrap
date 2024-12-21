@@ -5,6 +5,7 @@ import java.awt.event.KeyListener;
 
 import dreamTrap.Screen;
 import entities.Character;
+import mouvement.MouvementNormal;
 
 public class KeyboardInputs implements KeyListener {
 	private Character character;
@@ -27,7 +28,7 @@ public class KeyboardInputs implements KeyListener {
 		// whenever a key is pressed we check if it does something for our game
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_SPACE :
-			if (character.moving.gotWings()) {
+			if (character.moving instanceof MouvementNormal) {
 				character.moving.jumping(true);
 			}
 			else {
@@ -54,7 +55,7 @@ public class KeyboardInputs implements KeyListener {
 		// when a key is released it's the end of movement
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_SPACE:
-			if (character.moving.gotWings()) {
+			if (character.moving instanceof MouvementNormal) {
 				character.moving.jumping(false);
 				character.moving.releaseJump();
 			}
