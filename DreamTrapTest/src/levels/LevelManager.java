@@ -16,7 +16,7 @@ public class LevelManager {
 	private final static int SPRITES_WIDTH = 5; // block width of the image for blocsSpr
 	private final static int SPRITES_HEIGHT = 2;
 	private int[][] level;
-	private int levelHeight;
+	private static int levelHeight;
 	private int levelWidth;
 	
 	public LevelManager(Screen screen) {
@@ -24,6 +24,14 @@ public class LevelManager {
 		blockSprites=new BufferedImage[SPRITES_WIDTH*SPRITES_HEIGHT];
 		spritesInitializer();
 		levelInitializer();
+	}
+	
+	//getters and setters
+	public int[][] getCurrentLevel(){
+		return level;
+	}
+	public static int getLevelHeight() {
+		return levelHeight;
 	}
 	
 	private void spritesInitializer() {
@@ -49,7 +57,7 @@ public class LevelManager {
 				Color color = new Color(levelImage.getRGB(j, i));
 				int value = color.getGreen();
 				if (value < 128)
-					level[i][j] = 0;
+					level[i][j] = -1;
 				else
 					level[i][j] = value - 128;
 			}
@@ -57,11 +65,11 @@ public class LevelManager {
 	
 	
 	public void draw(Graphics g) {
-		int x = character.getPosX() / 64;
+		int x = character.getPosX() / Screen.BLOCK_SIZE;
 		for (int i = levelHeight - 1; i > levelHeight - Screen.BLOCK_PER_HEIGHT; i--)
 			for (int j = 0; j < Screen.BLOCK_PER_WIDTH + 2; j++) {
 				int block = level[i][j + x];
-				if (block != 0) {
+				if (block != -1) {
 					g.drawImage(blockSprites[block], j * Screen.BLOCK_SIZE - (character.getPosX() % 64),
 							(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE,
 							Screen.BLOCK_SIZE, Screen.BLOCK_SIZE, null);
@@ -71,15 +79,4 @@ public class LevelManager {
 	}
 	
 	public void update() {}
-	
-	public int[][] getCurrentLevel(){
-		return level;
-	}
-
-	public int getLevelHeight() {
-		return levelHeight;
-	}
-
-	
-	
 }

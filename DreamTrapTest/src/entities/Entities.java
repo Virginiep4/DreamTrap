@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
+import dreamTrap.Game;
+
 public abstract class Entities {
 	protected int posX=0;
 	protected int posY=0;
@@ -26,27 +28,32 @@ public abstract class Entities {
 	public int getPosY() {
 		return posY;
 	}
+	public int getHeight() {
+		return height;
+	}
+	public int getWidth() {
+		return width;
+	}
 	
 	public void drawHitbox(Graphics g) {
 		g.setColor(Color.red);
 		//g.drawRect((int)150 ,(int)( (BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE+ hitbox.y-40),(int) hitbox.width, (int)hitbox.height);
-		g.drawRect((int)hitbox.x ,(int) hitbox.y,(int) hitbox.width, (int)hitbox.height);
+		g.drawRect(4 * Game.TILES_SIZE ,(int) hitbox.y,(int) hitbox.width, (int)hitbox.height);
 		
 		// de base c'est 150+ hitbox.x si j veux que le carrer se deplacent
 	}
 	
 	protected void initHitbox() {
 		
-		hitbox= new Rectangle2D.Float(posX,posY,width,height);
+		hitbox= new Rectangle2D.Float(4 * BLOCK_SIZE, (BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE,width,height);
 	}
 	
 	public void updateHitbox() {
-		
-		hitbox.x=posX;
-		hitbox.y=posY;
+		hitbox.x=posX / Game.TILES_SIZE + posX % Game.TILES_SIZE;
+		hitbox.y=posY + (BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE;
 	}
 	
-	protected Rectangle2D.Float getHitbox() {
+	public Rectangle2D.Float getHitbox() {
 		return hitbox;
 	}
 	/**

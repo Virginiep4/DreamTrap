@@ -17,30 +17,26 @@ public class Screen extends JPanel {
 	public final static int BLOCK_SIZE = 64;
 	public final static int BLOCK_PER_WIDTH = 20;
 	public final static int BLOCK_PER_HEIGHT = 11;
-	private final static float SCALE = 1f;
-	
-	
-	
-	//private Platform platform=new Platform();
+
+	// private Platform platform=new Platform();
 
 	public Screen() {
-		
+
 		setScreenSize();
 		character = new Character();
 		levelmanager = new LevelManager(this);
 		character.loadlvlData(levelmanager.getCurrentLevel());
-		
-		addKeyListener(new KeyboardInputs(this));//focus on this(object screen ) bc of keylistener 
+
+		addKeyListener(new KeyboardInputs(this));// focus on this(object screen ) bc of keylistener
 	}
 
 	public void updateGame() {
-		
+
 		character.updateCharacAnimationTick();
 		character.updatePos();
 		character.updateHitbox();
 	}
-	
-	
+
 	/**
 	 * The function that will allow to draw on the created screen It is never called
 	 * on the code because it is automatically done
@@ -50,18 +46,17 @@ public class Screen extends JPanel {
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g); // constructor of Jpanel clean and allow to draw on the screen
-		
-		// paintComponent is called when Jpanel is created 
+
+		// paintComponent is called when Jpanel is created
 		// could be optimized by loading all sprite on same image and use getSubimage()
-		//g.drawImage(platform.getShop()[platform.getCurrentAnimation()][0], 150 , 350 , null);
-		
+		// g.drawImage(platform.getShop()[platform.getCurrentAnimation()][0], 150 , 350
+		// , null);
+
 		levelmanager.draw(g);
-		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],  (int) character.getPosX(), (int) character.getPosY(), null);
-		//g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
-			//	150, (BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE + character.getPosY() - 40, null);
+		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()], 4 * BLOCK_SIZE,
+				(BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE + character.getPosY(), null);
 
 		character.drawHitbox(g);
-		
 
 	}
 
@@ -69,11 +64,11 @@ public class Screen extends JPanel {
 	 * Where the screen size is determined : (1280x720) or (1920x1080)
 	 */
 	private void setScreenSize() {
-		Dimension size = new Dimension(1280, 720); // Screen resolution
+		Dimension size = new Dimension(BLOCK_PER_WIDTH * BLOCK_SIZE, BLOCK_PER_HEIGHT * BLOCK_SIZE); // Screen resolution
 		setPreferredSize(size);
-		
+
 	}
-	
+
 	public Character getCharacter() {
 		return character;
 	}
