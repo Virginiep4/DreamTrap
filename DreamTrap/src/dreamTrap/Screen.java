@@ -1,39 +1,39 @@
 package dreamTrap;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
 
-import javax.swing.JPanel;
-
-import inputs.KeyboardInputs;
-import levels.LevelManager;
-import entities.Character;
-import entities.Platform;
-
-@SuppressWarnings("serial")
 public class Screen extends JPanel {
-	private LevelManager levelmanager;
-	private Character character;
 	public final static int BLOCK_SIZE = 64;
 	public final static int BLOCK_PER_WIDTH = 20;
 	public final static int BLOCK_PER_HEIGHT = 11;
 	private final static float SCALE = 1f;
 	
+	private Character character;
+	private Boss boss;
+	private LevelManager levelManager;
 	
+	//getters and setters
+	public Character getCharacter() {
+		return character;
+	}
 	
-	private Platform platform=new Platform();
+	public Boss getBoss() {
+	    return boss;
 
 	public Screen() {
-		
 		setScreenSize();
 		character = new Character();
-		levelmanager = new LevelManager(this);
-		addKeyListener(new KeyboardInputs(this));//focus on this(object screen ) bc of keylistener 
+		boss = new Boss(character);
+		levelManager = new LevelManager(this);
+		addKeyListener(new KeyboardInputs(this));
 	}
 
 	public void updateGame() {
-		character.updateCharacAnimationTick();
-		character.updateHitbox();
+		character.update();
+		boss.update();
+	}
+
+	
 	}
 	
 	
@@ -49,7 +49,6 @@ public class Screen extends JPanel {
 		
 		// paintComponent is called when Jpanel is created 
 		// could be optimized by loading all sprite on same image and use getSubimage()
-		//g.drawImage(platform.getShop()[platform.getCurrentAnimation()][0], 150 , 350 , null);
 		
 		//levelmanager.draw(g);
 		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()], 150 + (int) character.getPosX(), 600 + (int) character.getPosY(), null);
@@ -62,7 +61,8 @@ public class Screen extends JPanel {
 	 * Where the screen size is determined : (1280x720) or (1920x1080)
 	 */
 	private void setScreenSize() {
-		Dimension size = new Dimension(1280, 720); // Screen resolution
+		Dimension size = new Dimension((int) (BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE),
+				(int) (BLOCK_SIZE * BLOCK_PER_HEIGHT * SCALE)); // Screen resolution
 		setPreferredSize(size);
 		
 	}
@@ -70,5 +70,4 @@ public class Screen extends JPanel {
 	public Character getCharacter() {
 		return character;
 	}
-
 }

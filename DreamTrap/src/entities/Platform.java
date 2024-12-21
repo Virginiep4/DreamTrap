@@ -2,7 +2,7 @@ package entities;
 
 import java.awt.image.BufferedImage;
 
-import levels.Loadsave;
+import level.Loadsave;
 
 public class Platform extends Entities  {
 	private BufferedImage[][] Shop;

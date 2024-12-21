@@ -5,10 +5,8 @@ public class Game implements Runnable {
 	private Window window;
 	private Screen screen;
 	private Thread gameThread; // is used to handle the game loop
-	private final int FPS_LIMIT = 60;
-	private final int UPS_LIMIT = 150; // updates per second
-
-	
+	private final static int FPS_LIMIT = 60;
+	private final static int UPS_LIMIT = 150; // updates per second
 	
 	public Game() {
 		
