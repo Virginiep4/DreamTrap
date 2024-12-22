@@ -120,10 +120,9 @@ public class LevelManager {
 					}
 				}
 			}
-		g.drawImage(boss.getBoss()[boss.getCurrentAnimation()][boss.getAniIndex()],
-				boss.getxBlock() * Screen.BLOCK_SIZE + boss.getmovingXBlock(),
-				boss.getyBlock() * Screen.BLOCK_SIZE + boss.getmovingYBlock(), Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
-				null);
-
+			g.drawImage(boss.getBoss()[boss.getCurrentAnimation()][boss.getAniIndex()],
+					boss.getxBlock() * Screen.BLOCK_SIZE + boss.getmovingXBlock() - character.getPosX(),
+					boss.getyBlock() * Screen.BLOCK_SIZE + boss.getmovingYBlock(), Screen.BLOCK_SIZE*2,
+					Screen.BLOCK_SIZE*3, null);
 	}
 }
