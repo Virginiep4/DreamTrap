@@ -55,7 +55,7 @@ public class Screen extends JPanel {
 		levelManager.draw(g);
 		// could be optimized by loading all sprite on same image and use getSubimage()
 		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
-				150, (BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE + character.getPosY() - 40, null);
+				4*BLOCK_SIZE, (BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE + character.getPosY() - 40, null);
 	}
 
 	/**
