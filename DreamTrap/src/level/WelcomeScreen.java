@@ -4,11 +4,13 @@ import java.awt.Graphics;
 
 import dreamTrap.Screen;
 
-public class WelcomeScreen extends LevelManager {
+public class WelcomeScreen extends LevelNoAnimBackground {
 
 	public WelcomeScreen(Screen screen) {
-		super(screen);
-		// TODO Auto-generated constructor stub
+		super(screen, "/WelcomeScreen.png", null, null, "/WelcomeScreenLevel.png");
+		
+		xCharacterSpawn = (Screen.BLOCK_PER_WIDTH * Screen.BLOCK_SIZE) / 2 - Screen.BLOCK_SIZE / 2;
+		yCharacterSpawn = (Screen.BLOCK_PER_HEIGHT - 5) * Screen.BLOCK_SIZE - Screen.BLOCK_SIZE / 2;
 	}
 
 	@Override
@@ -19,8 +21,5 @@ public class WelcomeScreen extends LevelManager {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-		
 	}
-
 }

@@ -14,15 +14,16 @@ public class Boss extends Entities {
 	private int aniTick, aniIndex = 0, aniSpeed = 30;
 	private Character main;
 	public MouvementAiles moving;
-	private int xBlock= 25;
-	private int yBlock= 3;
+	
+	// Stock the block index where the boss is on the screen
+	// (could be too far to be visible)
+	private int xBlock = 0; // to change for spawn location modification
 	private int movingXBlock;
-	private int movingYBlock;	
 
 	public Boss(Character main) {
 		super();
-		setPosX(25*Screen.BLOCK_SIZE);
-		setPosY(-4*Screen.BLOCK_SIZE);
+		setPosX(xBlock * Screen.BLOCK_SIZE);
+		setPosY(-(Screen.BLOCK_PER_HEIGHT - 5) * Screen.BLOCK_SIZE);
 		this.moving = new MouvementAiles(this);
 		this.main=main;
 	}
@@ -67,13 +68,6 @@ public class Boss extends Entities {
 	
 	public void update() {
 		
-		
-		if (movingYBlock < Screen.BLOCK_SIZE) {
-			movingYBlock+=Screen.BLOCK_SIZE;
-			yBlock-=1;}
-		if (movingYBlock > Screen.BLOCK_SIZE) {
-			movingYBlock-=Screen.BLOCK_SIZE;
-			yBlock+=1;}
 		if (movingXBlock < Screen.BLOCK_SIZE) {
 			movingXBlock+=Screen.BLOCK_SIZE;
 			xBlock-=1;}
@@ -85,11 +79,9 @@ public class Boss extends Entities {
 		aimCharacter();
 		if (moving.isUp()) {
 			moving.yMovement(-1);
-			movingYBlock-= 1;
 		}
 		if (moving.isDown()) {
 			moving.yMovement(1);
-			movingYBlock+= 1;
 		}
 		
 		if (moving.isRight()) {
@@ -114,15 +106,5 @@ public class Boss extends Entities {
 
 	public void setxBlock(int xBlock) {
 		this.xBlock = xBlock;
-	}
-
-	public int getyBlock() {
-		return yBlock;
-	}
-	public int getmovingYBlock() {
-		return movingYBlock;
-	}
-	public void setyBlock(int yBlock) {
-		this.yBlock = yBlock;
 	}
 }

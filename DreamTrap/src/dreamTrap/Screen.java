@@ -5,16 +5,16 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
-import entities.Boss;
 import entities.Character;
 import inputs.KeyboardInputs;
 import level.LevelManager;
 import level.LevelOne;
+import level.WelcomeScreen;
 
 public class Screen extends JPanel {
 	public final static int BLOCK_SIZE = 64;
-	public final static int BLOCK_PER_WIDTH = 29;
-	public final static int BLOCK_PER_HEIGHT = 12;
+	public final static int BLOCK_PER_WIDTH = 24;
+	public final static int BLOCK_PER_HEIGHT = 13;
 	private final static float SCALE = 1f;
 
 	private Character character;
@@ -32,7 +32,7 @@ public class Screen extends JPanel {
 	public Screen() {
 		setScreenSize();
 		character = new Character();
-		levelManager = new LevelOne(this);
+		levelManager = new WelcomeScreen(this);
 		addKeyListener(new KeyboardInputs(this));
 	}
 
@@ -56,7 +56,7 @@ public class Screen extends JPanel {
 
 		levelManager.draw(g);
 		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
-				4 * Screen.BLOCK_SIZE, (BLOCK_PER_HEIGHT - 5) * Screen.BLOCK_SIZE + (int) character.getPosY(), null);
+				levelManager.getxCharacterSpawn(), levelManager.getyCharacterSpawn() + (int) character.getPosY(), null);
 	}
 
 	/**

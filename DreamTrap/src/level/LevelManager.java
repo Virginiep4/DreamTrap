@@ -11,34 +11,60 @@ import static utils.ImageImporter.importImg;
 
 public abstract class LevelManager {
 	protected Character character;
+	protected int xCharacterSpawn;
+	protected int yCharacterSpawn;
+	
+	protected String backgroundPath;
 
+	protected String blocksPath;
 	private static final int BLOCKS_SIZE = 32;
 	private static int blocksLength;
 	private BufferedImage[] blocks;
 
+	protected String objectsPath;
 	private static final int OBJECTS_SIZE = 32;
 	private static int objectsLength;
 	private BufferedImage[] objects;
 
+	private String levelPath;
 	private int[][] level;
 	private int levelHeight;
 	private int levelWidth;
 
-	protected LevelManager(Screen screen) {
+	protected LevelManager(Screen screen, String blocksPath, String objectsPath,
+			String levelPath) {
 		character = screen.getCharacter();
+		this.blocksPath = blocksPath;
+		this.objectsPath = objectsPath;
+		this.levelPath = levelPath;
+
 		spritesInitializer();
 		levelInitializer();
 	}
+	
+	public int getxCharacterSpawn() {
+		return xCharacterSpawn;
+	}
+	public int getyCharacterSpawn() {
+		return yCharacterSpawn;
+	}
+
+	protected abstract void backgroundInitializer();
 
 	/**
 	 * Puts all blocks in the blockSprites array The levels are built with those
 	 * blocks
 	 */
 	private void spritesInitializer() {
-		blocks = fillArray(BLOCKS_SIZE, "/blockSprites.png");
-		blocksLength = blocks.length;
-		objects = fillArray(OBJECTS_SIZE, "/objectSprites.png");
-		objectsLength = objects.length;
+		if (blocksPath != null) {
+			blocks = fillArray(BLOCKS_SIZE, blocksPath);
+			blocksLength = blocks.length;
+		}
+
+		if (objectsPath != null) {
+			objects = fillArray(OBJECTS_SIZE, objectsPath);
+			objectsLength = objects.length;
+		}
 	}
 
 	private BufferedImage[] fillArray(int size, String path) {
@@ -62,7 +88,7 @@ public abstract class LevelManager {
 	 * index is the Green RGB value of the pixel in the imported image
 	 */
 	private void levelInitializer() {
-		BufferedImage levelImage = importImg("/LevelOne.png");
+		BufferedImage levelImage = importImg(levelPath);
 		levelWidth = levelImage.getWidth();
 		levelHeight = levelImage.getHeight();
 		level = new int[levelHeight][levelWidth];
@@ -101,6 +127,8 @@ public abstract class LevelManager {
 	public void draw(Graphics g) {
 		int x = character.getPosX() / Screen.BLOCK_SIZE;
 
+		drawBackground(g);
+
 		for (int i = levelHeight - 1; i > levelHeight - Screen.BLOCK_PER_HEIGHT - 1; i--)
 			for (int j = 0; j < Screen.BLOCK_PER_WIDTH + 1; j++) {
 				int block = level[i][j + x];
@@ -119,6 +147,8 @@ public abstract class LevelManager {
 			}
 		additionalDraw(g);
 	}
+
+	protected abstract void drawBackground(Graphics g);
 
 	protected abstract void additionalDraw(Graphics g);
 
