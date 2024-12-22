@@ -4,6 +4,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 import entities.Character;
 
@@ -18,7 +20,6 @@ public class Window extends JFrame {
 		jframe.add(screen);
 		jframe.setResizable(false);
 		jframe.pack(); //choose the preferenced size that I  fix on Screen 
-		jframe.setVisible(true);
 		
 		character = screen.getCharacter();
 		jframe.addWindowFocusListener(new WindowFocusListener() {
@@ -36,6 +37,14 @@ public class Window extends JFrame {
 				
 			}
 		});
+	}
+
+	public void update() {
+		JTextField welcomeText = new JTextField();
+		// x, y, width, height
+		welcomeText.setBounds(10 * Screen.BLOCK_SIZE, 5 * Screen.BLOCK_SIZE + 6, 4 * Screen.BLOCK_SIZE, 11);
+		jframe.add(welcomeText);
+		jframe.setVisible(true);		
 	}
 
 }
