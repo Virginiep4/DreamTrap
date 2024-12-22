@@ -2,10 +2,6 @@ package entities;
 
 import java.awt.image.BufferedImage;
 
-import dreamTrap.Screen;
-import level.Loadsave;
-
-import java.awt.Rectangle;
 import static utils.ImageImporter.importImg;
 import mouvement.*;
 

@@ -15,14 +15,14 @@ public class Boss extends Entities {
 	private Character main;
 	public MouvementAiles moving;
 	private int xBlock= 25;
-	private int yBlock= 9;
+	private int yBlock= 3;
 	private int movingXBlock;
 	private int movingYBlock;	
 
 	public Boss(Character main) {
 		super();
-		setPosX(30*Screen.BLOCK_SIZE);
-		setPosY(-10*Screen.BLOCK_SIZE);
+		setPosX(25*Screen.BLOCK_SIZE);
+		setPosY(-4*Screen.BLOCK_SIZE);
 		this.moving = new MouvementAiles(this);
 		this.main=main;
 	}

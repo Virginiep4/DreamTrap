@@ -9,6 +9,7 @@ import entities.Boss;
 import entities.Character;
 import inputs.KeyboardInputs;
 import level.LevelManager;
+import level.LevelOne;
 
 public class Screen extends JPanel {
 	public final static int BLOCK_SIZE = 64;
@@ -17,7 +18,6 @@ public class Screen extends JPanel {
 	private final static float SCALE = 1f;
 
 	private Character character;
-	private Boss boss;
 	private LevelManager levelManager;
 
 	// getters and setters
@@ -25,21 +25,20 @@ public class Screen extends JPanel {
 		return character;
 	}
 
-	public Boss getBoss() {
-		return boss;
+	public LevelManager getLevelManager() {
+		return levelManager;
 	}
 
 	public Screen() {
 		setScreenSize();
 		character = new Character();
-		boss = new Boss(character);
-		levelManager = new LevelManager(this);
+		levelManager = new LevelOne(this);
 		addKeyListener(new KeyboardInputs(this));
 	}
 
 	public void updateGame() {
 		character.update();
-		boss.update();
+		levelManager.update();
 	}
 
 	/**

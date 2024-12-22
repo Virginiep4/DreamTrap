@@ -6,13 +6,11 @@ import java.awt.image.BufferedImage;
 
 import dreamTrap.Screen;
 import entities.Character;
-import entities.Boss;
 
 import static utils.ImageImporter.importImg;
 
-public class LevelManager {
-	private Character character;
-	private Boss boss;
+public abstract class LevelManager {
+	protected Character character;
 
 	private static final int BLOCKS_SIZE = 32;
 	private static int blocksLength;
@@ -26,9 +24,8 @@ public class LevelManager {
 	private int levelHeight;
 	private int levelWidth;
 
-	public LevelManager(Screen screen) {
+	protected LevelManager(Screen screen) {
 		character = screen.getCharacter();
-		boss = screen.getBoss();
 		spritesInitializer();
 		levelInitializer();
 	}
@@ -120,9 +117,10 @@ public class LevelManager {
 					}
 				}
 			}
-			g.drawImage(boss.getBoss()[boss.getCurrentAnimation()][boss.getAniIndex()],
-					boss.getxBlock() * Screen.BLOCK_SIZE + boss.getmovingXBlock() - character.getPosX(),
-					boss.getyBlock() * Screen.BLOCK_SIZE + boss.getmovingYBlock(), Screen.BLOCK_SIZE*2,
-					Screen.BLOCK_SIZE*3, null);
+		additionalDraw(g);
 	}
+
+	protected abstract void additionalDraw(Graphics g);
+
+	public abstract void update();
 }
