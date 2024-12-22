@@ -14,8 +14,8 @@ public class Boss extends Entities {
 	private int aniTick, aniIndex = 0, aniSpeed = 30;
 	private Character main;
 	public MouvementAiles moving;
-	private int xBlock= 50;
-	private int yBlock= 20;
+	private int xBlock= 25;
+	private int yBlock= 9;
 	private int movingXBlock;
 	private int movingYBlock;
 
