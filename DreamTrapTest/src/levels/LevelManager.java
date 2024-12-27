@@ -2,6 +2,7 @@ package levels;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.awt.Color;
 import dreamTrap.Screen;
 import entities.Character;

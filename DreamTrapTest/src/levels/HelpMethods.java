@@ -22,28 +22,24 @@ public class HelpMethods {
 
 	// Checks if the position (x, y) is solid (i.e., has an obstacle)
 	private static boolean IsSolid(entities.Character character, float xMove, float yMove) {
-
 		// Check if the position is out of bounds
 		if (character.getPosY() + yMove - 2 * Game.TILES_SIZE< -Game.GAME_HEIGHT)
 			return true; // Out of top/bottom bounds
 
-		// Calculate the tile index based on the position
-		int i = LevelManager.getLevelHeight() - 2 ; // Index de colonne
-		int j = character.getPosX() / Game.TILES_SIZE + character.getPosX() % Game.TILES_SIZE; // Index de ligne
+		int i = (int) (LevelManager.getLevelHeight() -2 + (character.getPosY() + yMove) / Game.TILES_SIZE); // Index de colonne
+		float j = (4 + (character.getPosX() + xMove) / Game.TILES_SIZE); // Index de ligne
+		/* 4 * BLOCK_SIZE / Game.TILES_SIZE
+		 * BLOCK_SIZE = TILE_SIZE
+		 * pendant le merge peut-être uniformiser les noms...
+		*/
+		int targetedTileUpLeft = character.getLvlData()[i][(int)Math.floor(j)];
+		int targetedTileUpRight = character.getLvlData()[i][(int)Math.ceil(j)];
+		int targetedTileDownLeft = character.getLvlData()[i+character.getHeight()/Game.TILES_SIZE][(int)Math.floor(j)];
+		int targetedTileDownRight = character.getLvlData()[i+character.getHeight()/Game.TILES_SIZE][(int)Math.ceil(j)];
 		
-		// Get the value of the tile at the calculated index
-		int valueXMin = character.getLvlData()[i + (int) (character.getPosY()) / Game.TILES_SIZE]
-				[(int) (Math.ceil(xMove) / Game.TILES_SIZE) + j];
-		int valueXMax = character.getLvlData()[i + (int) (character.getPosY()) / Game.TILES_SIZE]
-				[(int) Math.floor((character.getWidth() + xMove) / Game.TILES_SIZE) + j];
-		int valueYMin = character.getLvlData()
-				[i + (int) Math.ceil((character.getPosY() + character.getHeight() + yMove) / Game.TILES_SIZE)][(int) j];
-		int valueYMax = character.getLvlData()
-				[i + (int) Math.floor((character.getPosY() + yMove) / Game.TILES_SIZE)][(int) j];
-
 		// Determine if the tile is solid based on its value
 
-		if ((valueXMin != -1) || (valueXMax != -1) || (valueYMin != -1) || (valueYMax != -1)) {
+		if (targetedTileUpLeft != -1 || targetedTileUpRight != -1 || targetedTileDownLeft != -1 || targetedTileDownRight != -1) {
 			System.out.println("Le joueur est sur un bloc solide.");
 			return true; // The tile is solid
 		}
