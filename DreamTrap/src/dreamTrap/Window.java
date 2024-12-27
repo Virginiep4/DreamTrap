@@ -20,6 +20,7 @@ public class Window extends JFrame {
 		jframe.add(screen);
 		jframe.setResizable(false);
 		jframe.pack(); //choose the preferenced size that I  fix on Screen 
+		jframe.setVisible(true);
 		
 		character = screen.getCharacter();
 		jframe.addWindowFocusListener(new WindowFocusListener() {
@@ -44,7 +45,5 @@ public class Window extends JFrame {
 		// x, y, width, height
 		welcomeText.setBounds(10 * Screen.BLOCK_SIZE, 5 * Screen.BLOCK_SIZE + 6, 4 * Screen.BLOCK_SIZE, 11);
 		jframe.add(welcomeText);
-		jframe.setVisible(true);		
 	}
-
 }

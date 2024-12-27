@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 
 import dreamTrap.Screen;
 import entities.Character;
+import entities.Platform;
 
 import static utils.ImageImporter.importImg;
 
@@ -133,10 +134,14 @@ public abstract class LevelManager {
 			for (int j = 0; j < Screen.BLOCK_PER_WIDTH + 1; j++) {
 				int block = level[i][j + x];
 				if (block != -1) {
+					
+					// platforms
 					if (block < blocksLength) {
 						g.drawImage(blocks[block], j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
 								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
 								Screen.BLOCK_SIZE, null);
+						
+						//objects
 					} else if (block < blocksLength + objectsLength) {
 						g.drawImage(objects[block - blocksLength],
 								j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
