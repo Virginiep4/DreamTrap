@@ -26,6 +26,7 @@ public class Screen extends JPanel {
 		character = new Character();
 		levelmanager = new LevelManager(this);
 		character.loadlvlData(levelmanager.getCurrentLevel());
+		character.loadlvlStarsData(levelmanager.getStars());
 
 		addKeyListener(new KeyboardInputs(this));// focus on this(object screen ) bc of keylistener
 	}
@@ -35,6 +36,7 @@ public class Screen extends JPanel {
 		character.updateCharacAnimationTick();
 		character.updatePos();
 		character.updateHitbox();
+		levelmanager.update();
 	}
 
 	/**

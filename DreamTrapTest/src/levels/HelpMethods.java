@@ -25,8 +25,8 @@ public class HelpMethods {
 		// Check if the position is out of bounds
 		if (character.getPosY() + yMove - 2 * Game.TILES_SIZE< -Game.GAME_HEIGHT)
 			return true; // Out of top/bottom bounds
-
-		int i = (int) (LevelManager.getLevelHeight() -2 + (character.getPosY() + yMove) / Game.TILES_SIZE); // Index de colonne
+		
+		int i = (int) (LevelManager.getLevelHeight() - 2 + (character.getPosY() + yMove) / Game.TILES_SIZE); // Index de colonne
 		float j = (4 + (character.getPosX() + xMove) / Game.TILES_SIZE); // Index de ligne
 		/* 4 * BLOCK_SIZE / Game.TILES_SIZE
 		 * BLOCK_SIZE = TILE_SIZE
@@ -43,9 +43,33 @@ public class HelpMethods {
 			System.out.println("Le joueur est sur un bloc solide.");
 			return true; // The tile is solid
 		}
-
+		
 		return false; // The tile is not solid
 
+	}
+	
+	public static boolean IsStar(entities.Character character) {
+		
+				int i = (int) (LevelManager.getLevelHeight() - 2 + character.getPosY() / Game.TILES_SIZE); // Index de colonne
+				int j = (int) (4 + (character.getPosX()) / Game.TILES_SIZE); // Index de ligne
+				
+				if (character.getLvlStarsData()[i][j]!=-1) {
+					System.out.println("Le joueur est sur une étoile.");
+					return true; // The tile is solid
+				}
+				
+				return false; // The tile is not solid
+	}
+	
+	public static void gotStar(entities.Character character, LevelManager level) {
+		int i = (int) (LevelManager.getLevelHeight() - 2 + character.getPosY() / Game.TILES_SIZE); // Index de colonne
+		int j = (int) (4 + (character.getPosX()) / Game.TILES_SIZE); // Index de ligne
+		
+		character.setEtoiles(character.getEtoiles()+1);
+		int[][] newStars = character.getLvlStarsData();
+		newStars[i][j] = -1;
+		character.setLvlStarsData(newStars);
+		level.setStars(newStars);
 	}
 
 	// Gets the X position of the entity next to a wall

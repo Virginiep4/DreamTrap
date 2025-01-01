@@ -9,7 +9,7 @@ import dreamTrap.Game;
 
 public abstract class Entities {
 	protected int posX=0;
-	protected int posY=0;
+	protected int posY=-80;
 	protected Rectangle2D.Float hitbox ;
 	protected int width = 49;
 	protected int height = 72;

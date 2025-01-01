@@ -25,6 +25,7 @@ public class Character extends Entities {
 	private boolean movingUp = false;
 	private boolean movingDown = false;
 	private int[][] lvlData;
+	private int[][] lvlStarsData;
 	private float airSpeed = 0f; // Vitesse verticale(vitesse monter et descente)
 	private final float GRAVITY = 0.04f * 1f; // Force de gravité
 	private final static int JUMP_DELAY = 2; // how many phase before changing position
@@ -39,7 +40,6 @@ public class Character extends Entities {
 
 	public Character(int id, String nom, int niveau, int etoiles) {
 		super();
-		posX = 4 * Game.TILES_SIZE;
 		this.id = id;
 		this.nom = nom;
 		this.niv = niveau;
@@ -49,7 +49,6 @@ public class Character extends Entities {
 
 	public Character(String nom, int niveau, int etoiles) {
 		super();
-		posX = 4 * Game.TILES_SIZE;
 		this.nom = nom;
 		this.niv = niveau;
 		this.etoiles = etoiles;
@@ -58,8 +57,6 @@ public class Character extends Entities {
 
 	public Character() {
 		super();
-		posX = 4 * Game.TILES_SIZE;
-
 	}
 
 	public BufferedImage[][] getCharacter() {
@@ -102,6 +99,10 @@ public class Character extends Entities {
 //			System.out.println(); // Passe à la ligne suivante après avoir affiché une ligne
 //		}
 
+	}
+	
+	public void loadlvlStarsData(int[][] lvlStarsData) {
+		this.lvlStarsData = lvlStarsData;
 	}
 
 	/**
@@ -150,8 +151,6 @@ public class Character extends Entities {
 			}
 			if (movingUp) {
 				ySpeed = -5.0f;
-				System.out.println("Tentative de mouvement vers le haut : " + (posY + (int) ySpeed));
-
 			}
 			if (movingDown) {
 				ySpeed = 5.0f;
@@ -310,6 +309,14 @@ public class Character extends Entities {
 
 	public int getId() {
 		return id;
+	}
+
+	public int[][] getLvlStarsData() {
+		return lvlStarsData;
+	}
+
+	public void setLvlStarsData(int[][] lvlStarsData) {
+		this.lvlStarsData = lvlStarsData;
 	}
 
 }

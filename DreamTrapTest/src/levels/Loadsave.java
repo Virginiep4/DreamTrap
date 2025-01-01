@@ -10,6 +10,7 @@ public class Loadsave {
 
 	public static final String BLOC_IMG="/blockSprites.png";
 	public static final String LEVEL_IMG="/LevelTest.png";
+	public static final String STAR_IMG="/stars.png";
 	
 	
 	
