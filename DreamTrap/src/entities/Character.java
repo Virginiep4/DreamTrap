@@ -16,9 +16,29 @@ public class Character extends Entities {
 	private double parablePos = -1; // makes the jump parabolic
 	private boolean movingRight = false;
 	private boolean movingLeft = false;
+	private static boolean clicking=false;
 
 	private final int RIGHT = 0;
 	private final int LEFT = 1;
+	private int id;
+	private String nom;
+	private int niv;
+	private static int etoiles;
+	
+	public Character(int id, String nom, int niveau,int etoiles) {
+		this.id=id;
+		this.nom =nom;
+		this.niv =niveau;
+		this.etoiles=etoiles;
+		
+	}
+	public Character( String nom, int niveau,int etoiles) {
+		
+		this.nom =nom;
+		this.niv =niveau;
+		this.etoiles=etoiles;
+		
+	}
 
 	public Character() {
 		super();
@@ -38,18 +58,18 @@ public class Character extends Entities {
 		character = new BufferedImage[2][]; // amount of different animations
 
 		character[0] = new BufferedImage[2];
-		character[0][0] = importImg("/powder.png");
-		character[0][1] = importImg("/powderPlaned.png");
+		character[0][0] = importImg("/Powpow.png");
+		character[0][1] = importImg("/Powpow2.png");
 
 		character[1] = new BufferedImage[2];
-		character[1][0] = importImg("/powderLeft.png");
-		character[1][1] = importImg("/powderPlanedLeft.png");
+		character[1][0] = importImg("/Left-Powpow (1).png");
+		character[1][1] = importImg("/Left-Powpow 2 (1).png");
 	}
 
 	/**
 	 * Where the animation of the character are handled
 	 */
-	public void updateCharacAnimationTick() {
+	public void updateAnimationTick() {
 		aniTick++;
 		if (aniTick >= aniSpeed) {
 			// two cases : character is jumping or basic animation
@@ -112,6 +132,7 @@ public class Character extends Entities {
 	 */
 	public void xMovement(double move) {
 		posX += move;
+		this.clicking=false;
 		if (move < 0)
 			currentAnimation = LEFT;
 		else
@@ -124,7 +145,18 @@ public class Character extends Entities {
 	public void jump() {
 		jumping = true;
 	}
-
+	
+	public void click() {
+		clicking = true;
+	}
+	
+	public static boolean isClicked() {
+		return clicking;
+	}
+	
+	public static void setClicked(boolean b) {
+		clicking=b;
+	}
 	/**
 	 * Allow to enter the right moving animation in updateCharacAnimationTick()
 	 */
@@ -137,5 +169,28 @@ public class Character extends Entities {
 	 */
 	public void left(boolean b) {
 		movingLeft = b;
+	}
+	
+	public int getAniIndex() {
+		return aniIndex;
+	}
+	
+	public static void setPosX(int x) {
+		posX=x;
+	}
+	public static int getEtoiles() {
+		return etoiles;
+	}
+	public static void setEtoiles(int e) {
+		etoiles = e;
+	}
+	public String getNom() {
+		return nom;
+	}
+	public int getNiv() {
+		return niv;
+	}
+	public int getId() {
+		return id;
 	}
 }

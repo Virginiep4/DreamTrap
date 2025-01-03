@@ -7,17 +7,18 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 public abstract class Entities {
-	protected int posX = 0;
-	protected int posY = 0;
+	protected static int posX = 0;
+	protected static int posY = 0;
 	
 	public Entities() {
 		importEntity();
 	}
+
 	
-	public int getPosX() {
+	public static int getPosX() {
 		return posX;
 	}
-	public int getPosY() {
+	public static int getPosY() {
 		return posY;
 	}
 	
@@ -47,5 +48,5 @@ public abstract class Entities {
 	/**
 	 * Where the animation of the character are handled
 	 */
-	abstract void updateCharacAnimationTick();
+	abstract void updateAnimationTick();
 }
