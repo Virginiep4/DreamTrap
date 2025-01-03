@@ -118,7 +118,12 @@ public class Item extends Entities {
 	}
 	
 	public static void click() {
-		achat();
+		if(backgroundd.getCurrentAnimation()==2 && (ShopInt.getPlace()==1 || ShopInt.getPlace()==2)){
+				
+				texte=1;
+				Timer time=new Timer(3000, e->texte=0);
+				time.start();		
+			}
 	}
 	
 	public static String achat() {
