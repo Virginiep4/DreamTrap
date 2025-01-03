@@ -33,7 +33,7 @@ public class Screen extends JPanel {
 	private GameOverScreen gameOverScreen;
 	private Welcome welcomeScreen;
 	private Welcome2 welcomeScreen2;
-	
+
 	// getters and setters
 	public Character getCharacter() {
 		return character;
@@ -43,16 +43,16 @@ public class Screen extends JPanel {
 		return levelManager;
 	}
 
-	public Screen(Progression prog ) {
+	public Screen(Progression prog) {
 		setScreenSize();
-		joueur=new JoueurDAO();
+		joueur = new JoueurDAO();
 		character = joueur.loadsave();
-		 progression=prog;
-		scoreScreen=new ScoreScreen(character);
-		gameOverScreen=new GameOverScreen(character);
-		welcomeScreen=new Welcome(character);
-		welcomeScreen2=new Welcome2(character);
-		//levelManager = new WelcomeScreen(this);
+		progression = prog;
+		scoreScreen = new ScoreScreen(character);
+		gameOverScreen = new GameOverScreen(character);
+		welcomeScreen = new Welcome(character);
+		welcomeScreen2 = new Welcome2(character);
+		// levelManager = new WelcomeScreen(this);
 		levelManager = new LevelOne(this);
 		addKeyListener(new KeyboardInputs(this));
 		getPlayerName();
@@ -75,23 +75,20 @@ public class Screen extends JPanel {
 
 		// paintComponent is called when Jpanel is created
 		// could be optimized by loading all sprite on same image and use getSubimage()
-		
-		
-		
+
 		levelManager.draw(g);
 		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
 				levelManager.getxCharacterSpawn(), levelManager.getyCharacterSpawn() + (int) character.getPosY(), null);
-				
-		System.out.println("Screen win: "+progression.getWin());
-		/*if (progression.getWin()==0) {
 
-			scoreScreen.drawScroreScreen(g);
-		}*/
-		
-		//gameOverScreen.drawGameOverScreen(g,character,levelManager);
+		/*
+		 * if (progression.getWin()==0) {
+		 * 
+		 * scoreScreen.drawScroreScreen(g); }
+		 */
+
+		// gameOverScreen.drawGameOverScreen(g,character,levelManager);
 		welcomeScreen2.drawGameOverScreen(g, character, levelManager);
-		
-		
+
 	}
 
 	/**
@@ -103,19 +100,18 @@ public class Screen extends JPanel {
 		setPreferredSize(size);
 
 	}
+
 	public void setTime(int tmp) {
 		scoreScreen.setTotalTimeElapsed(tmp);
 	}
-	
+
 	public void getPlayerName() {
 		JTextField welcomeText = new JTextField();
 		// x, y, width, height
-		welcomeText.setPreferredSize(new Dimension(250,40));
-		welcomeText.setBounds((int)((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE) / 4), 250, 200, 100);
+		welcomeText.setPreferredSize(new Dimension(250, 40));
+		welcomeText.setBounds((int) ((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE) / 4), 250, 200, 100);
 		this.add(welcomeText);
-			
+
 	}
 
-	
-	
 }

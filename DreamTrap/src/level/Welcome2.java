@@ -20,6 +20,7 @@ public class Welcome2 {
 			private boolean ShowZ=false;
 			private boolean ShowS=false;
 			private int CommandNum;
+			public static String nom = "player";
 			
 			
 			public Welcome2(Character character) {

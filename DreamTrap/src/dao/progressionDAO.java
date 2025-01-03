@@ -57,7 +57,7 @@ public class progressionDAO extends DAO{
 
 	public List<Progression> getProgressionByJoueurId(int joueurId) {
         List<Progression> progressions = new ArrayList<>();
-        String req = "SELECT * FROM progression P JOIN  avoir A ON P.idprogression = A.idprogression JOIN joueur J ON A.idnom = J.idnom "; 
+        String req = "SELECT * FROM progression P JOIN joueur J ON J.idprogression = P.idprogression"; 
         //WHERE J.idnom = ?
         this.open(req);
         try {

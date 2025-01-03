@@ -95,8 +95,6 @@ public class Game implements Runnable {
 				timeUpdate--;
 				
 			}
-			System.out.println("win: "+progress.getWin());
-			System.out.println("time: "+timer.getTotalTimeElapsed());
 			if (timer.getTotalTimeElapsed() >= 6) {
 				setTimer();
 				progress.setWin(0);
