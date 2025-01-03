@@ -21,13 +21,18 @@ public class Character extends Entities {
 	private int etoiles = 0;
 	private int id;
 
+	// Système de PV et d'attente avant de pouvoir à nouveau subir des dégâts
+
+	private int nbCoeurs = 3;
+	private boolean hurting = false;
+
 	public Character(int id, String nom, int niveau, int etoiles) {
 		super();
 		this.id = id;
 		this.nom = nom;
 		this.niv = niveau;
 		this.etoiles = etoiles;
-		this.moving = new MouvementAiles(this);
+		this.moving = new MouvementNormal(this);
 		setPosY(-100);
 	}
 
@@ -36,13 +41,13 @@ public class Character extends Entities {
 		this.nom = nom;
 		this.niv = niveau;
 		this.etoiles = etoiles;
-		this.moving = new MouvementAiles(this);
+		this.moving = new MouvementNormal(this);
 		setPosY(-100);
 	}
 
 	public Character() {
 		super();
-		this.moving = new MouvementAiles(this);
+		this.moving = new MouvementNormal(this);
 		setPosY(-100);
 	}
 
@@ -94,47 +99,87 @@ public class Character extends Entities {
 
 	public void updatePos() {
 		aniTick++;
+
+		float xMove = 0, yMove = 1;
+
 		if (moving instanceof MouvementNormal) {
-			if (aniTick >= aniSpeed) {
-				// deux cas : le personnage saute ou animation
-				if (!moving.isJumping() && (moving.isInJumpingPhase() == -1)) {
-					aniIndex = ++aniIndex % character.length; // Iterates through all the images in screen.character
-					aniTick = 0;
-				} else {
-					this.moving.jumpAnimation();
+			if (moving.isInJumpingPhase() == -1) {
+				yMove = 5;
+			}
+			
+			if (!moving.isJumping() && (moving.isInJumpingPhase() == -1)) {
+				if (aniTick % walkSpeed == 0) {
+					if (aniTick >= aniSpeed) {
+						// deux cas : le personnage saute ou animation
+						aniIndex = ++aniIndex % character.length; // Iterates through all the images in screen.character
+						aniTick = 0;
+					}
+
+				}
+			} else {
+				yMove = this.moving.jumpAnimation(yMove);
+			}
+			
+			if (aniTick % walkSpeed == 0) {
+				if (moving.isUp()) {
+					yMove = -5.0f;
+				}
+				if (moving.isDown()) {
+					yMove = 5.0f;
+				}
+
+				if (moving.isRight()) {
+					// On ne rejoint jamais 2048 * 64...
+					xMove = 5.0f;
+
+				}
+				if (moving.isLeft()) {
+					xMove = -5.0f;
+				}
+
+				if (HelpMethods.CanMoveHere(this, (int) xMove, 0)) {
+					moving.xMovement((int) xMove);
 				}
 			}
-		}
-		if (aniTick % walkSpeed == 0) {
-			float xMove = 0, yMove = 0;
-			/*
-			 * if (moving instanceof MouvementNormal) { if (aniTick >= aniSpeed) { // deux
-			 * cas : le personnage saute ou animation if (!moving.isJumping() &&
-			 * (moving.isInJumpingPhase() == -1)) { aniIndex = ++aniIndex %
-			 * character.length; // Iterates through all the images in screen.character
-			 * aniTick = 0; } else { this.moving.jumpAnimation(); } } }
-			 */
 			
-			
-			if (moving.isUp()) {
-				yMove = -5.0f;
-			}
-			if (moving.isDown()) {
-				yMove = 5.0f;
-			}
-
-			if (moving.isRight()) {
-				// On ne rejoint jamais 2048 * 64...
-				xMove = 5.0f;
-			}
-			if (moving.isLeft()) {
-					xMove = -5.0f;
-			}
-			
-			if (HelpMethods.CanMoveHere(this, (int) xMove, (int) yMove)) {
-				moving.xMovement((int) xMove);
+			if (HelpMethods.CanMoveHere(this, 0, (int) yMove)) {
 				moving.yMovement((int) yMove);
 			}
+		}
+
+		if (moving instanceof MouvementAiles) {
+
+			if (aniTick % walkSpeed == 0) {
+				/*
+				 * if (moving instanceof MouvementNormal) { if (aniTick >= aniSpeed) { // deux
+				 * cas : le personnage saute ou animation if (!moving.isJumping() &&
+				 * (moving.isInJumpingPhase() == -1)) { aniIndex = ++aniIndex %
+				 * character.length; // Iterates through all the images in screen.character
+				 * aniTick = 0; } else { this.moving.jumpAnimation(); } } }
+				 */
+
+				if (moving.isUp()) {
+					yMove = -5.0f;
+				}
+				if (moving.isDown()) {
+					yMove = 5.0f;
+				}
+
+				if (moving.isRight()) {
+					// On ne rejoint jamais 2048 * 64...
+					xMove = 5.0f;
+
+				}
+				if (moving.isLeft()) {
+					xMove = -5.0f;
+				}
+
+				if (HelpMethods.CanMoveHere(this, (int) xMove, (int) yMove)) {
+					moving.xMovement((int) xMove);
+					moving.yMovement((int) yMove);
+				}
+			}
+
 		}
 	}
 
@@ -197,6 +242,22 @@ public class Character extends Entities {
 		 * } }
 		 */
 
+	}
+
+	public int getNbCoeurs() {
+		return nbCoeurs;
+	}
+
+	public void setNbCoeurs(int nbCoeurs) {
+		this.nbCoeurs = nbCoeurs;
+	}
+
+	public boolean isHurting() {
+		return hurting;
+	}
+
+	public void setHurting(boolean hurting) {
+		this.hurting = hurting;
 	}
 
 }

@@ -3,74 +3,96 @@ package level;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.lang.Math;
+import java.util.TimerTask;
+
+import javax.swing.Timer;
 
 import dreamTrap.Game;
 import dreamTrap.Screen;
+import entities.Boss;
 import level.LevelManager;
 
 public class HelpMethods {
 
-	// Checks if the entity can move to the specified position (x, y) with given
-	// width and height
 	public static boolean CanMoveHere(entities.Character character, float xMove, float yMove) {
 		// Check all four corners of the entity's bounding box
 		if (!IsSolid(character, xMove, yMove))
 			return true;
 		return false;
-		
-
 	}
 
 	// Checks if the position (x, y) is solid (i.e., has an obstacle)
 	private static boolean IsSolid(entities.Character character, float xMove, float yMove) {
 		// Check if the position is out of bounds
-		if (character.getPosY() + yMove - 2 * Game.TILES_SIZE< -Game.GAME_HEIGHT)
+		if (character.getPosY() + yMove - 2 * Game.TILES_SIZE < -Game.GAME_HEIGHT)
 			return true; // Out of top/bottom bounds
-		
-		int i = (int) (LevelManager.getLevelHeight() - 2 + (character.getPosY() + yMove) / Game.TILES_SIZE); // Index de colonne
+
+		int i = (int) (LevelManager.getLevelHeight() - 2 + (character.getPosY() + yMove) / Game.TILES_SIZE); // Index de
+																												// colonne
 		float j = (4 + (character.getPosX() + xMove) / Game.TILES_SIZE); // Index de ligne
-		/* 4 * BLOCK_SIZE / Game.TILES_SIZE
-		 * BLOCK_SIZE = TILE_SIZE
-		 * pendant le merge peut-être uniformiser les noms...
-		*/
-		int targetedTileUpLeft = character.getLvlData()[i][(int)Math.floor(j)];
-		int targetedTileUpRight = character.getLvlData()[i][(int)Math.ceil(j)];
-		int targetedTileDownLeft = character.getLvlData()[i+character.getHeight()/Game.TILES_SIZE][(int)Math.floor(j)];
-		int targetedTileDownRight = character.getLvlData()[i+character.getHeight()/Game.TILES_SIZE][(int)Math.ceil(j)];
-		
+		/*
+		 * 4 * BLOCK_SIZE / Game.TILES_SIZE BLOCK_SIZE = TILE_SIZE pendant le merge
+		 * peut-être uniformiser les noms...
+		 */
+		int targetedTileUpLeft = character.getLvlData()[i][(int) Math.floor(j)];
+		int targetedTileUpRight = character.getLvlData()[i][(int) Math.ceil(j)];
+		int targetedTileDownLeft = character.getLvlData()[i + character.getHeight() / Game.TILES_SIZE][(int) Math
+				.floor(j)];
+		int targetedTileDownRight = character.getLvlData()[i + character.getHeight() / Game.TILES_SIZE][(int) Math
+				.ceil(j)];
+
 		// Determine if the tile is solid based on its value
 
-		if (targetedTileUpLeft != -1 || targetedTileUpRight != -1 || targetedTileDownLeft != -1 || targetedTileDownRight != -1) {
-			System.out.println("Le joueur est sur un bloc solide.");
+		if (targetedTileUpLeft != -1 || targetedTileUpRight != -1 || targetedTileDownLeft != -1
+				|| targetedTileDownRight != -1) {
 			return true; // The tile is solid
 		}
-		
+
 		return false; // The tile is not solid
 
 	}
-	
+
 	public static boolean IsStar(entities.Character character) {
-		
-				int i = (int) (LevelManager.getLevelHeight() - 2 + character.getPosY() / Game.TILES_SIZE); // Index de colonne
-				int j = (int) (4 + (character.getPosX()) / Game.TILES_SIZE); // Index de ligne
-				
-				if (character.getLvlStarsData()[i][j]!=-1) {
-					System.out.println("Le joueur est sur une étoile.");
-					return true; // The tile is solid
-				}
-				
-				return false; // The tile is not solid
+
+		int i = (int) (LevelManager.getLevelHeight() - 2 + character.getPosY() / Game.TILES_SIZE); // Index de colonne
+		int j = (int) (4 + (character.getPosX()) / Game.TILES_SIZE); // Index de ligne
+
+		if (character.getLvlStarsData()[i][j] != -1) {
+			return true; // The tile is solid
+		}
+
+		return false; // The tile is not solid
 	}
-	
+
 	public static void gotStar(entities.Character character, LevelManager level) {
 		int i = (int) (LevelManager.getLevelHeight() - 2 + character.getPosY() / Game.TILES_SIZE); // Index de colonne
 		int j = (int) (4 + (character.getPosX()) / Game.TILES_SIZE); // Index de ligne
-		
-		character.setEtoiles(character.getEtoiles()+1);
+
+		character.setEtoiles(character.getEtoiles() + 1);
 		int[][] newStars = character.getLvlStarsData();
 		newStars[i][j] = -1;
 		character.setLvlStarsData(newStars);
 		level.setStars(newStars);
+	}
+
+	public static void bossHurts(entities.Character character, entities.Boss boss) {
+		float characX = (float) (character.getPosX()) / (float) (Screen.BLOCK_SIZE)
+				- (float) (character.getPosX() % Screen.BLOCK_SIZE) / (float) (Screen.BLOCK_SIZE);
+		if (boss.getxBlock() - characX == 4.0 && boss.getPosY() == character.getPosY() && !character.isHurting()) {
+			characterHurts(character);
+			System.out.println("Coeurs :" + character.getNbCoeurs());
+		}
+	}
+
+	public static void characterHurts(entities.Character character) {
+		character.setNbCoeurs(character.getNbCoeurs() - 1);
+		character.setHurting(true);
+		Timer hurtTimer = new Timer(3000, e -> { // PAS LE MÊME QUE Time !!!!!!!!!
+			character.setHurting(false);
+		});
+
+		hurtTimer.setRepeats(false);
+		hurtTimer.start();
 	}
 
 	// Gets the X position of the entity next to a wall

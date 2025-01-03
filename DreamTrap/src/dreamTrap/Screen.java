@@ -2,10 +2,13 @@ package dreamTrap;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 
 import javax.swing.JPanel;
 
 import inputs.KeyboardInputs;
+import level.HelpMethods;
 import level.LevelManager;
 import entities.Boss;
 import entities.Character;
@@ -31,6 +34,7 @@ public class Screen extends JPanel {
 
 		addKeyListener(new KeyboardInputs(this));// focus on this(object screen ) bc of keylistener
 	}
+	
 
 	public void updateGame() {
 
@@ -38,6 +42,11 @@ public class Screen extends JPanel {
 		character.updateCharacAnimationTick();
 		character.updateHitbox();
 		levelmanager.update();
+		
+		if (character.getNbCoeurs()==0) {
+			// Game Over
+			System.out.println("Game Over !");
+		}
 	}
 	
 
@@ -57,12 +66,20 @@ public class Screen extends JPanel {
 		// , null);
 
 		levelmanager.draw(g);
-		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
+		
+		BufferedImage characterImage = character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()];
+		
+		if (character.isHurting()) {
+	        float[] scales = {1.0f, 0.0f, 0.0f, 1.0f};
+	        RescaleOp redFilter = new RescaleOp(scales, new float[4], null);
+	        characterImage = redFilter.filter(characterImage, null);
+	    }
+		
+		g.drawImage(characterImage,
 				4 * BLOCK_SIZE,
 				(BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE + character.getPosY(), null);
 
 		character.drawHitbox(g);
-
 	}
 
 	/**

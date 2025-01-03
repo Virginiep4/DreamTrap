@@ -66,11 +66,11 @@ public class MouvementNormal implements Mouvement {
 	/**
 	 * Where the jump of the character is handled
 	 */
-	public void jumpAnimation() {
+	public float jumpAnimation(float yMove) {
 		// ascending phase for the first half of jump phases
 		if ((jumpingPhase < (MAX_JUMP_PHASE / 2)) && (jumpingPhase % JUMP_DELAY == 0)) {
 			jumpingPhase++;
-			main.setPosY(main.getPosY() - (int) (parablePos * parablePos * JUMP_HEIGHT_FACTOR));
+			yMove -= parablePos * parablePos * JUMP_HEIGHT_FACTOR;
 			parablePos += 2 / MAX_JUMP_PHASE; // 2 because range between -1 and 1
 		}
 
@@ -84,7 +84,7 @@ public class MouvementNormal implements Mouvement {
 		// descending phase
 		else if (jumpingPhase % JUMP_DELAY == 0) {
 			jumpingPhase++;
-			main.setPosY(main.getPosY() + (int) (parablePos * parablePos * JUMP_HEIGHT_FACTOR));
+			yMove += parablePos * parablePos * JUMP_HEIGHT_FACTOR;
 			parablePos += 2 / MAX_JUMP_PHASE; // 2 because range between -1 and 1
 		}
 
@@ -93,6 +93,8 @@ public class MouvementNormal implements Mouvement {
 			jumpingPhase++;
 			parablePos += 2 / MAX_JUMP_PHASE;
 		}
+		
+		return yMove;
 	}
 
 	public void xMovement(int move) {
@@ -107,7 +109,7 @@ public class MouvementNormal implements Mouvement {
 	}
 
 	public void yMovement(int move) {
-
+		main.setPosY(main.getPosY() + move);
 	}
 
 	public void releaseJump() {

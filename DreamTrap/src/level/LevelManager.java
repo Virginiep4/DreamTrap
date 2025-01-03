@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.awt.Color;
 import dreamTrap.Screen;
+import dreamTrap.Time;
 import entities.Boss;
 import entities.Character;
 
@@ -30,6 +31,7 @@ public class LevelManager {
 		blockSprites = new BufferedImage[SPRITES_WIDTH * SPRITES_HEIGHT];
 		spritesInitializer();
 		levelInitializer();
+		System.out.println("Coeurs :" + character.getNbCoeurs());
 	}
 
 	// getters and setters
@@ -96,15 +98,17 @@ public class LevelManager {
 					boss.getyBlock() * Screen.BLOCK_SIZE + boss.getmovingYBlock(), Screen.BLOCK_SIZE,
 					Screen.BLOCK_SIZE, null);
 
-	    } else {
 	    }
 	}
 
 	public void update() {
 		boss.update();
+		HelpMethods.bossHurts(character, boss);
+		
 		if (HelpMethods.IsStar(character)) {
 			HelpMethods.gotStar(character, this);
 		}
+		
 	}
 
 	// Stars

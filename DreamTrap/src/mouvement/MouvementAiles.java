@@ -66,8 +66,8 @@ public class MouvementAiles implements Mouvement {
 	    this.falling = falling;
 	}
 	@Override
-	public void jumpAnimation() {
-		// TODO Auto-generated method stub
+	public float jumpAnimation(float yMove) {
+		return 0;
 		
 	}
 	@Override

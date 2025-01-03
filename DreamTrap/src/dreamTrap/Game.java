@@ -10,7 +10,7 @@ public class Game implements Runnable {
 	public final static int TILES_SIZE = 64;
 	public final static int GAME_WIDTH = TILES_SIZE* 20;
 	public final static int GAME_HEIGHT = TILES_SIZE*11;
-
+	private Time timer;
 	
 	
 	public Game() {
@@ -20,6 +20,7 @@ public class Game implements Runnable {
 		window = new Window(screen);
 		screen.requestFocus();//ask jpanel to be ready to recieve at any time input from keyboard
 		startGameLoop();
+		timer= new Time();
 	}
 	
 	/**
@@ -31,6 +32,8 @@ public class Game implements Runnable {
 		gameThread = new Thread(this);//independant sequence of instruction
 		gameThread.start(); // calls run method
 	}
+	
+	
 	
 	public void updateGame() {
 		screen.updateGame();
@@ -53,19 +56,39 @@ public class Game implements Runnable {
 		
 		double deltaFrame = 0;
 		double deltaUpdate = 0;
+		double timeUpdate = 0;
 		
 		while (true) {
+
 			crtTime = System.nanoTime(); //current time in nano second
+			
+			timeUpdate+=(crtTime - previousTime)/ 1000000000.0;
+			
 			deltaFrame += (crtTime - previousTime) / timePerFrame;//time spend since last img 
 			deltaUpdate += (crtTime - previousTime) / timePerUpdate;//time spend since last update 
 			previousTime = crtTime;
+			
 			
 			//if enough time spend for update game
 			if (deltaUpdate >= 1) {
 				updateGame();
 				deltaUpdate--;
 				
+				
+				
 			}
+			
+			if(timeUpdate>=1) {
+				timer.update();
+				timeUpdate--;
+				
+			}
+			//System.out.println("win: "+progress.getWin());
+			//System.out.println("time: "+timer.getTotalTimeElapsed());
+			/*if (timer.getTotalTimeElapsed() >= 6) {
+				setTimer();
+				progress.setWin(0);
+			}*/
 			
 			//if enough time spend for repaint my frame (img)
 			if (deltaFrame >= 1) {
@@ -74,4 +97,5 @@ public class Game implements Runnable {
 			}		
 		}
 	}
+	
 }
