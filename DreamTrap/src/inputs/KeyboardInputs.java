@@ -4,18 +4,19 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import dreamTrap.Screen;
+import entities.Character;
 
 public class KeyboardInputs implements KeyListener {
-	private Screen screen;
+	private Character character;
 
 	public KeyboardInputs(Screen screen) {
-		this.screen = screen;
+		character = screen.getCharacter();
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
-	
+
 	/**
 	 * Handle the Keys pressed
 	 *
@@ -26,19 +27,27 @@ public class KeyboardInputs implements KeyListener {
 		// whenever a key is pressed we check if it does something for our game
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_SPACE:
-			screen.jump();
+			character.jump();
 			break;
 		case KeyEvent.VK_D:
-			screen.xMovement(10);
+			character.right(true);
 			break;
 		case KeyEvent.VK_Q:
-			screen.xMovement(-10);
+			character.left(true);
 			break;
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		// when a key is released it's the end of movement
+		switch (e.getKeyCode()) {
+		case KeyEvent.VK_D:
+			character.right(false);
+			break;
+		case KeyEvent.VK_Q:
+			character.left(false);
+			break;
+		}
 	}
-
 }
