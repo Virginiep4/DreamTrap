@@ -5,6 +5,8 @@ import java.awt.event.KeyListener;
 
 import dreamTrap.Screen;
 import entities.Character;
+import entities.Item;
+import entities.ShopInt;
 
 public class KeyboardInputs implements KeyListener {
 	private Character character;
@@ -35,7 +37,26 @@ public class KeyboardInputs implements KeyListener {
 		case KeyEvent.VK_Q:
 			character.left(true);
 			break;
+		case KeyEvent.VK_ENTER:
+			character.click();
+			Item.click();
+			ShopInt.click();
+			break;
+		case KeyEvent.VK_LEFT:
+			ShopInt.left();
+			break;
+		case KeyEvent.VK_RIGHT:
+			ShopInt.right();
+			break;
+		case KeyEvent.VK_DOWN:
+			ShopInt.down();
+			break;
+		case KeyEvent.VK_UP:
+			ShopInt.up();
+			break;
 		}
+		
+		
 	}
 
 	@Override
