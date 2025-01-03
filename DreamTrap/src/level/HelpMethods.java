@@ -52,16 +52,23 @@ public class HelpMethods {
 
 	}
 
-	public static boolean IsStar(entities.Character character) {
+	public static void OnStar(entities.Character character, LevelManager level) {
 
 		int i = (int) (LevelManager.getLevelHeight() - 2 + character.getPosY() / Game.TILES_SIZE); // Index de colonne
 		int j = (int) (4 + (character.getPosX()) / Game.TILES_SIZE); // Index de ligne
+		if (level.getStars()[i][j] != -1) {
+			gotStar(character, level);
+		}
+	}
 
-		if (character.getLvlStarsData()[i][j] != -1) {
-			return true; // The tile is solid
+	public static void OnSpike(entities.Character character, LevelManager level) {
+
+		int i = (int) (LevelManager.getLevelHeight() - 2 + character.getPosY() / Game.TILES_SIZE); // Index de colonne
+		int j = (int) (4 + (character.getPosX()) / Game.TILES_SIZE); // Index de ligne
+		if (level.getSpikes()[i][j] != -1) {
+			characterHurt(character);
 		}
 
-		return false; // The tile is not solid
 	}
 
 	public static void gotStar(entities.Character character, LevelManager level) {
@@ -69,9 +76,8 @@ public class HelpMethods {
 		int j = (int) (4 + (character.getPosX()) / Game.TILES_SIZE); // Index de ligne
 
 		character.setEtoiles(character.getEtoiles() + 1);
-		int[][] newStars = character.getLvlStarsData();
+		int[][] newStars = level.getStars();
 		newStars[i][j] = -1;
-		character.setLvlStarsData(newStars);
 		level.setStars(newStars);
 	}
 
@@ -79,20 +85,22 @@ public class HelpMethods {
 		float characX = (float) (character.getPosX()) / (float) (Screen.BLOCK_SIZE)
 				- (float) (character.getPosX() % Screen.BLOCK_SIZE) / (float) (Screen.BLOCK_SIZE);
 		if (boss.getxBlock() - characX == 4.0 && boss.getPosY() == character.getPosY() && !character.isHurting()) {
-			characterHurts(character);
-			System.out.println("Coeurs :" + character.getNbCoeurs());
+			characterHurt(character);
 		}
 	}
 
-	public static void characterHurts(entities.Character character) {
-		character.setNbCoeurs(character.getNbCoeurs() - 1);
-		character.setHurting(true);
-		Timer hurtTimer = new Timer(3000, e -> { // PAS LE MÊME QUE Time !!!!!!!!!
-			character.setHurting(false);
-		});
+	public static void characterHurt(entities.Character character) {
+		if (!character.isHurting()) {
+			character.setNbCoeurs(character.getNbCoeurs() - 1);
+			System.out.println(character.getNbCoeurs());
+			character.setHurting(true);
+			Timer hurtTimer = new Timer(3000, e -> { // PAS LE MÊME QUE Time !!!!!!!!!
+				character.setHurting(false);
+			});
 
-		hurtTimer.setRepeats(false);
-		hurtTimer.start();
+			hurtTimer.setRepeats(false);
+			hurtTimer.start();
+		}
 	}
 
 	// Gets the X position of the entity next to a wall

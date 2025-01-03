@@ -23,8 +23,10 @@ public class LevelManager {
 	private int levelWidth;
 	private BufferedImage[] starSprites;
 	private BufferedImage starImg;
+	private BufferedImage spikeImg;
 	private int[][] stars;
-
+	private int[][] spikes;
+	
 	public LevelManager(Screen screen) {
 		character = screen.getCharacter();
 		boss = new Boss(character);
@@ -54,7 +56,7 @@ public class LevelManager {
 			}
 
 		this.starImg = Loadsave.importImg(Loadsave.STAR_IMG);
-
+		this.spikeImg = Loadsave.importImg(Loadsave.SPIKE_IMG);
 	}
 
 	private void levelInitializer() {
@@ -63,6 +65,7 @@ public class LevelManager {
 		levelHeight = levelImage.getHeight();
 		level = new int[levelHeight][levelWidth];
 		starsInitializer();
+		spikesInitializer();
 
 		for (int i = 0; i < levelHeight; i++)
 			for (int j = 0; j < levelWidth; j++) {
@@ -81,6 +84,8 @@ public class LevelManager {
 			for (int j = 0; j < Screen.BLOCK_PER_WIDTH + 2; j++) {
 				int block = level[i][j + x];
 				int star = stars[i][j + x];
+				int spike = spikes[i][j + x];
+				
 				if (block != -1) {
 					g.drawImage(blockSprites[block], j * Screen.BLOCK_SIZE - (character.getPosX() % 64),
 							(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
@@ -88,6 +93,11 @@ public class LevelManager {
 				}
 				if (star != -1) {
 					g.drawImage(starImg, j * Screen.BLOCK_SIZE - (character.getPosX() % 64),
+							(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
+							Screen.BLOCK_SIZE, null);
+				}
+				if (spike != -1) {
+					g.drawImage(spikeImg, j * Screen.BLOCK_SIZE - (character.getPosX() % 64),
 							(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
 							Screen.BLOCK_SIZE, null);
 				}
@@ -104,11 +114,8 @@ public class LevelManager {
 	public void update() {
 		boss.update();
 		HelpMethods.bossHurts(character, boss);
-		
-		if (HelpMethods.IsStar(character)) {
-			HelpMethods.gotStar(character, this);
-		}
-		
+		HelpMethods.OnSpike(character, this);
+		HelpMethods.OnStar(character, this);
 	}
 
 	// Stars
@@ -121,11 +128,56 @@ public class LevelManager {
 				stars[i][j] = -1;
 			}
 		}
+		
+		// Placées à la main
 
 		stars[25][7] = 0;
 		stars[25][30] = 0;
 		stars[27][11] = 0;
 		stars[26][22] = 0;
+		
+		/* Mais faire boucle sur Blue
+		 * for (int i = 0; i < levelHeight; i++)
+			for (int j = 0; j < levelWidth; j++) {
+				Color color = new Color(levelImage.getRGB(j, i));
+				int value = color.getBlue();
+				if (value < 128)
+					level[i][j] = -1;
+				else
+					level[i][j] = 0;
+			}
+		 */
+	}
+	
+	public void spikesInitializer() {
+		spikes = new int[levelHeight][levelWidth];
+
+		for (int i = 0; i < spikes.length; i++) {
+			for (int j = 0; j < spikes[i].length; j++) {
+				spikes[i][j] = -1;
+			}
+		}
+		
+		// Placés à la main
+		
+		spikes[29][7] = 0;
+		spikes[29][43] = 0;spikes[29][44] = 0;spikes[29][45] = 0;spikes[29][46] = 0;
+		spikes[29][47] = 0;spikes[29][48] = 0;
+		spikes[27][51] = 0;
+		spikes[29][56] = 0;
+		spikes[29][57] = 0;
+		
+		/* Mais faire boucle sur Red
+		 * for (int i = 0; i < levelHeight; i++)
+			for (int j = 0; j < levelWidth; j++) {
+				Color color = new Color(levelImage.getRGB(j, i));
+				int value = color.getRed();
+				if (value < 128)
+					level[i][j] = -1;
+				else
+					level[i][j] = 0;
+			}
+		 */
 	}
 
 	public int[][] getStars() {
@@ -134,5 +186,9 @@ public class LevelManager {
 
 	public void setStars(int[][] stars) {
 		this.stars = stars;
+	}
+	
+	public int[][] getSpikes() {
+		return spikes;
 	}
 }

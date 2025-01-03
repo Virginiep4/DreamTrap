@@ -15,7 +15,6 @@ public class Character extends Entities {
 	// of tick between movings IT SHOULD BE A DIVISOR OF aniSpeed !!!
 	private int aniTick, aniIndex = 0, aniSpeed = 40, walkSpeed = 5; // animation speed egal 120 fps / 2 animations
 	private int[][] lvlData;
-	private int[][] lvlStarsData;
 	private String nom = "";
 	private int niv = 0;
 	private int etoiles = 0;
@@ -87,10 +86,6 @@ public class Character extends Entities {
 //			System.out.println(); // Passe à la ligne suivante après avoir affiché une ligne
 //		}
 
-	}
-
-	public void loadlvlStarsData(int[][] lvlStarsData) {
-		this.lvlStarsData = lvlStarsData;
 	}
 
 	/**
@@ -205,14 +200,6 @@ public class Character extends Entities {
 
 	public int getId() {
 		return id;
-	}
-
-	public int[][] getLvlStarsData() {
-		return lvlStarsData;
-	}
-
-	public void setLvlStarsData(int[][] lvlStarsData) {
-		this.lvlStarsData = lvlStarsData;
 	}
 
 	@Override
