@@ -35,20 +35,30 @@ public class JoueurDAO extends DAO {
 		return obj;
 	}
 
-	public Character find() {
+	public Character find( String playerName ) {
 	    Character character = null;
-	    String req = "SELECT * FROM joueur ORDER BY idnom DESC LIMIT 1";
+	    
+	    String req = "SELECT * FROM joueur J  JOIN  avoir A ON J.idnom = A.idnom INNER JOIN progression P  ON A.idprogression = P.idprogression WHERE J.nom=? AND win=1";
 	    this.open(req);
 	    try {
-	        //this.stm.setString(1, nom);
+	        this.stm.setString(1, playerName);
 	        ResultSet rs = this.stm.executeQuery();
-	        if (rs.next()) {
-	            int id = rs.getInt("idnom"); 
-	            String nom =rs.getString("nom");
-	            int niveau = rs.getInt("niveau");
-	            int etoiles = rs.getInt("etoiles");
-	            character = new Character(id, nom, niveau, etoiles); 
+	        
+		        if (rs.next()) {
+		            int id = rs.getInt("idnom"); 
+		            String nom =rs.getString("nom");
+		            int niveau = rs.getInt("niveau");
+		            int etoiles = rs.getInt("etoiles");
+		            character = new Character(id, nom, niveau, etoiles); 
+		            System.out.println(character);
+		        }
+	        
+		        
+	        else {
+	        	character = new Character(0, playerName, 0, 0); 
 	        }
+	        	
+	        
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
@@ -56,10 +66,10 @@ public class JoueurDAO extends DAO {
 	}
 	
 	
-	public Character loadsave() {
+	public Character loadsave(String name) {
 		// faudrais recuperer le nom joeur 
 		
-		return find();
+		return find(name);
 		
 	}
 	

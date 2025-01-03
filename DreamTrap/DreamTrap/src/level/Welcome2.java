@@ -26,7 +26,7 @@ public class Welcome2 {
 				        this.character = character; 
 				    }
 			
-			public void drawGameOverScreen(Graphics g,Character character,LevelManager levelManager) {
+			public void draw(Graphics g,Character character,LevelManager levelManager) {
 			
 				
 					

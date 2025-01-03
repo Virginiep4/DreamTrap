@@ -95,12 +95,12 @@ public class Game implements Runnable {
 				timeUpdate--;
 				
 			}
-			System.out.println("win: "+progress.getWin());
-			System.out.println("time: "+timer.getTotalTimeElapsed());
-			if (timer.getTotalTimeElapsed() >= 6) {
+			//System.out.println("win: "+progress.getWin());
+			//System.out.println("time: "+timer.getTotalTimeElapsed());
+			/*if (timer.getTotalTimeElapsed() >= 6) {
 				setTimer();
 				progress.setWin(0);
-			}
+			}*/
 			
 			//if enough time spend for repaint my frame (img)
 			if (deltaFrame >= 1) {

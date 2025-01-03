@@ -116,6 +116,10 @@ public class Character extends Entities {
 		// TODO Auto-generated method stub
 		
 	}
+	public void setNom(String nom) {
+		this.nom=nom;
+		
+	}
 	public String toString() {
         return "Character{" +
                 "id=" + id +

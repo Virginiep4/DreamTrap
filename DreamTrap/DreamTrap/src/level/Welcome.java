@@ -30,7 +30,7 @@ public class Welcome {
 			        this.character = character; 
 			    }
 		
-		public void drawGameOverScreen(Graphics g,Character character,LevelManager levelManager) {
+		public void draw(Graphics g,Character character,LevelManager levelManager) {
 		
 			
 				
@@ -54,7 +54,7 @@ public class Welcome {
 				
 			    // Play Again 
 			    g.setFont(g.getFont().deriveFont(40f));
-				text="NEW GAME";
+				text="PlAY";
 				x=(int)((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE) / 4);
 				y= 500;
 				g.drawString(text, x, y);
@@ -67,7 +67,7 @@ public class Welcome {
 				if(this.character.moving.isDown()){ShowZ(false); ShowS(true);}
 				//Exit 
 				g.setFont(g.getFont().deriveFont(40f));
-				text="LOAD GAME";
+				text="";
 				x=(int)((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE) / 4);
 				y= 600;
 				g.drawString(text, x, y);

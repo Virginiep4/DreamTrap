@@ -18,10 +18,10 @@ public class ScoreList {
 	private Character character;
 	 private static ScoreList scorelist;
 	
-	public ScoreList(Character character) {
+	public ScoreList() {
 		scorelist=this;
-		this.character=character;
-		scoreList = dao.getProgressionByJoueurId(character.getId());
+		
+		scoreList = dao.getProgressionByJoueurId(); // get all the progression
 		 
 		
 	}

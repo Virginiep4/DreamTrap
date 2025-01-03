@@ -38,10 +38,10 @@ public class Test {
 		        
 		        //joueurDAO.create(newJoeur);
 		        
-		        System.out.println(joueurDAO.loadsave());
+		        System.out.println(joueurDAO.loadsave("dede"));
 		        
 		        progressionDAO p = new progressionDAO();
-		        System.out.println(p.getProgressionByJoueurId(3));
+		        System.out.println(p.getProgressionByJoueurId());
 	
 
 }

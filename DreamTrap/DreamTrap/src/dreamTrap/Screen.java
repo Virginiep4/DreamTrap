@@ -2,6 +2,8 @@ package dreamTrap;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -33,7 +35,7 @@ public class Screen extends JPanel {
 	private GameOverScreen gameOverScreen;
 	private Welcome welcomeScreen;
 	private Welcome2 welcomeScreen2;
-	
+	private String nom;
 	// getters and setters
 	public Character getCharacter() {
 		return character;
@@ -46,8 +48,9 @@ public class Screen extends JPanel {
 	public Screen(Progression prog ) {
 		setScreenSize();
 		joueur=new JoueurDAO();
-		character = joueur.loadsave();
-		 progression=prog;
+		
+		character = joueur.loadsave("didi");
+		progression=prog;
 		scoreScreen=new ScoreScreen(character);
 		gameOverScreen=new GameOverScreen(character);
 		welcomeScreen=new Welcome(character);
@@ -56,6 +59,8 @@ public class Screen extends JPanel {
 		levelManager = new LevelOne(this);
 		addKeyListener(new KeyboardInputs(this));
 		getPlayerName();
+		
+		
 	}
 
 	public void updateGame() {
@@ -77,19 +82,22 @@ public class Screen extends JPanel {
 		// could be optimized by loading all sprite on same image and use getSubimage()
 		
 		
+			
+		
 		
 		levelManager.draw(g);
-		g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
+		welcomeScreen2.draw(g, character, levelManager);
+		
+		/*g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
 				levelManager.getxCharacterSpawn(), levelManager.getyCharacterSpawn() + (int) character.getPosY(), null);
-				
-		System.out.println("Screen win: "+progression.getWin());
+		*/	
+		
 		/*if (progression.getWin()==0) {
 
 			scoreScreen.drawScroreScreen(g);
 		}*/
 		
 		//gameOverScreen.drawGameOverScreen(g,character,levelManager);
-		welcomeScreen2.drawGameOverScreen(g, character, levelManager);
 		
 		
 	}
@@ -113,9 +121,22 @@ public class Screen extends JPanel {
 		welcomeText.setPreferredSize(new Dimension(250,40));
 		welcomeText.setBounds((int)((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE) / 4), 250, 200, 100);
 		this.add(welcomeText);
-			
+		
+	
+	 welcomeText.addActionListener(new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            
+              nom = welcomeText.getText();
+             //character.setNom(nom);
+             System.out.println(character.getNom());
+         }
+         
+		
+     });
+	 
+	 
 	}
-
 	
 	
 }

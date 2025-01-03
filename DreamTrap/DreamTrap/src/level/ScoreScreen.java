@@ -40,9 +40,9 @@ public class ScoreScreen extends ScoreList {
 	private int CommandNum;
 	
 	 public ScoreScreen(Character character) {
-		 super(character);
+		 super(); // scrolist constructor
 	     this.character = character; 
-	     scorelist=ScoreList.getInstance();
+	     scorelist=ScoreList.getInstance(); // get all the progression
 	     TopfiveList=scorelist.getTopfive();
 	     //timer=game.getTimer();
 	        
