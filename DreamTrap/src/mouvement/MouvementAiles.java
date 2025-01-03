@@ -43,27 +43,19 @@ public class MouvementAiles implements Mouvement {
 	// Méthodes
 	
 	public void xMovement(int move) {
+		
 		main.setPosX(main.getPosX()+move);
 		if (move < 0) {
 			main.setCurrentAnimation(LEFT);
-			left(true);
 		}
 
 		else {
 			main.setCurrentAnimation(RIGHT);
-			right(true);
 		}
 	}
 	
 	public void yMovement(int move) {
 		main.setPosY(main.getPosY()+move);
-		if (move < 0) {
-			up(true);
-		}
-
-		else {
-			down(true);
-		}
 	}
 	
 	public boolean isFalling() {

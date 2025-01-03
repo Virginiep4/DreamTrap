@@ -5,24 +5,28 @@ import static utils.ImageImporter.importImg;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import dreamTrap.Game;
 import dreamTrap.Screen;
+import level.LevelManager;
 import mouvement.MouvementAiles;
 public class Boss extends Entities {
 	
 	private BufferedImage[][] boss;
-	private Rectangle hitbox;
 	private int aniTick, aniIndex = 0, aniSpeed = 30;
 	private Character main;
 	public MouvementAiles moving;
-	private float xBlock= 30;
-	private int yBlock= 10;
+	private int xBlock=25;
+	private int yBlock=7 + (BLOCK_PER_HEIGHT - 2);
 	private int movingXBlock;
-	private int movingYBlock;	
-
+	private int movingYBlock;
+	private int currentAnimation = 0;
+	
+	public void setCurrentAnimation(int currentAnimation) {this.currentAnimation=currentAnimation;}
+	public int getCurrentAnimation() {return currentAnimation;}
+	
 	public Boss(Character main) {
 		super();
-		setPosX(30*Screen.BLOCK_SIZE);
-		setPosY(-10*Screen.BLOCK_SIZE);
+		setPosX(xBlock*Screen.BLOCK_SIZE); setPosY((yBlock - (BLOCK_PER_HEIGHT - 2)) *Screen.BLOCK_SIZE);
 		this.moving = new MouvementAiles(this);
 		this.main=main;
 	}
@@ -47,15 +51,15 @@ public class Boss extends Entities {
 	
 	// Mouvements
 	
-	public void aimCharacter() {
+public void aimCharacter() {
 		
 		// Viser position sur y
 		
 		int characY = main.getPosY();
 		int bossY = this.getPosY();
-		if (characY - Screen.BLOCK_SIZE > bossY) {moving.down(true); moving.up(false);}
-		if (characY - Screen.BLOCK_SIZE < bossY) {moving.up(true); moving.down(false);}
-		if (characY - Screen.BLOCK_SIZE == bossY) {moving.up(false); moving.down(false);}
+		if (characY > bossY) {moving.down(true); moving.up(false);}
+		if (characY < bossY) {moving.up(true); moving.down(false);}
+		if (characY == bossY) {moving.up(false); moving.down(false);}
 		
 		// Viser le print du main sur x
 		
@@ -83,8 +87,6 @@ public class Boss extends Entities {
 		}
 		
 		aimCharacter();
-		System.out.println(this.posX);
-		System.out.println(this.posY);
 		if (moving.isUp()) {
 			moving.yMovement(-1);
 			movingYBlock-= 1;
@@ -102,7 +104,6 @@ public class Boss extends Entities {
 				moving.xMovement(-1);
 				movingXBlock-= 1;
 		}
-		
 		
 	
 	}
@@ -126,5 +127,11 @@ public class Boss extends Entities {
 	}
 	public void setyBlock(int yBlock) {
 		this.yBlock = yBlock;
+	}
+
+	@Override
+	void updateCharacAnimationTick() {
+		// TODO Auto-generated method stub
+		
 	}
 }
