@@ -1,19 +1,26 @@
 package entities;
 
+
 public class Progression {
 
 	    private String nom;
-	    private int tmp; 
+	    private String tmp; 
+	    private int id ;
 	    private int win; // Indicateur de victoire (1 pour gagné, 0 pour perdu)
-
-	    public Progression(String nom , int tmp ,int win) {
-	        this.tmp = tmp;
+	    private static Progression progression;
+	    
+	    public Progression(String nom , String tmp ,int win) {
+	        
+	    	this.tmp = tmp;
 	        this.nom = nom;
 	        this.win = win;
+	        progression=this;
 	    }
 
 	    // Getters
-	   
+	    public static Progression getInstance() {
+	        return progression;
+	    }
 
 	    public int getWin() {
 	        return win;
@@ -23,8 +30,32 @@ public class Progression {
 			return nom;
 		}
 
-		public int getTmp() {
+		public String getTmp() {
 			return tmp;
 		}
+
+		
+		public void setWin(int win) {
+			this.win = win;
+		}
+		
+
+		public void setTmp(String tmp) {
+			this.tmp = tmp;
+		}
+		
+		public int getId() {
+			return id;
+		}
+
+		public void setId(int id) {
+			this.id = id;
+		}
+
+		@Override
+		public String toString() {
+			return "Progression [nom=" + nom + ", tmp=" + tmp + ", win=" + win + "]";
+		}
+		
 	
 }

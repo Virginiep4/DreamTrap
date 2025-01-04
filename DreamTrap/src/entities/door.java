@@ -2,6 +2,10 @@ package entities;
 
 import java.awt.image.BufferedImage;
 
+import dreamTrap.Screen;
+
+import static utils.ImageImporter.importImg;
+
 public class door extends Entities implements Interagiseable {
 	
 	private BufferedImage[][] door;
@@ -11,18 +15,23 @@ public class door extends Entities implements Interagiseable {
 	private int sizeY=200;
 	private int placeX;
 	private int placeY;
+	private Character character;
+	private backgroundd backgroundd;
 	
-	public door(int placeX, int placeY, int currentAnimation) {
+	public door(int placeX, int placeY, int currentAnimation, Screen screen) {
 		super();
 		this.placeX=placeX;
 		this.placeY=placeY;
 		this.currentAnimation=currentAnimation;
+		
+		this.character = screen.getCharacter();
+		this.backgroundd = screen.getBackgroundd();
 	}
 	
 	public boolean isWellPlaced() {
 		boolean rep=false;
-		int posXChara=Character.getPosX();
-		int posYChara=Character.getPosY();
+		int posXChara=character.getPosX();
+		int posYChara=character.getPosY();
 		if((posXChara>(this.placeX-150)) && (posXChara<(this.placeX-150+sizeX)) && (posYChara<(placeY-600+sizeY)) && (posYChara>placeY-600)) {
 			rep=true;
 		}
@@ -31,25 +40,27 @@ public class door extends Entities implements Interagiseable {
 
 		
 		public void change() {
-				if(backgroundd.getCurrentAnimation()==1) {
+				if(backgroundd.getCurrentAnimation()==3) {
 					if (dreamTrap.Screen.getDoor0().isWellPlaced()) {
-					backgroundd.setCurrentAnimation(3);
-					Character.setClicked(false);
-					Character.setPosX(0);
+					backgroundd.setCurrentAnimation(5);
+					character.setClicked(false);
+					character.setPosX(0);
 					}
 				}
 				
-				if(backgroundd.getCurrentAnimation()==3) {
+				if(backgroundd.getCurrentAnimation()==5) {
 					
-					if(Character.getPosX()<600) {
+					if(character.getPosX()<600) {
 						if (dreamTrap.Screen.getDoor1().isWellPlaced()) {
-						backgroundd.setCurrentAnimation(4);
-						Character.setClicked(false);
+						backgroundd.setCurrentAnimation(6);
+						character.setClicked(false);
+						character.setPosX(0);character.setPosY(0);
 					}}
-					if(Character.getPosX()<1100 && Character.getPosX()>400) {
+					if(character.getPosX()<1100 && character.getPosX()>400) {
 						if (dreamTrap.Screen.getDoor2().isWellPlaced()) {
-						backgroundd.setCurrentAnimation(5);
-						Character.setClicked(false);
+						backgroundd.setCurrentAnimation(7);
+						character.setClicked(false);
+						character.setPosX(0);character.setPosY(0);
 						}}
 					}
 				
@@ -90,7 +101,7 @@ public class door extends Entities implements Interagiseable {
 		}
 
 
-		public void updateAnimationTick() {
+		public void update() {
 			aniTick++;
 			if (aniTick >= aniSpeed) {
 				aniIndex = ++aniIndex % door[currentAnimation].length;

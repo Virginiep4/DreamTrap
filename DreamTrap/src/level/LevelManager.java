@@ -9,35 +9,71 @@ import entities.Character;
 
 import static utils.ImageImporter.importImg;
 
-public class LevelManager {
-	private Character character;
+public abstract class LevelManager {
+	protected Character character;
+	protected int xCharacterSpawn;
+	protected int yCharacterSpawn;
+	
+	protected String backgroundPath;
 
-	private final static int SPRITES_WIDTH = 5; // block width of the image for blocsSpr
-	private final static int SPRITES_HEIGHT = 2;
-	private BufferedImage[] blockSprites;
+	protected String blocksPath;
+	private static final int BLOCKS_SIZE = 32;
+	private static int blocksLength;
+	private BufferedImage[] blocks;
+
+	protected String objectsPath;
+	private static final int OBJECTS_SIZE = 32;
+	private static int objectsLength;
+	private BufferedImage[] objects;
+
+	private String levelPath;
 	private int[][] level;
 	private int levelHeight;
 	private int levelWidth;
 
-	public LevelManager(Screen screen) {
+	protected LevelManager(Screen screen, String blocksPath, String objectsPath,
+			String levelPath) {
 		character = screen.getCharacter();
+		this.blocksPath = blocksPath;
+		this.objectsPath = objectsPath;
+		this.levelPath = levelPath;
+
 		spritesInitializer();
 		levelInitializer();
 	}
-
-	/**
-	 * Puts all blocks in the blockSprites array The levels are built with those
-	 * blocks
-	 */
+	
+	public int getxCharacterSpawn() {
+		return xCharacterSpawn;
+	}
+	public int getyCharacterSpawn() {
+		return yCharacterSpawn;
+	}
+	
 	private void spritesInitializer() {
-		blockSprites = new BufferedImage[SPRITES_HEIGHT * SPRITES_WIDTH];
-		BufferedImage img = importImg("/blockSprites.png");
+		if (blocksPath != null) {
+			blocks = fillArray(BLOCKS_SIZE, blocksPath);
+			blocksLength = blocks.length;
+		}
 
-		for (int i = 0; i < SPRITES_HEIGHT; i++)
-			for (int j = 0; j < SPRITES_WIDTH; j++) {
-				blockSprites[i * SPRITES_WIDTH + j] = img.getSubimage(j * 64,
-						i * 64, 64, 64);
+		if (objectsPath != null) {
+			objects = fillArray(OBJECTS_SIZE, objectsPath);
+			objectsLength = objects.length;
+		}
+	}
+
+	private BufferedImage[] fillArray(int size, String path) {
+		BufferedImage img = importImg(path);
+		int height = img.getHeight() / size;
+		int width = img.getWidth() / size;
+		BufferedImage[] array = new BufferedImage[height * width]; // initialize the array according to image size
+
+		for (int i = 0; i < height; i++)
+			for (int j = 0; j < width; j++) {
+				// place each square in right index
+				array[i * width + j] = img.getSubimage(j * size, i * size, size, size);
 			}
+
+		return array;
 	}
 
 	/**
@@ -46,19 +82,28 @@ public class LevelManager {
 	 * index is the Green RGB value of the pixel in the imported image
 	 */
 	private void levelInitializer() {
-		BufferedImage levelImage = importImg("/LevelTest.png");
+		BufferedImage levelImage = importImg(levelPath);
 		levelWidth = levelImage.getWidth();
 		levelHeight = levelImage.getHeight();
 		level = new int[levelHeight][levelWidth];
+		int value;
 
 		for (int i = 0; i < levelHeight; i++)
 			for (int j = 0; j < levelWidth; j++) {
 				Color color = new Color(levelImage.getRGB(j, i));
-				int value = color.getGreen();
+
+				// block test
+				value = color.getGreen();
 				if (value < 128)
 					level[i][j] = -1;
 				else
 					level[i][j] = value - 128;
+
+				// object test
+				value = color.getBlue();
+				if (value > 127)
+					// objects index is always higher than objects and we know blocks length
+					level[i][j] = value - 128 + blocksLength;
 			}
 	}
 
@@ -74,14 +119,29 @@ public class LevelManager {
 	 */
 	public void draw(Graphics g) {
 		int x = character.getPosX() / Screen.BLOCK_SIZE;
-		for (int i = levelHeight - 1; i > levelHeight - Screen.BLOCK_PER_HEIGHT; i--)
-			for (int j = 0; j < Screen.BLOCK_PER_WIDTH + 2; j++) {
+
+		for (int i = levelHeight - 1; i > levelHeight - Screen.BLOCK_PER_HEIGHT - 1; i--)
+			for (int j = 0; j < Screen.BLOCK_PER_WIDTH + 1; j++) {
 				int block = level[i][j + x];
 				if (block != -1) {
-					g.drawImage(blockSprites[block], j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
-							(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
-							Screen.BLOCK_SIZE, null);
+					if (block < blocksLength) {
+						g.drawImage(blocks[block], j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
+								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
+								Screen.BLOCK_SIZE, null);
+						
+						
+					} else if (block < blocksLength + objectsLength) {
+						g.drawImage(objects[block - blocksLength],
+								j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
+								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
+								Screen.BLOCK_SIZE, null);
+					}
 				}
 			}
+		additionalDraw(g);
 	}
+
+	protected abstract void additionalDraw(Graphics g);
+
+	public abstract void update();
 }

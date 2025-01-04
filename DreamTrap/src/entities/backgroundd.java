@@ -1,10 +1,11 @@
 package entities;
 
 import java.awt.image.BufferedImage;
+import static utils.ImageImporter.importImg;
 
 public class backgroundd extends Entities{
 	private BufferedImage[][] backgroundd;
-	private static int currentAnimation = 1;
+	private int currentAnimation = 1;
 	private int aniTick, aniIndex = 0, aniSpeed = 60;
 //	private int accueil=0; 
 //	private int loby=1;
@@ -53,10 +54,9 @@ public class backgroundd extends Entities{
 		backgroundd[6][1]=importImg("/PageAccueil 4b.png");
 		
 	}
-
 	
-	public void updateAnimationTick() {
-	
+	@Override
+	public void update() {
 		aniTick++;
 		if (aniTick >= aniSpeed) {
 			aniIndex = ++aniIndex % backgroundd[currentAnimation].length;
@@ -67,15 +67,14 @@ public class backgroundd extends Entities{
 	public BufferedImage[][] getBackgroundd() {
 		return backgroundd;
 	}
-	public static int getCurrentAnimation() {
+	public int getCurrentAnimation() {
 		return currentAnimation;
 	}
 	
-	public static void setCurrentAnimation(int a) {
+	public void setCurrentAnimation(int a) {
 		currentAnimation=a;
 	}
 	public int getAniIndex() {
 		return aniIndex;
 	}
-	
 }

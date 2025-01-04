@@ -2,10 +2,16 @@ package entities;
 
 import java.awt.image.BufferedImage;
 
+import dreamTrap.Game;
+import dreamTrap.Screen;
+import level.ScoreScreen;
+
+import static utils.ImageImporter.importImg;
+import mouvement.*;
+
 public class Character extends Entities {
 	private BufferedImage[][] character;
-	private int currentAnimation = 0;
-
+	private static Character charactere;
 	// aniTick is current tick, aniIndex is the current sub-animation, aniSpeed is
 	// amount of Game.updates(ticks) before changing animation, walkSpeed is amount
 	// of tick between movings IT SHOULD BE A DIVISOR OF aniSpeed !!!
@@ -16,39 +22,62 @@ public class Character extends Entities {
 	private double parablePos = -1; // makes the jump parabolic
 	private boolean movingRight = false;
 	private boolean movingLeft = false;
-	private static boolean clicking=false;
+	private static boolean clicking = false;
+	public Mouvement moving;
 
 	private final int RIGHT = 0;
 	private final int LEFT = 1;
+	private String nom = "";
+	private int niv = 0;
+	private int etoiles = 0;
 	private int id;
-	private String nom;
-	private int niv;
-	private static int etoiles;
-	
-	public Character(int id, String nom, int niveau,int etoiles) {
-		this.id=id;
-		this.nom =nom;
-		this.niv =niveau;
-		this.etoiles=etoiles;
-		
-	}
-	public Character( String nom, int niveau,int etoiles) {
-		
-		this.nom =nom;
-		this.niv =niveau;
-		this.etoiles=etoiles;
-		
+
+	public Character(String nom, int niveau, int etoiles) {
+		this.nom = nom;
+		this.niv = niveau;
+		this.etoiles = etoiles;
+
 	}
 
-	public Character() {
+	public Character(int id, String nom, int niv, int etoiles) {
+		// le passage des infos ne marche pas a partir d'ici
 		super();
+		charactere = this;
+		this.moving = new MouvementNormal(this);
+		new ScoreScreen(this);
+		this.id = id;
+		this.nom = nom;
+		this.niv = niv;
+		this.etoiles = etoiles;
+
 	}
 
 	public BufferedImage[][] getCharacter() {
 		return character;
 	}
-	public int getCurrentAnimation() {
-		return currentAnimation;
+
+	public int getAniIndex() {
+		return aniIndex;
+	}
+
+	public int getEtoiles() {
+		return etoiles;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public int getNiv() {
+		return niv;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public static Character getInstance() {
+		return charactere;
 	}
 
 	/**
@@ -69,59 +98,50 @@ public class Character extends Entities {
 	/**
 	 * Where the animation of the character are handled
 	 */
-	public void updateAnimationTick() {
+
+	public void update() {
 		aniTick++;
-		if (aniTick >= aniSpeed) {
-			// two cases : character is jumping or basic animation
-			if (!jumping) {
-				aniIndex = ++aniIndex % character.length; // Iterates through all the images in screen.character
-				aniTick = 0;
-			} else {
-				jumpAnimation();
+
+		if (moving instanceof MouvementNormal) {
+			if (aniTick >= aniSpeed) {
+				// deux cas : le personnage saute ou animation
+				if (!moving.isJumping() && (moving.isInJumpingPhase() == -1)) {
+					aniIndex = ++aniIndex % character.length; // Iterates through all the images in screen.character
+					aniTick = 0;
+				} else {
+					this.moving.jumpAnimation();
+				}
 			}
 		}
-
-		if (aniTick % walkSpeed == 0) {
-			if (movingRight) {
-				xMovement(20);
-			}
-			if (movingLeft) {
-				xMovement(-20);
-			}
+		
+		if (moving.isUp()) {
+			moving.yMovement(-2);
+		}
+		if (moving.isDown()) {
+			moving.yMovement(2);
+		}
+		if (moving.isRight()) {
+			// On ne rejoint jamais  2048 * 64...
+			moving.xMovement(2);
+		}
+		if (moving.isLeft()) {
+			if (posX > 0) // évite les outOfBounds
+				moving.xMovement(-2);
 		}
 	}
 
-	/**
-	 * Where the jump of the character is handled
-	 */
-	public void jumpAnimation() {
-		// 16 phases for jumping : 8 going up and 8 going down
-		// this will probably change to make the jump more smooth
+	public void setEtoiles(int etoile) {
+		// TODO Auto-generated method stub
 
-		// ascending phase
-		if ((jumpingPhase < (MAX_JUMP_PHASE / 2)) && (jumpingPhase % 3 == 0)) { // mod 3 to have more delayed updates
-			jumpingPhase++;
-			posY -= parablePos * parablePos * 20; //
-			parablePos += 2 / MAX_JUMP_PHASE;
-		}
+	}
 
-		else if (jumpingPhase == MAX_JUMP_PHASE) { // jump is over
-			jumpingPhase = 0;
-			parablePos = -1;
-			jumping = false;
-		}
+	public void setNom(String nom) {
+		this.nom = nom;
 
-		// descending phase
-		else if (jumpingPhase % 3 == 0) {
-			jumpingPhase++;
-			posY += parablePos * parablePos * 20;
-			parablePos += 2 / MAX_JUMP_PHASE;
-		}
+	}
 
-		else {
-			jumpingPhase++;
-			parablePos += 2 / MAX_JUMP_PHASE;
-		}
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**
@@ -132,7 +152,7 @@ public class Character extends Entities {
 	 */
 	public void xMovement(double move) {
 		posX += move;
-		this.clicking=false;
+		this.clicking = false;
 		if (move < 0)
 			currentAnimation = LEFT;
 		else
@@ -145,18 +165,19 @@ public class Character extends Entities {
 	public void jump() {
 		jumping = true;
 	}
-	
+
 	public void click() {
 		clicking = true;
 	}
-	
+
 	public static boolean isClicked() {
 		return clicking;
 	}
-	
-	public static void setClicked(boolean b) {
-		clicking=b;
+
+	public void setClicked(boolean b) {
+		clicking = b;
 	}
+
 	/**
 	 * Allow to enter the right moving animation in updateCharacAnimationTick()
 	 */
@@ -170,27 +191,13 @@ public class Character extends Entities {
 	public void left(boolean b) {
 		movingLeft = b;
 	}
-	
-	public int getAniIndex() {
-		return aniIndex;
-	}
-	
-	public static void setPosX(int x) {
-		posX=x;
-	}
-	public static int getEtoiles() {
-		return etoiles;
-	}
-	public static void setEtoiles(int e) {
-		etoiles = e;
-	}
-	public String getNom() {
-		return nom;
-	}
-	public int getNiv() {
-		return niv;
-	}
-	public int getId() {
-		return id;
-	}
+
+	public String toString() {
+        return "Character{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", niveau=" + niv +
+                ", etoiles=" + etoiles +
+                '}';
+    }
 }

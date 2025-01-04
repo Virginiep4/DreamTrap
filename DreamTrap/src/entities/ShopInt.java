@@ -2,6 +2,10 @@ package entities;
 
 import java.awt.image.BufferedImage;
 
+import dreamTrap.Screen;
+
+import static utils.ImageImporter.importImg;
+
 public class ShopInt extends Entities {
 	private BufferedImage[][] fleche;
 	private int aniTick, aniIndex = 0, aniSpeed = 60;
@@ -15,12 +19,16 @@ public class ShopInt extends Entities {
 	int posY=400;
 	private static boolean clicking=false;
 	
-	public ShopInt(int currentAnimation) {
+	private static Character character;
+	private static backgroundd backgroundd;
+	
+	public ShopInt(int currentAnimation, Screen screen) {
 		super();
 		this.currentAnimation=currentAnimation;
+		
+		this.character = screen.getCharacter();
+		this.backgroundd = screen.getBackgroundd();
 	}
-	
-	
 	
 	@Override
 	void importEntity() {
@@ -35,8 +43,9 @@ public class ShopInt extends Entities {
 		fleche[1][1] = importImg("/Souris2.png");
 		
 	}
+	
 	@Override
-	public void updateAnimationTick() {
+	public void update() {
 		aniTick++;
 		if (aniTick >= aniSpeed) {
 			aniIndex = ++aniIndex % fleche[currentAnimation].length;
@@ -108,8 +117,8 @@ public class ShopInt extends Entities {
 	
 	public static void click() {
 		if(place==3) {
-			backgroundd.setCurrentAnimation(1);
-			Character.setPosX(0);
+			backgroundd.setCurrentAnimation(3);
+			character.setPosX(0);
 			place=1;
 		}
 	}
