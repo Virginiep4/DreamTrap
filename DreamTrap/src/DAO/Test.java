@@ -13,7 +13,7 @@ public class Test {
 		        ItemDAO itemDAO = new ItemDAO();
 		       
 		        // Créer un nouvel item
-		        Item newItem = new Item(2,"poing", 20, "Une poing tranchante", 0,0);
+		        Item newItem = new Item(2,"poing", 20, "Une poing tranchante", 0);
 		        itemDAO.create(newItem);
 		       // System.out.println("Item créé : " + newItem.getNom());
 		       

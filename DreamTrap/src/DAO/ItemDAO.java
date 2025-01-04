@@ -101,7 +101,7 @@ public class ItemDAO extends DAO{
                 Acquis= rs.getInt("Acquis"); 
 
               
-                 item = new Item(itemId,nom, prix, description,Acquis, 0);
+                 item = new Item(itemId,nom, prix, description,Acquis);
                
                
             }

@@ -13,7 +13,7 @@ public class SingleConnection {
 		String databaseName="dreamtrap";
 		String url="jdbc:mysql://localhost/"+databaseName+"?serverTimezone=UTC";
 		String login="root"; // dans l'idal un login de connexion pour l'application, et non root...
-		String password="1411"; // mot de passe avec xampp
+		String password="root"; // mot de passe avec xampp
 		
 		MysqlDataSource mysqlDS = new MysqlDataSource();
 		mysqlDS.setURL(url);

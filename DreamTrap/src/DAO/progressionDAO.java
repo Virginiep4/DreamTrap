@@ -10,12 +10,12 @@ import entities.Character;
 
 public class progressionDAO extends DAO{
 
-	private static Character charactere = Character.getInstance();
+	private static Character charactere;
 	
 	
 	@Override
 	public Object create(Object obj) {
-		
+		charactere = Character.getInstance();
 		Progression progression= (Progression)obj;
 		String nom=progression.getNom();
 		String tmp=progression.getTmp(); 
@@ -42,6 +42,7 @@ public class progressionDAO extends DAO{
 	               
 	                String insertAvoirQuery = "INSERT INTO avoir(idnom, idprogression) VALUES(?, ?)";
 	                this.open(insertAvoirQuery);
+	                System.out.println("ici 4 "+charactere);
 	                this.stm.setInt(1, charactere.getId());
 	                this.stm.setInt(2, progressionId);
 	                this.stm.executeUpdate();
@@ -161,7 +162,7 @@ public class progressionDAO extends DAO{
 
 	@Override
 	public void delete(Object obj) {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub
 		
 	}
 
