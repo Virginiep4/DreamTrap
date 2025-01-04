@@ -1,6 +1,8 @@
 package mouvement;
 
+import entities.Character;
 import entities.Entities;
+import level.HelpMethods;
 
 public class MouvementNormal implements Mouvement {
 
@@ -47,7 +49,9 @@ public class MouvementNormal implements Mouvement {
 	}
 
 	public void jumping(boolean b) {
-		jumping = b;
+		if (!b || !HelpMethods.CanMoveHere((Character) main, 0, 5)) {
+			jumping = b;
+		}
 		if (b && jumpingPhase == -1)
 			jumpingPhase++;
 	}
@@ -93,7 +97,7 @@ public class MouvementNormal implements Mouvement {
 			jumpingPhase++;
 			parablePos += 2 / MAX_JUMP_PHASE;
 		}
-		
+
 		return yMove;
 	}
 
@@ -103,7 +107,7 @@ public class MouvementNormal implements Mouvement {
 			main.setCurrentAnimation(LEFT);
 		}
 
-		else {
+		else if (move > 0){
 			main.setCurrentAnimation(RIGHT);
 		}
 	}
@@ -119,7 +123,6 @@ public class MouvementNormal implements Mouvement {
 
 	@Override
 	public boolean isUp() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

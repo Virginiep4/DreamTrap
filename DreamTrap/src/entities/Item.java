@@ -139,6 +139,7 @@ public class Item extends Entities {
 	}
 
 	public static  void click() {
+		System.out.println("test");
 		achat();
 	}
 

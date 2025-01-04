@@ -47,7 +47,7 @@ public class JoueurDAO extends DAO {
 		return character;
 	}
 
-	public Character find( String playerName ) {
+	public Character find(String playerName ) {
 	    Character character = null;
 	    
 	    String req = "SELECT * FROM joueur J JOIN avoir A ON J.idnom = A.idnom INNER JOIN progression P ON A.idprogression = P.idprogression WHERE J.nom LIKE ? AND P.win=1";

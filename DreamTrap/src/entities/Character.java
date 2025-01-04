@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import dreamTrap.Game;
 import dreamTrap.Screen;
 import level.HelpMethods;
+import level.LevelManager;
 import level.ScoreScreen;
 
 import static utils.ImageImporter.importImg;
@@ -13,10 +14,11 @@ import mouvement.*;
 public class Character extends Entities {
 	private BufferedImage[][] character;
 	private static Character charactere;
+	private LevelManager levelManager;
 	// aniTick is current tick, aniIndex is the current sub-animation, aniSpeed is
 	// amount of Game.updates(ticks) before changing animation, walkSpeed is amount
 	// of tick between movings IT SHOULD BE A DIVISOR OF aniSpeed !!!
-	private int aniTick, aniIndex = 0, aniSpeed = 30, walkSpeed = 5;
+	private int aniTick, aniIndex = 0, aniSpeed = 30, walkSpeed = 2;
 	private boolean jumping = false; // true if the character is jumping
 	private int jumpingPhase = 0;
 	private final int MAX_JUMP_PHASE = 66;
@@ -32,10 +34,9 @@ public class Character extends Entities {
 	private int niv = 0;
 	private int etoiles = 0;
 	private int id;
-	
+
 	private int nbCoeurs = 3;
 	private boolean hurting = false;
-	private int[][] lvlData;
 
 	public Character(String nom, int niveau, int etoiles) {
 		this.nom = nom;
@@ -54,15 +55,13 @@ public class Character extends Entities {
 		this.nom = nom;
 		this.niv = niv;
 		this.etoiles = etoiles;
-
+		this.levelManager = Screen.levelManager;
+		
+		this.posX = levelManager.getxCharacterSpawn();
 	}
 
 	public BufferedImage[][] getCharacter() {
 		return character;
-	}
-	
-	public int[][] getLvlData() {
-		return lvlData;
 	}
 
 	public int getAniIndex() {
@@ -89,6 +88,14 @@ public class Character extends Entities {
 		return charactere;
 	}
 
+	public LevelManager getLevelManager() {
+		return levelManager;
+	}
+	
+	public void setLevelManager(LevelManager levelManager) {
+		this.levelManager = levelManager;
+	}
+
 	/**
 	 * Puts all the frame of character animation in each character array
 	 */
@@ -103,10 +110,6 @@ public class Character extends Entities {
 		character[1][0] = importImg("/Left-Powpow (1).png");
 		character[1][1] = importImg("/Left-Powpow 2 (1).png");
 	}
-	
-	public void loadlvlData(int[][] lvldata) {
-		this.lvlData = lvldata;
-	}
 
 	/**
 	 * Where the animation of the character are handled
@@ -114,20 +117,20 @@ public class Character extends Entities {
 	public void update() {
 		updatePos();
 	}
-	
+
 	/**
 	 * Where the moves of the character are handled
 	 */
 	public void updatePos() {
 		aniTick++;
 
-		float xMove = 0, yMove = 1;
+		float xMove = 0, yMove = 1; // yMove is set to default value for flying gravity
 
 		if (moving instanceof MouvementNormal) {
 			if (moving.isInJumpingPhase() == -1) {
-				yMove = 5;
+				yMove = 5; // default value for walking gravity
 			}
-			
+
 			if (!moving.isJumping() && (moving.isInJumpingPhase() == -1)) {
 				if (aniTick % walkSpeed == 0) {
 					if (aniTick >= aniSpeed) {
@@ -140,68 +143,35 @@ public class Character extends Entities {
 			} else {
 				yMove = this.moving.jumpAnimation(yMove);
 			}
-			
-			if (aniTick % walkSpeed == 0) {
-				if (moving.isUp()) {
-					yMove = -5.0f;
-				}
-				if (moving.isDown()) {
-					yMove = 5.0f;
-				}
-
-				if (moving.isRight()) {
-					// On ne rejoint jamais 2048 * 64...
-					xMove = 5.0f;
-
-				}
-				if (moving.isLeft()) {
-					xMove = -5.0f;
-				}
-
-				if (HelpMethods.CanMoveHere(this, (int) xMove, 0)) {
-					moving.xMovement((int) xMove);
-				}
-			}
-			
-			if (HelpMethods.CanMoveHere(this, 0, (int) yMove)) {
-				moving.yMovement((int) yMove);
-			}
-		}
-
-		if (moving instanceof MouvementAiles) {
-
-			if (aniTick % walkSpeed == 0) {
-				/*
-				 * if (moving instanceof MouvementNormal) { if (aniTick >= aniSpeed) { // deux
-				 * cas : le personnage saute ou animation if (!moving.isJumping() &&
-				 * (moving.isInJumpingPhase() == -1)) { aniIndex = ++aniIndex %
-				 * character.length; // Iterates through all the images in screen.character
-				 * aniTick = 0; } else { this.moving.jumpAnimation(); } } }
-				 */
-
-				if (moving.isUp()) {
-					yMove = -5.0f;
-				}
-				if (moving.isDown()) {
-					yMove = 5.0f;
-				}
-
-				if (moving.isRight()) {
-					// On ne rejoint jamais 2048 * 64...
-					xMove = 5.0f;
-
-				}
-				if (moving.isLeft()) {
-					xMove = -5.0f;
-				}
-
-				if (HelpMethods.CanMoveHere(this, (int) xMove, (int) yMove)) {
-					moving.xMovement((int) xMove);
-					moving.yMovement((int) yMove);
-				}
-			}
 
 		}
+		if (aniTick % walkSpeed == 0) {
+			if (moving.isUp()) {
+				yMove = -5.0f;
+			}
+			if (moving.isDown()) {
+				yMove = 5.0f;
+			}
+
+			if (moving.isRight()) {
+				// On ne rejoint jamais 2048 * 64...
+				xMove = 5.0f;
+
+			}
+			if (moving.isLeft()) {
+				if (posX - 5 > levelManager.getxCharacterSpawn())
+					xMove = -5.0f;
+			}
+		}
+		
+		if (HelpMethods.CanMoveHere(this, (int) xMove, 0)) {
+			moving.xMovement((int) xMove);
+		}
+
+		if (HelpMethods.CanMoveHere(this, 0, (int) yMove)) {
+			moving.yMovement((int) yMove);
+		}
+
 	}
 
 	public void setEtoiles(int etoile) {
@@ -217,7 +187,7 @@ public class Character extends Entities {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
 	public int getNbCoeurs() {
 		return nbCoeurs;
 	}
@@ -283,11 +253,6 @@ public class Character extends Entities {
 	}
 
 	public String toString() {
-        return "Character{" +
-                "id=" + id +
-                ", nom='" + nom + '\'' +
-                ", niveau=" + niv +
-                ", etoiles=" + etoiles +
-                '}';
-    }
+		return "Character{" + "id=" + id + ", nom='" + nom + '\'' + ", niveau=" + niv + ", etoiles=" + etoiles + '}';
+	}
 }

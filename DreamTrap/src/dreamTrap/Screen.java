@@ -8,6 +8,9 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.RescaleOp;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -25,6 +28,7 @@ import level.ScoreScreen;
 import level.Welcome;
 import level.Welcome2;
 import level.HelpMethods;
+import level.HubLevel;
 import entities.Boss;
 //import entities.Platform;
 
@@ -36,10 +40,11 @@ public class Screen extends JPanel {
 	private final static float SCALE = 1f;
 
 	private Game game;
+	private static Screen screen;
 	private static boolean gotName = false;
 	private static boolean initializedItems = false;
 
-	private LevelManager levelManager;
+	public static LevelManager levelManager;
 	private Character character;
 	private entities.shop shop;
 	private entities.backgroundd backgroundd;
@@ -60,6 +65,9 @@ public class Screen extends JPanel {
 	private Welcome2 welcomeScreen2;
 	private JTextField welcomeText;
 
+	private Clip currentClip; // Clip pour le son actuel
+	private int lastAnimation = 0; // Dernière animation pour vérifier les changements
+
 	// getters and setters
 	public Character getCharacter() {
 		return character;
@@ -72,6 +80,8 @@ public class Screen extends JPanel {
 	public Screen(Game game) {
 		setScreenSize();
 		this.game = game;
+		screen = this;
+		levelManager = new HubLevel(this);
 		character = new Character(0, "0", 0, 0);
 		joueur = new JoueurDAO();
 		welcomeScreen = new Welcome(character);
@@ -80,7 +90,6 @@ public class Screen extends JPanel {
 		this.setLayout(null);
 		addKeyListener(new KeyboardInputs(this));
 	}
-	
 
 	public void updateGame() {
 		backgroundd.update();
@@ -95,12 +104,18 @@ public class Screen extends JPanel {
 			fleche.update();
 			souris.update();
 			levelManager.update();
+			character.update();
 		}
-		character.update();
-		if (character.getNbCoeurs()==0) {
+		if ((character.getNbCoeurs() == 0 || character.getPosY() > 500) && (backgroundd.getCurrentAnimation() < 9)
+				&& (backgroundd.getCurrentAnimation() > 5)) {
 			// Game Over
-			System.out.println("Game Over !");
+			levelManager = new HubLevel(screen);
+			backgroundd.setCurrentAnimation(9);
 		}
+	}
+
+	public static Screen getInstance() {
+		return screen;
 	}
 
 	public entities.shop getShop() {
@@ -118,7 +133,6 @@ public class Screen extends JPanel {
 	public static Item getPince() {
 		return pince;
 	}
-	
 
 	/**
 	 * The function that will allow to draw on the created screen It is never called
@@ -153,13 +167,20 @@ public class Screen extends JPanel {
 		 * scoreScreen.drawScroreScreen(g); }
 		 */
 
+		if (backgroundd.getCurrentAnimation() != getLastAnimation()) {
+			stopCurrentSound(); // Arrêter le son actuel
+			playSoundForAnimation(backgroundd.getCurrentAnimation()); // Jouer le son correspondant à la nouvelle
+																		// animation
+			setLastAnimation(backgroundd.getCurrentAnimation()); // Mettre à jour la dernière animation
+		}
+
 		// gameOverScreen.drawGameOverScreen(g,character,levelManager);
 		if (backgroundd.getCurrentAnimation() == 1) {
 			welcomeScreen.draw(g, character, levelManager);
 		}
 		if (backgroundd.getCurrentAnimation() == 2) {
 			if (!gotName) {
-				getPlayerName(game);
+				getPlayerName();
 				gotName = true;
 			}
 			welcomeScreen2.draw(g);
@@ -167,11 +188,12 @@ public class Screen extends JPanel {
 		if (backgroundd.getCurrentAnimation() == 3) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
 					10, null);
+			levelManager.draw(g);
 			g.drawImage(getDoor0().getDoor()[getDoor0().getCurrentAnimation()][getDoor0().getAniIndex()],
 					getDoor0().getPlaceX(), getDoor0().getPlaceY(), null);
-			g.drawImage(shop.getShop()[shop.getCurrentAnimation()][shop.getAniIndex()], 500, 339, null);
+			g.drawImage(shop.getShop()[shop.getCurrentAnimation()][shop.getAniIndex()], 500, 310, null);
 			g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
-					150 + (int) character.getPosX(), 600 + (int) character.getPosY(), null);
+					(int) character.getPosX(), levelManager.getyCharacterSpawn() + (int) character.getPosY(), null);
 		}
 		if (backgroundd.getCurrentAnimation() == 4) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
@@ -186,12 +208,13 @@ public class Screen extends JPanel {
 		if (backgroundd.getCurrentAnimation() == 5) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
 					10, null);
+			levelManager.draw(g);
 			g.drawImage(door1.getDoor()[door1.getCurrentAnimation()][door1.getAniIndex()], door1.getPlaceX(),
 					door1.getPlaceY(), null);
 			g.drawImage(door2.getDoor()[door2.getCurrentAnimation()][door2.getAniIndex()], door2.getPlaceX(),
 					door2.getPlaceY(), null);
 			g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
-					150 + (int) character.getPosX(), 600 + (int) character.getPosY(), null);
+					(int) character.getPosX(), levelManager.getyCharacterSpawn() + (int) character.getPosY(), null);
 		}
 		if (backgroundd.getCurrentAnimation() == 6) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
@@ -199,8 +222,8 @@ public class Screen extends JPanel {
 			g.drawImage(door3.getDoor()[door3.getCurrentAnimation()][door3.getAniIndex()], door3.getPlaceX(),
 					door3.getPlaceY(), null);
 			levelManager.draw(g);
-			g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()], levelManager.getxCharacterSpawn(),
-					levelManager.getyCharacterSpawn(), null);
+			g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
+					levelManager.getxCharacterSpawn(), levelManager.getyCharacterSpawn() + character.getPosY(), null);
 		}
 		if (backgroundd.getCurrentAnimation() == 7) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
@@ -217,7 +240,10 @@ public class Screen extends JPanel {
 			g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()], 150,
 					(BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE + character.getPosY() - 40, null);
 		}
-		
+		if (backgroundd.getCurrentAnimation() == 9) {
+			gameOverScreen.drawGameOverScreen(g, character);
+		}
+
 //		if (character.isHurting()) {
 //	        float[] scales = {1.0f, 0.0f, 0.0f, 1.0f};
 //	        RescaleOp redFilter = new RescaleOp(scales, new float[4], null);
@@ -255,13 +281,14 @@ public class Screen extends JPanel {
 		scoreScreen.setTotalTimeElapsed(tmp);
 	}
 
-	public void getPlayerName(Game game) {
+	public void getPlayerName() {
 		welcomeText = new JTextField();
 		// x, y, width, height
 		welcomeText.setPreferredSize(new Dimension(250, 40));
 		Font font = new Font("SansSerif", Font.BOLD, 20);
 		welcomeText.setFont(font);
-		welcomeText.setBounds((int) ((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE) / 2.50), (int) ((BLOCK_SIZE * BLOCK_PER_HEIGHT * SCALE) / 1.80), 300, 50);
+		welcomeText.setBounds((int) ((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE) / 2.50),
+				(int) ((BLOCK_SIZE * BLOCK_PER_HEIGHT * SCALE) / 1.80), 300, 50);
 		this.add(welcomeText);
 		this.revalidate();
 		this.repaint();
@@ -287,20 +314,87 @@ public class Screen extends JPanel {
 	}
 
 	private void initializeScreens() {
-		scoreScreen = new ScoreScreen(character);
 		gameOverScreen = new GameOverScreen(character);
+		scoreScreen = new ScoreScreen(character);
 		shop = new entities.shop(this);
-		door0 = new entities.door(1400, 570, 1, this);
-		door1 = new entities.door(500, 570, 0, this);
-		door2 = new entities.door(1000, 200, 0, this);
+		door0 = new entities.door(1400, 525, 1, this);
+		door1 = new entities.door(500, 525, 0, this);
+		door2 = new entities.door(1000, 150, 0, this);
 		door3 = new entities.door(4080, 570, 1, this);
 
 		ailes = new entities.Item("ailes", 50, "popo", 0, 0, character);
 		pince = new entities.Item("pince", 50, "popo", 0, 1, character);
 		fleche = new entities.ShopInt(0, this);
 		souris = new entities.ShopInt(1, this);
-		levelManager = new LevelOne(this);
 		addKeyListener(new KeyboardInputs(this));
 		initializedItems = true;
+	}
+
+	public void playSoundForAnimation(int animation) {
+
+		String soundFile = ""; // Chemin vers le fichier audio
+
+		switch (animation) {
+		case 1:
+			soundFile = "/sounds/weirdwelcome.wav"; // Exemple de son pour l'animation 1
+			break;
+		case 2:
+			soundFile = "/sounds/sadWelcometwo.wav"; // Exemple de son pour l'animation 2
+			break;
+		case 3:
+			soundFile = "/sounds/calm.wav"; // Exemple de son pour l'animation 3
+			break;
+		case 4:
+			// shop
+			soundFile = "/sounds/Boutique.wav"; // Exemple de son pour l'animation 4
+			break;
+		case 5:
+			// door room
+			soundFile = "/sounds/calm.wav"; // Exemple de son pour l'animation 5
+			break;
+		case 6:
+			// lvl1
+			soundFile = "/sounds/calm.wav"; // Exemple de son pour l'animation 6
+			break;
+		case 7:
+			// lvl2
+			soundFile = "/sounds/calm.wav"; // Exemple de son pour l'animation 7
+			break;
+		case 8:
+			soundFile = "/sounds/boss.wav"; // Exemple de son pour l'animation 8
+			break;
+		case 9:
+			soundFile = "/sounds/sadWelcometwo.wav"; // Exemple de son pour l'animation 8
+			break;
+		default:
+			break;
+		}
+
+		if (!soundFile.isEmpty()) {
+			try {
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(getClass().getResource(soundFile));
+
+				currentClip = AudioSystem.getClip();
+				currentClip.open(audioInputStream);
+				currentClip.loop(Clip.LOOP_CONTINUOUSLY); // Joue en boucle
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void stopCurrentSound() {
+		if (currentClip != null && currentClip.isRunning()) {
+			currentClip.stop();
+			currentClip.close();
+		}
+	}
+
+	public int getLastAnimation() {
+		return lastAnimation;
+	}
+
+	public void setLastAnimation(int lastAnimation) {
+		this.lastAnimation = lastAnimation;
 	}
 }

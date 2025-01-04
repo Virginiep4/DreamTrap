@@ -16,8 +16,8 @@ public class Boss extends Entities {
 	private int aniTick, aniIndex = 0, aniSpeed = 30;
 	private Character main;
 	public MouvementAiles moving;
-	private int xBlock = 25;
-	private int yBlock = 7 + (Screen.BLOCK_PER_HEIGHT - 2);
+	private int xBlock = 2;
+	private int yBlock;
 	private int movingXBlock;
 	private int movingYBlock;
 	private int currentAnimation = 0;
@@ -33,8 +33,12 @@ public class Boss extends Entities {
 
 	public Boss(Character main) {
 		super();
+		
+		yBlock = Screen.BLOCK_PER_HEIGHT / 2; 
 		setPosX(xBlock * Screen.BLOCK_SIZE);
-		setPosY((yBlock - (Screen.BLOCK_PER_HEIGHT - 2)) * Screen.BLOCK_SIZE);
+		int yCharacterSpawn = Screen.BLOCK_PER_HEIGHT - main.getLevelManager().getyCharacterSpawn() / Screen.BLOCK_SIZE;
+		setPosY((yCharacterSpawn - yBlock) * Screen.BLOCK_SIZE);
+		
 		this.moving = new MouvementAiles(this);
 		this.main = main;
 	}
@@ -87,15 +91,15 @@ public class Boss extends Entities {
 
 		float characX = (float) (main.getPosX()) / (float) (Screen.BLOCK_SIZE)
 				- (float) (main.getPosX() % Screen.BLOCK_SIZE) / (float) (Screen.BLOCK_SIZE);
-		if (this.xBlock - characX > 4.0) {
+		if (this.xBlock - characX > 0) {
 			moving.left(true);
 			moving.right(false);
 		} // 4 * BLOCK_SIZE sur le print de main dans Screen
-		if (this.xBlock - characX < 4.0) {
+		if (this.xBlock - characX < 0) {
 			moving.right(true);
 			moving.left(false);
 		}
-		if (this.xBlock - characX == 4.0) {
+		if (this.xBlock - characX == 0) {
 			moving.left(false);
 			moving.right(false);
 			;

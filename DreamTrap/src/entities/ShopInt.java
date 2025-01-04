@@ -26,8 +26,8 @@ public class ShopInt extends Entities {
 		super();
 		this.currentAnimation=currentAnimation;
 		
-		this.character = screen.getCharacter();
-		this.backgroundd = screen.getBackgroundd();
+		character = screen.getCharacter();
+		backgroundd = screen.getBackgroundd();
 	}
 	
 	@Override

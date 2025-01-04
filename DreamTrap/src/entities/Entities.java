@@ -5,9 +5,6 @@ public abstract class Entities {
 	protected int posY=0;
 	protected int width = 49;
 	protected int height = 72;
-	public final static int BLOCK_PER_WIDTH = 20;
-	public final static int BLOCK_PER_HEIGHT = 11;
-	public final static int BLOCK_SIZE = 64;
 	protected int currentAnimation = 0;
 
 	

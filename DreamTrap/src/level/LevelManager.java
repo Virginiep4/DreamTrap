@@ -21,20 +21,19 @@ public abstract class LevelManager {
 
 	protected String blocksPath;
 	private static final int BLOCKS_SIZE = 32;
-	private static int blocksLength;
-	private BufferedImage[] blocks;
+	public static int blocksLength;
+	protected BufferedImage[] blocks;
 
 	protected String objectsPath;
 	private static final int OBJECTS_SIZE = 32;
-	private static int objectsLength;
-	private BufferedImage[] objects;
+	public static int objectsLength;
+	protected BufferedImage[] objects;
 
 	private String levelPath;
-	private int[][] level;
+	protected static int[][] level;
 
 	protected static int levelHeight;
 	protected static int levelWidth;
-	private BufferedImage[] starSprites;
 	private BufferedImage starImg;
 	private BufferedImage spikeImg;
 	protected int[][] stars;
@@ -153,7 +152,7 @@ public abstract class LevelManager {
 	 * @param g is given by screen to allow repainting in this function
 	 */
 	public void draw(Graphics g) {
-		int x = character.getPosX() / Screen.BLOCK_SIZE;
+		int x = (character.getPosX() - xCharacterSpawn) / Screen.BLOCK_SIZE;
 
 		for (int i = levelHeight - 1; i > levelHeight - Screen.BLOCK_PER_HEIGHT - 1; i--)
 			for (int j = 0; j < Screen.BLOCK_PER_WIDTH + 1; j++) {
@@ -173,18 +172,18 @@ public abstract class LevelManager {
 								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
 								Screen.BLOCK_SIZE, null);
 					}
+				}
+				
+				if (star != -1) {
+					g.drawImage(starImg, j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
+							(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
+							Screen.BLOCK_SIZE, null);
+				}
 
-					if (star != -1) {
-						g.drawImage(starImg, j * Screen.BLOCK_SIZE - (character.getPosX() % 64),
-								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
-								Screen.BLOCK_SIZE, null);
-					}
-
-					if (spike != -1) {
-						g.drawImage(spikeImg, j * Screen.BLOCK_SIZE - (character.getPosX() % 64),
-								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
-								Screen.BLOCK_SIZE, null);
-					}
+				if (spike != -1) {
+					g.drawImage(spikeImg, j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
+							(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
+							Screen.BLOCK_SIZE, null);
 				}
 			}
 		additionalDraw(g);
