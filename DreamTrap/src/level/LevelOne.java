@@ -11,8 +11,8 @@ public class LevelOne extends LevelAnimBackground {
 	public LevelOne(Screen screen) {
 		super(screen, "/levelOneBackgrounds.png", "/blockSprites.png", "/objectSprites.png", "/levelOne.png");
 		
-		xCharacterSpawn = 5 * Screen.BLOCK_SIZE ;
-		yCharacterSpawn = (Screen.BLOCK_PER_HEIGHT - 6) * Screen.BLOCK_SIZE / 2;
+		xCharacterSpawn = 4 * Screen.BLOCK_SIZE ;
+		yCharacterSpawn = (Screen.BLOCK_PER_HEIGHT - 5) * Screen.BLOCK_SIZE;
 		boss = new Boss(screen.getCharacter());
 	}
 

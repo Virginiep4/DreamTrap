@@ -35,7 +35,11 @@ public class Screen extends JPanel {
 	private GameOverScreen gameOverScreen;
 	private Welcome welcomeScreen;
 	private Welcome2 welcomeScreen2;
+<<<<<<< HEAD:DreamTrap/DreamTrap/src/dreamTrap/Screen.java
 	private String nom;
+=======
+
+>>>>>>> 69d7bbeff532cb4307c5016476dfdac3e6e485b8:DreamTrap/src/dreamTrap/Screen.java
 	// getters and setters
 	public Character getCharacter() {
 		return character;
@@ -45,8 +49,9 @@ public class Screen extends JPanel {
 		return levelManager;
 	}
 
-	public Screen(Progression prog ) {
+	public Screen(Progression prog) {
 		setScreenSize();
+<<<<<<< HEAD:DreamTrap/DreamTrap/src/dreamTrap/Screen.java
 		joueur=new JoueurDAO();
 		
 		character = joueur.loadsave("didi");
@@ -56,6 +61,16 @@ public class Screen extends JPanel {
 		welcomeScreen=new Welcome(character);
 		welcomeScreen2=new Welcome2(character);
 		//levelManager = new WelcomeScreen(this);
+=======
+		joueur = new JoueurDAO();
+		character = joueur.loadsave();
+		progression = prog;
+		scoreScreen = new ScoreScreen(character);
+		gameOverScreen = new GameOverScreen(character);
+		welcomeScreen = new Welcome(character);
+		welcomeScreen2 = new Welcome2(character);
+		// levelManager = new WelcomeScreen(this);
+>>>>>>> 69d7bbeff532cb4307c5016476dfdac3e6e485b8:DreamTrap/src/dreamTrap/Screen.java
 		levelManager = new LevelOne(this);
 		addKeyListener(new KeyboardInputs(this));
 		getPlayerName();
@@ -80,16 +95,21 @@ public class Screen extends JPanel {
 
 		// paintComponent is called when Jpanel is created
 		// could be optimized by loading all sprite on same image and use getSubimage()
+<<<<<<< HEAD:DreamTrap/DreamTrap/src/dreamTrap/Screen.java
 		
 		
 			
 		
 		
+=======
+
+>>>>>>> 69d7bbeff532cb4307c5016476dfdac3e6e485b8:DreamTrap/src/dreamTrap/Screen.java
 		levelManager.draw(g);
 		welcomeScreen2.draw(g, character, levelManager);
 		
 		/*g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
 				levelManager.getxCharacterSpawn(), levelManager.getyCharacterSpawn() + (int) character.getPosY(), null);
+<<<<<<< HEAD:DreamTrap/DreamTrap/src/dreamTrap/Screen.java
 		*/	
 		
 		/*if (progression.getWin()==0) {
@@ -100,6 +120,18 @@ public class Screen extends JPanel {
 		//gameOverScreen.drawGameOverScreen(g,character,levelManager);
 		
 		
+=======
+
+		/*
+		 * if (progression.getWin()==0) {
+		 * 
+		 * scoreScreen.drawScroreScreen(g); }
+		 */
+
+		// gameOverScreen.drawGameOverScreen(g,character,levelManager);
+		welcomeScreen2.drawGameOverScreen(g, character, levelManager);
+
+>>>>>>> 69d7bbeff532cb4307c5016476dfdac3e6e485b8:DreamTrap/src/dreamTrap/Screen.java
 	}
 
 	/**
@@ -111,16 +143,18 @@ public class Screen extends JPanel {
 		setPreferredSize(size);
 
 	}
+
 	public void setTime(int tmp) {
 		scoreScreen.setTotalTimeElapsed(tmp);
 	}
-	
+
 	public void getPlayerName() {
 		JTextField welcomeText = new JTextField();
 		// x, y, width, height
-		welcomeText.setPreferredSize(new Dimension(250,40));
-		welcomeText.setBounds((int)((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE) / 4), 250, 200, 100);
+		welcomeText.setPreferredSize(new Dimension(250, 40));
+		welcomeText.setBounds((int) ((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE) / 4), 250, 200, 100);
 		this.add(welcomeText);
+<<<<<<< HEAD:DreamTrap/DreamTrap/src/dreamTrap/Screen.java
 		
 	
 	 welcomeText.addActionListener(new ActionListener() {
@@ -139,4 +173,9 @@ public class Screen extends JPanel {
 	}
 	
 	
+=======
+
+	}
+
+>>>>>>> 69d7bbeff532cb4307c5016476dfdac3e6e485b8:DreamTrap/src/dreamTrap/Screen.java
 }
