@@ -152,6 +152,9 @@ public class Screen extends JPanel {
 			}
 			welcomeScreen2.draw(g);
 		}
+		
+		// Shop :
+		
 		if (backgroundd.getCurrentAnimation() == 3) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
 					10, null);
@@ -170,6 +173,8 @@ public class Screen extends JPanel {
 			g.drawImage(souris.getFleche()[souris.getCurrentAnimation()][souris.getAniIndex()], souris.bougerX(),
 					souris.bougerY(), null);
 		}
+		
+		// LevelSelector
 
 		if (backgroundd.getCurrentAnimation() == 5) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
