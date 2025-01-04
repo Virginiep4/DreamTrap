@@ -1,4 +1,4 @@
-package dao;
+package DAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
