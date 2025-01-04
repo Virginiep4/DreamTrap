@@ -4,7 +4,6 @@ import entities.Progression;
 import java.time.Duration;
 import java.time.Instant;
 
-
 public class Game implements Runnable {
 	private Window window;
 	private Screen screen;
@@ -24,6 +23,7 @@ public class Game implements Runnable {
 		timer=new Time();
 		game=this;
 		startGameLoop();
+		timer= new Time();
 	}
 	
 	public Window getWindow() {
@@ -37,15 +37,17 @@ public class Game implements Runnable {
 	 * The function create a Thread that will handle the game loop
 	 */
 	
-	
 	public void startGameLoop() {
 		gameThread = new Thread(this); // independant sequence of instruction
 		gameThread.start(); // calls run method
 	}
 	
+	
+	
 	public void updateGame() {
 		screen.updateGame();
 	}
+	
 	
 	/**
 	 * this function is called by Thread.start() and repaint the screen
@@ -80,6 +82,8 @@ public class Game implements Runnable {
 			if (deltaUpdate >= 1) {
 				updateGame();
 				deltaUpdate--;
+				
+				
 				
 			}
 			

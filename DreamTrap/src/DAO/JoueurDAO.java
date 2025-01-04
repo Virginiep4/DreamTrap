@@ -76,13 +76,12 @@ public class JoueurDAO extends DAO {
 	        	
 	        }
 	        	
-	        
+	   
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
 	    return character;
 	}
-	
 	
 	public Character loadsave(String name) {
 		// faudrais recuperer le nom joeur 
@@ -116,9 +115,6 @@ public class JoueurDAO extends DAO {
 		
 
 	}
-	
-	
-	
 
 public Object updateStar(Object obj) {
 		

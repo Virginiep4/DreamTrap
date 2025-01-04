@@ -8,9 +8,6 @@ import entities.Character;
 import entities.Item;
 import entities.ShopInt;
 import entities.backgroundd;
-import entities.shop;
-import level.ScoreScreen;
-import mouvement.MouvementNormal;
 
 public class KeyboardInputs implements KeyListener {
 	private Character character;
@@ -35,11 +32,7 @@ public class KeyboardInputs implements KeyListener {
 		// whenever a key is pressed we check if it does something for our game
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_SPACE:
-			if (character.moving instanceof MouvementNormal) {
-				character.moving.jumping(true);
-			} else {
-				character.moving.up(true);
-			}
+			character.moving.jumping(true);
 			break;
 		case KeyEvent.VK_Z:
 			character.moving.up(true);
@@ -83,17 +76,10 @@ public class KeyboardInputs implements KeyListener {
 		// when a key is released it's the end of movement
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_SPACE:
-			if (character.moving instanceof MouvementNormal) {
-				character.moving.jumping(false);
-				character.moving.releaseJump();
-			} else {
-				character.moving.up(false);
-			}
+			character.moving.jumping(false);
 			break;
 		case KeyEvent.VK_Z:
-			// if(character.moving.isDown())
 			character.moving.up(false);
-
 			break;
 		case KeyEvent.VK_D:
 			character.moving.right(false);

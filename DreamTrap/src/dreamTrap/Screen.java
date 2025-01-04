@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.RescaleOp;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -22,7 +24,11 @@ import level.LevelOne;
 import level.ScoreScreen;
 import level.Welcome;
 import level.Welcome2;
+import level.HelpMethods;
+import entities.Boss;
+//import entities.Platform;
 
+@SuppressWarnings("serial")
 public class Screen extends JPanel {
 	public final static int BLOCK_SIZE = 64;
 	public final static int BLOCK_PER_WIDTH = 24;
@@ -74,6 +80,7 @@ public class Screen extends JPanel {
 		this.setLayout(null);
 		addKeyListener(new KeyboardInputs(this));
 	}
+	
 
 	public void updateGame() {
 		backgroundd.update();
@@ -90,6 +97,10 @@ public class Screen extends JPanel {
 			levelManager.update();
 		}
 		character.update();
+		if (character.getNbCoeurs()==0) {
+			// Game Over
+			System.out.println("Game Over !");
+		}
 	}
 
 	public entities.shop getShop() {
@@ -107,6 +118,7 @@ public class Screen extends JPanel {
 	public static Item getPince() {
 		return pince;
 	}
+	
 
 	/**
 	 * The function that will allow to draw on the created screen It is never called
@@ -205,6 +217,12 @@ public class Screen extends JPanel {
 			g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()], 150,
 					(BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE + character.getPosY() - 40, null);
 		}
+		
+//		if (character.isHurting()) {
+//	        float[] scales = {1.0f, 0.0f, 0.0f, 1.0f};
+//	        RescaleOp redFilter = new RescaleOp(scales, new float[4], null);
+//	        characterImage = redFilter.filter(characterImage, null);
+//	    }
 	}
 
 	/**
@@ -285,5 +303,4 @@ public class Screen extends JPanel {
 		addKeyListener(new KeyboardInputs(this));
 		initializedItems = true;
 	}
-
 }

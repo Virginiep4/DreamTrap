@@ -49,14 +49,9 @@ public class progressionDAO extends DAO{
 	            } catch (SQLException e) {
 	                e.printStackTrace();
 	            }
-	            
-	            
-	        
-	    
 		
 		return null;
 	}
-
 	
 	public List<Progression> getProgression() {
         List<Progression> progressions = new ArrayList<>();
@@ -69,8 +64,8 @@ public class progressionDAO extends DAO{
 
             
             while (rs.next()) {
-                String nom = rs.getString("nom_joueur"); 
-                String temps = rs.getString("temps"); 
+                String nom = rs.getString("nom_joueur");
+                String temps = rs.getString("temps");
                 int win = rs.getInt("win"); 
 
               

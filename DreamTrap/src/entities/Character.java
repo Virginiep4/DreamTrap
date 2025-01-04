@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 
 import dreamTrap.Game;
 import dreamTrap.Screen;
+import level.HelpMethods;
 import level.ScoreScreen;
 
 import static utils.ImageImporter.importImg;
@@ -31,6 +32,10 @@ public class Character extends Entities {
 	private int niv = 0;
 	private int etoiles = 0;
 	private int id;
+	
+	private int nbCoeurs = 3;
+	private boolean hurting = false;
+	private int[][] lvlData;
 
 	public Character(String nom, int niveau, int etoiles) {
 		this.nom = nom;
@@ -54,6 +59,10 @@ public class Character extends Entities {
 
 	public BufferedImage[][] getCharacter() {
 		return character;
+	}
+	
+	public int[][] getLvlData() {
+		return lvlData;
 	}
 
 	public int getAniIndex() {
@@ -94,39 +103,104 @@ public class Character extends Entities {
 		character[1][0] = importImg("/Left-Powpow (1).png");
 		character[1][1] = importImg("/Left-Powpow 2 (1).png");
 	}
+	
+	public void loadlvlData(int[][] lvldata) {
+		this.lvlData = lvldata;
+	}
 
 	/**
 	 * Where the animation of the character are handled
 	 */
-
 	public void update() {
+		updatePos();
+	}
+	
+	/**
+	 * Where the moves of the character are handled
+	 */
+	public void updatePos() {
 		aniTick++;
 
+		float xMove = 0, yMove = 1;
+
 		if (moving instanceof MouvementNormal) {
-			if (aniTick >= aniSpeed) {
-				// deux cas : le personnage saute ou animation
-				if (!moving.isJumping() && (moving.isInJumpingPhase() == -1)) {
-					aniIndex = ++aniIndex % character.length; // Iterates through all the images in screen.character
-					aniTick = 0;
-				} else {
-					this.moving.jumpAnimation();
+			if (moving.isInJumpingPhase() == -1) {
+				yMove = 5;
+			}
+			
+			if (!moving.isJumping() && (moving.isInJumpingPhase() == -1)) {
+				if (aniTick % walkSpeed == 0) {
+					if (aniTick >= aniSpeed) {
+						// deux cas : le personnage saute ou animation
+						aniIndex = ++aniIndex % character.length; // Iterates through all the images in screen.character
+						aniTick = 0;
+					}
+
+				}
+			} else {
+				yMove = this.moving.jumpAnimation(yMove);
+			}
+			
+			if (aniTick % walkSpeed == 0) {
+				if (moving.isUp()) {
+					yMove = -5.0f;
+				}
+				if (moving.isDown()) {
+					yMove = 5.0f;
+				}
+
+				if (moving.isRight()) {
+					// On ne rejoint jamais 2048 * 64...
+					xMove = 5.0f;
+
+				}
+				if (moving.isLeft()) {
+					xMove = -5.0f;
+				}
+
+				if (HelpMethods.CanMoveHere(this, (int) xMove, 0)) {
+					moving.xMovement((int) xMove);
 				}
 			}
+			
+			if (HelpMethods.CanMoveHere(this, 0, (int) yMove)) {
+				moving.yMovement((int) yMove);
+			}
 		}
-		
-		if (moving.isUp()) {
-			moving.yMovement(-2);
-		}
-		if (moving.isDown()) {
-			moving.yMovement(2);
-		}
-		if (moving.isRight()) {
-			// On ne rejoint jamais  2048 * 64...
-			moving.xMovement(2);
-		}
-		if (moving.isLeft()) {
-			if (posX > 0) // évite les outOfBounds
-				moving.xMovement(-2);
+
+		if (moving instanceof MouvementAiles) {
+
+			if (aniTick % walkSpeed == 0) {
+				/*
+				 * if (moving instanceof MouvementNormal) { if (aniTick >= aniSpeed) { // deux
+				 * cas : le personnage saute ou animation if (!moving.isJumping() &&
+				 * (moving.isInJumpingPhase() == -1)) { aniIndex = ++aniIndex %
+				 * character.length; // Iterates through all the images in screen.character
+				 * aniTick = 0; } else { this.moving.jumpAnimation(); } } }
+				 */
+
+				if (moving.isUp()) {
+					yMove = -5.0f;
+				}
+				if (moving.isDown()) {
+					yMove = 5.0f;
+				}
+
+				if (moving.isRight()) {
+					// On ne rejoint jamais 2048 * 64...
+					xMove = 5.0f;
+
+				}
+				if (moving.isLeft()) {
+					xMove = -5.0f;
+				}
+
+				if (HelpMethods.CanMoveHere(this, (int) xMove, (int) yMove)) {
+					moving.xMovement((int) xMove);
+					moving.yMovement((int) yMove);
+				}
+			}
+
 		}
 	}
 
@@ -142,6 +216,22 @@ public class Character extends Entities {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+	
+	public int getNbCoeurs() {
+		return nbCoeurs;
+	}
+
+	public void setNbCoeurs(int nbCoeurs) {
+		this.nbCoeurs = nbCoeurs;
+	}
+
+	public boolean isHurting() {
+		return hurting;
+	}
+
+	public void setHurting(boolean hurting) {
+		this.hurting = hurting;
 	}
 
 	/**

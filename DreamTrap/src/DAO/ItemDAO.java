@@ -114,6 +114,4 @@ public class ItemDAO extends DAO{
 	public void delete(Object obj) {
 		//null
 	}
-
-	
 }

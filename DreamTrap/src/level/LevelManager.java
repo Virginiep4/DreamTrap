@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import java.util.Arrays;
 import dreamTrap.Screen;
+import dreamTrap.Time;
+import entities.Boss;
 import entities.Character;
 
 import static utils.ImageImporter.importImg;
@@ -13,7 +16,7 @@ public abstract class LevelManager {
 	protected Character character;
 	protected int xCharacterSpawn;
 	protected int yCharacterSpawn;
-	
+
 	protected String backgroundPath;
 
 	protected String blocksPath;
@@ -28,11 +31,16 @@ public abstract class LevelManager {
 
 	private String levelPath;
 	private int[][] level;
-	private int levelHeight;
-	private int levelWidth;
 
-	protected LevelManager(Screen screen, String blocksPath, String objectsPath,
-			String levelPath) {
+	protected static int levelHeight;
+	protected static int levelWidth;
+	private BufferedImage[] starSprites;
+	private BufferedImage starImg;
+	private BufferedImage spikeImg;
+	protected int[][] stars;
+	protected int[][] spikes;
+
+	protected LevelManager(Screen screen, String blocksPath, String objectsPath, String levelPath) {
 		character = screen.getCharacter();
 		this.blocksPath = blocksPath;
 		this.objectsPath = objectsPath;
@@ -41,14 +49,36 @@ public abstract class LevelManager {
 		spritesInitializer();
 		levelInitializer();
 	}
-	
+
+	// getters and setters
+	public int[][] getCurrentLevel() {
+		return level;
+	}
+
+	public static int getLevelHeight() {
+		return levelHeight;
+	}
+
 	public int getxCharacterSpawn() {
 		return xCharacterSpawn;
 	}
+
 	public int getyCharacterSpawn() {
 		return yCharacterSpawn;
 	}
-	
+
+	public int[][] getStars() {
+		return stars;
+	}
+
+	public void setStars(int[][] stars) {
+		this.stars = stars;
+	}
+
+	public int[][] getSpikes() {
+		return spikes;
+	}
+
 	private void spritesInitializer() {
 		if (blocksPath != null) {
 			blocks = fillArray(BLOCKS_SIZE, blocksPath);
@@ -59,6 +89,9 @@ public abstract class LevelManager {
 			objects = fillArray(OBJECTS_SIZE, objectsPath);
 			objectsLength = objects.length;
 		}
+
+		this.starImg = Loadsave.importImg(Loadsave.STAR_IMG);
+		this.spikeImg = Loadsave.importImg(Loadsave.SPIKE_IMG);
 	}
 
 	private BufferedImage[] fillArray(int size, String path) {
@@ -87,6 +120,8 @@ public abstract class LevelManager {
 		levelHeight = levelImage.getHeight();
 		level = new int[levelHeight][levelWidth];
 		int value;
+		starsInitializer();
+		spikesInitializer();
 
 		for (int i = 0; i < levelHeight; i++)
 			for (int j = 0; j < levelWidth; j++) {
@@ -123,16 +158,30 @@ public abstract class LevelManager {
 		for (int i = levelHeight - 1; i > levelHeight - Screen.BLOCK_PER_HEIGHT - 1; i--)
 			for (int j = 0; j < Screen.BLOCK_PER_WIDTH + 1; j++) {
 				int block = level[i][j + x];
+				int star = stars[i][j + x];
+				int spike = spikes[i][j + x];
+
 				if (block != -1) {
 					if (block < blocksLength) {
 						g.drawImage(blocks[block], j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
 								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
 								Screen.BLOCK_SIZE, null);
-						
-						
+
 					} else if (block < blocksLength + objectsLength) {
 						g.drawImage(objects[block - blocksLength],
 								j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
+								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
+								Screen.BLOCK_SIZE, null);
+					}
+
+					if (star != -1) {
+						g.drawImage(starImg, j * Screen.BLOCK_SIZE - (character.getPosX() % 64),
+								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
+								Screen.BLOCK_SIZE, null);
+					}
+
+					if (spike != -1) {
+						g.drawImage(spikeImg, j * Screen.BLOCK_SIZE - (character.getPosX() % 64),
 								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
 								Screen.BLOCK_SIZE, null);
 					}
@@ -144,4 +193,8 @@ public abstract class LevelManager {
 	protected abstract void additionalDraw(Graphics g);
 
 	public abstract void update();
+
+	public abstract void starsInitializer();
+
+	public abstract void spikesInitializer();
 }
