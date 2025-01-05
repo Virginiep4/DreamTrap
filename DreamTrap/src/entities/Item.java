@@ -2,6 +2,8 @@ package entities;
 
 import java.awt.image.BufferedImage;
 
+import javax.swing.Timer;
+
 import dreamTrap.Screen;
 import static utils.ImageImporter.importImg;
 
@@ -15,6 +17,8 @@ public class Item extends Entities {
 	private int acquis;
 	private int id;
 	private static Character character;
+	
+	private static int texte=0;
 
 	private static boolean clicking = false;
 
@@ -139,21 +143,34 @@ public class Item extends Entities {
 	}
 
 	public static  void click() {
-		achat();
+		
+		if(Screen.getInstance().getBackgroundd().getCurrentAnimation()==4 && (ShopInt.getPlace()==1 || ShopInt.getPlace()==2)){
+			
+			texte=1;
+			Timer time=new Timer(3000, e->texte=0);
+			time.start();		
+		}	
 	}
 
 	public static String achat() {
 		String ans = "";
 		if (ShopInt.place == 1 && acheterItem(Screen.getAiles())) {
+			if(Screen.getAiles().isAcquis()) {
+				ans = "Vous possédez déjà cet objet...";
+			}
 
 			ans = "Acheté!";
 			Screen.getAiles().setAniIndex(0);
 		}
 		if (ShopInt.place == 2 && acheterItem(Screen.getPince())) {
+			if(Screen.getPince().isAcquis()) {
+				ans = "Vous possédez déjà cet objet...";
+			}
+
 			ans = "Acheté!";
 			Screen.getPince().setAniIndex(0);
 		} else {
-			ans = "Pas possible d'acheté";
+			ans = "Vous n'avez pas assez d'étoiles...";
 		}
 		return ans;
 	}
@@ -164,5 +181,9 @@ public class Item extends Entities {
 
 	public static void setClicked(boolean b) {
 		clicking = b;
+	}
+
+	public static int getTexte() {
+		return texte;
 	}
 }
