@@ -22,8 +22,8 @@ public class LevelTwo extends LevelManager {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-		
+		HelpMethods.OnSpike(character, this);
+		HelpMethods.OnStar(character, this);
 	}
 
 	@Override

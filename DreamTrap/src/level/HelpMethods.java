@@ -23,14 +23,14 @@ public class HelpMethods {
 
 	// Checks if the position (x, y) is solid (i.e., has an obstacle)
 	private static boolean IsSolid(entities.Character character, float xMove, float yMove) {
-		
+
 		// Index de colonne
 		int i = (int) (LevelManager.getLevelHeight() - Screen.BLOCK_PER_HEIGHT
 				+ character.getLevelManager().getyCharacterSpawn() / Screen.BLOCK_SIZE
 				+ (character.getPosY() + yMove) / Screen.BLOCK_SIZE);
 		if (i + character.getHeight() / Screen.BLOCK_SIZE > 63)
 			return false;
-		
+
 		// Index de ligne
 		float j = (character.getPosX() + xMove) / Screen.BLOCK_SIZE;
 		/*
@@ -62,11 +62,11 @@ public class HelpMethods {
 		// Index de colonne
 		int i = (int) (LevelManager.getLevelHeight() - Screen.BLOCK_PER_HEIGHT
 				+ character.getLevelManager().getyCharacterSpawn() / Screen.BLOCK_SIZE
-				+ character.getPosY() / Screen.BLOCK_SIZE);
+				+ (character.getPosY() + (character.getPosY() % Screen.BLOCK_SIZE)) / Screen.BLOCK_SIZE);
 		// Index de ligne
 		int j = character.getPosX() / Screen.BLOCK_SIZE;
-		if (i < 63 && level.getStars()[i + 1][j] != -1) {
-			gotStar(character, level);
+		if (i < 63 && (level.getStars()[i + 1][j] != -1 || level.getStars()[i][j] != -1)) {
+			gotStar(character, level, i, j);
 		}
 	}
 
@@ -75,27 +75,26 @@ public class HelpMethods {
 		// Index de colonne
 		int i = (int) (LevelManager.getLevelHeight() - Screen.BLOCK_PER_HEIGHT
 				+ character.getLevelManager().getyCharacterSpawn() / Screen.BLOCK_SIZE
-				+ character.getPosY() / Screen.BLOCK_SIZE);
+				+ (character.getPosY() + (character.getPosY() % Screen.BLOCK_SIZE)) / Screen.BLOCK_SIZE);
 		// Index de ligne
 		int j = character.getPosX() / Screen.BLOCK_SIZE;
-		if (i < 63 && level.getSpikes()[i + 1][j] != -1) {
+		if (i < 63 && level.getSpikes()[i][j] != -1) {
 			characterHurt(character);
 		}
 
 	}
 
-	public static void gotStar(entities.Character character, LevelManager level) {
-		// Index de colonne
-		int i = (int) (LevelManager.getLevelHeight() - Screen.BLOCK_PER_HEIGHT
-				+ character.getLevelManager().getyCharacterSpawn() / Screen.BLOCK_SIZE
-				+ character.getPosY() / Screen.BLOCK_SIZE);
-		// Index de ligne
-		int j = character.getPosX() / Screen.BLOCK_SIZE;
-
-		character.setEtoiles(character.getEtoiles() + 1);
-		level.stars[i + 1][j] = -1;
+	public static void gotStar(entities.Character character, LevelManager level, int i, int j) {
+		if (level.stars[i + 1][j] != -1) {
+			character.setEtoiles(character.getEtoiles() + 1);
+			level.stars[i + 1][j] = -1;
+		}
+		if (level.stars[i][j] != -1) {
+			character.setEtoiles(character.getEtoiles() + 1);
+			level.stars[i][j] = -1;
+		}
 	}
-
+	
 	public static void bossHurts(entities.Character character, entities.Boss boss) {
 		float characX = (float) (character.getPosX()) / (float) (Screen.BLOCK_SIZE)
 				- (float) (character.getPosX() % Screen.BLOCK_SIZE) / (float) (Screen.BLOCK_SIZE);

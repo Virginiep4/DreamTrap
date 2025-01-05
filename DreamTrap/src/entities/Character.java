@@ -227,7 +227,7 @@ public class Character extends Entities {
 		this.clicking = false;
 		if (move < 0)
 			currentAnimation = LEFT;
-		else
+		else if (move > 0)
 			currentAnimation = RIGHT;
 	}
 

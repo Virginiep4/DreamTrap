@@ -9,8 +9,10 @@ import dreamTrap.Screen;
 import dreamTrap.Time;
 import entities.Boss;
 import entities.Character;
+import utils.ImageImporter;
 
 import static utils.ImageImporter.importImg;
+import static utils.ImageFliper.flipImageVertically;
 
 public abstract class LevelManager {
 	protected Character character;
@@ -36,6 +38,7 @@ public abstract class LevelManager {
 	protected static int levelWidth;
 	private BufferedImage starImg;
 	private BufferedImage spikeImg;
+	private BufferedImage spikeImgReversed;
 	protected int[][] stars;
 	protected int[][] spikes;
 
@@ -91,6 +94,8 @@ public abstract class LevelManager {
 
 		this.starImg = Loadsave.importImg(Loadsave.STAR_IMG);
 		this.spikeImg = Loadsave.importImg(Loadsave.SPIKE_IMG);
+		this.spikeImgReversed = importImg(Loadsave.SPIKE_IMG);
+		flipImageVertically(spikeImgReversed);
 	}
 
 	private BufferedImage[] fillArray(int size, String path) {
@@ -147,7 +152,9 @@ public abstract class LevelManager {
 				if (value > 127) {
 					// objects index is always higher than objects and we know blocks length
 					if (value == 128)
-						spikes[i][j] = value - 128;
+						spikes[i][j] = 0;
+					else if (value == 129)
+						spikes[i][j] = 1;
 					else if (value == 255)
 						stars[i][j] = value - 128;
 					else {
@@ -197,9 +204,14 @@ public abstract class LevelManager {
 				}
 
 				if (spike != -1) {
-					g.drawImage(spikeImg, j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
-							(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
-							Screen.BLOCK_SIZE, null);
+					if (spike == 0)
+						g.drawImage(spikeImg, j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
+								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
+								Screen.BLOCK_SIZE, null);
+					if (spike == 1)
+						g.drawImage(spikeImgReversed, j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
+								(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,
+								Screen.BLOCK_SIZE, null);
 				}
 			}
 		additionalDraw(g);
