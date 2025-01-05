@@ -113,7 +113,7 @@ public class Screen extends JPanel {
 			character.update();
 		}
 		if ((character.getNbCoeurs() == 0 || character.getPosY() > 500) && (backgroundd.getCurrentAnimation() < 9)
-				&& (backgroundd.getCurrentAnimation() > 5)) {
+				&& (backgroundd.getCurrentAnimation() > 2)) {
 			// Game Over
 			levelManager = new HubLevel(screen);
 			character.setLevelManager(levelManager);

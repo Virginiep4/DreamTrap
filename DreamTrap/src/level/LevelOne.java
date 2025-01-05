@@ -41,11 +41,6 @@ public class LevelOne extends LevelManager {
 
 	@Override
 	protected void additionalDraw(Graphics g) {
-		if (boss != null) {
-			g.drawImage(boss.getBoss()[boss.getCurrentAnimation()][boss.getAniIndex()],
-					boss.getxBlock() * Screen.BLOCK_SIZE + boss.getmovingXBlock() - character.getPosX() + xCharacterSpawn,
-					boss.getyBlock() * Screen.BLOCK_SIZE + boss.getmovingYBlock(), null);
-		}
 	}
 
 	@Override
