@@ -3,6 +3,7 @@ package dreamTrap;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -35,10 +36,14 @@ import entities.Boss;
 @SuppressWarnings("serial")
 public class Screen extends JPanel {
 	public final static int BLOCK_SIZE = 64;
-	public final static int BLOCK_PER_WIDTH = 24;
-	public final static int BLOCK_PER_HEIGHT = 13;
+	public final static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	public final static int BLOCK_PER_WIDTH =  screenSize.width /BLOCK_SIZE;
+	public final static int BLOCK_PER_HEIGHT = screenSize.height /BLOCK_SIZE;
 	public final static float SCALE = 1f;
-
+	private static double ratiowidht;
+	private static double ratioheight;
+	
+	
 	private Game game;
 	private static Screen screen;
 	private static boolean gotName = false;
@@ -77,12 +82,15 @@ public class Screen extends JPanel {
 	public LevelManager getLevelManager() {
 		return levelManager;
 	}
-	
-	public JoueurDAO getJoueur() {
-		return joueur;
-	}
 
 	public Screen(Game game) {
+		
+		ratioheight=((double)screenSize.height/(double)832);
+		ratiowidht=((double)screenSize.width/(double)1440);
+		System.out.println("width" + screenSize.width);
+		System.out.println("height" + screenSize.height);
+		System.out.println("width" + ratiowidht);
+		System.out.println("height" + ratioheight);
 		setScreenSize();
 		this.game = game;
 		screen = this;
@@ -199,16 +207,13 @@ public class Screen extends JPanel {
 			}
 			welcomeScreen2.draw(g);
 		}
-		
-		// Shop :
-		
 		if (backgroundd.getCurrentAnimation() == 3) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
 					10, null);
 			levelManager.draw(g);
 			g.drawImage(getDoor0().getDoor()[getDoor0().getCurrentAnimation()][getDoor0().getAniIndex()],
-					getDoor0().getPlaceX(), getDoor0().getPlaceY(), null);
-			g.drawImage(shop.getShop()[shop.getCurrentAnimation()][shop.getAniIndex()], 500, 310, null);
+					(int)(getDoor0().getPlaceX()), (int)(getDoor0().getPlaceY()), null);
+			g.drawImage(shop.getShop()[shop.getCurrentAnimation()][shop.getAniIndex()], (int)(500), (int)(310), null);
 			g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
 					(int) character.getPosX(), levelManager.getyCharacterSpawn() + (int) character.getPosY(), null);
 		}
@@ -221,8 +226,6 @@ public class Screen extends JPanel {
 			g.drawImage(souris.getFleche()[souris.getCurrentAnimation()][souris.getAniIndex()], souris.bougerX(),
 					souris.bougerY(), null);
 		}
-		
-		// LevelSelector
 
 		if (backgroundd.getCurrentAnimation() == 5) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
@@ -275,8 +278,9 @@ public class Screen extends JPanel {
 	 * Where the screen size is determined : (1280x720) or (1920x1080)
 	 */
 	private void setScreenSize() {
-		Dimension size = new Dimension((int) (BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE),
-				(int) (BLOCK_SIZE * BLOCK_PER_HEIGHT * SCALE)); // Screen resolution
+	    
+		Dimension size = new Dimension((int) ((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE)*ratiowidht),
+				(int) ((BLOCK_SIZE * BLOCK_PER_HEIGHT * SCALE)*ratioheight)); // Screen resolution
 		setPreferredSize(size);
 
 	}
@@ -418,4 +422,22 @@ public class Screen extends JPanel {
 	public void setLastAnimation(int lastAnimation) {
 		this.lastAnimation = lastAnimation;
 	}
+
+	public static double getRatiowidht() {
+		return ratiowidht;
+	}
+
+	public static double getRatioheight() {
+		return ratioheight;
+	}
+
+	public static int getBlockPerWidth() {
+		return BLOCK_PER_WIDTH;
+	}
+
+	public static int getBlockPerHeight() {
+		return BLOCK_PER_HEIGHT;
+	}
+	
+	
 }

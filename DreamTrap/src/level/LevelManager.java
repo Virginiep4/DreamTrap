@@ -135,25 +135,9 @@ public abstract class LevelManager {
 
 				// object test
 				value = color.getBlue();
-				if (value > 127) {
-					if (value > 127 + objectsLength - 3) {
-						spikes[i][j] = value - 128;
-					}
+				if (value > 127)
 					// objects index is always higher than objects and we know blocks length
 					level[i][j] = value - 128 + blocksLength;
-				}
-
-				value = color.getRed();
-				if (value > 127) {
-					// objects index is always higher than objects and we know blocks length
-					if (value == 128)
-						spikes[i][j] = value - 128;
-					else if (value == 255)
-						stars[i][j] = value - 128;
-					else {
-						stars[i][j] = -1;
-					}
-				}
 			}
 	}
 
@@ -189,7 +173,7 @@ public abstract class LevelManager {
 								Screen.BLOCK_SIZE, null);
 					}
 				}
-
+				
 				if (star != -1) {
 					g.drawImage(starImg, j * Screen.BLOCK_SIZE - (character.getPosX() % Screen.BLOCK_SIZE),
 							(Screen.BLOCK_PER_HEIGHT - levelHeight + i) * Screen.BLOCK_SIZE, Screen.BLOCK_SIZE,

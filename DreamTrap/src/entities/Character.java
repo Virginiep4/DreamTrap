@@ -91,10 +91,6 @@ public class Character extends Entities {
 	public String getNom() {
 		return nom;
 	}
-	
-	public void setNiv(int niv) {
-		this.niv=niv;
-	}
 
 	public static Character getInstance() {
 		return charactere;

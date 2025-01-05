@@ -2,8 +2,8 @@ package entities;
 
 import java.awt.image.BufferedImage;
 
-import DAO.JoueurDAO;
 import dreamTrap.Screen;
+import level.LevelManager;
 import level.LevelOne;
 
 import static utils.ImageImporter.importImg;
@@ -19,7 +19,6 @@ public class door extends Entities implements Interagiseable {
 	private int placeY;
 	private Character character;
 	private backgroundd backgroundd;
-	private JoueurDAO joueurDAO;
 
 	public door(int placeX, int placeY, int currentAnimation, Screen screen) {
 		super();
@@ -29,7 +28,6 @@ public class door extends Entities implements Interagiseable {
 
 		this.character = screen.getCharacter();
 		this.backgroundd = screen.getBackgroundd();
-		this.joueurDAO = screen.getJoueur();
 	}
 
 	public boolean isWellPlaced() {
@@ -46,7 +44,7 @@ public class door extends Entities implements Interagiseable {
 
 	public void change() {
 		if (backgroundd.getCurrentAnimation() == 3) {
-			if (Screen.getDoor0().isWellPlaced()) {
+			if (dreamTrap.Screen.getDoor0().isWellPlaced()) {
 				backgroundd.setCurrentAnimation(5);
 				character.setClicked(false);
 				character.setPosX(character.getLevelManager().getxCharacterSpawn());
@@ -56,7 +54,7 @@ public class door extends Entities implements Interagiseable {
 		if (backgroundd.getCurrentAnimation() == 5) {
 
 			if (character.getPosX() < 600) {
-				if (Screen.getDoor1().isWellPlaced()) {
+				if (dreamTrap.Screen.getDoor1().isWellPlaced()) {
 					backgroundd.setCurrentAnimation(6);
 					
 					Screen.levelManager = new LevelOne(Screen.getInstance());
@@ -66,7 +64,7 @@ public class door extends Entities implements Interagiseable {
 				}
 			}
 			if (character.getPosX() < 1100 && character.getPosX() > 400) {
-				if (Screen.getDoor2().isWellPlaced()) {
+				if (dreamTrap.Screen.getDoor2().isWellPlaced()) {
 					backgroundd.setCurrentAnimation(7);
 					character.setClicked(false);
 					character.setPosX(0);
@@ -75,14 +73,23 @@ public class door extends Entities implements Interagiseable {
 			}
 		}
 
-		if (backgroundd.getCurrentAnimation() == 6) {
-			if (this.isWellPlaced()) {
-				backgroundd.setCurrentAnimation(3);
-				character.setNiv(aniIndex);
-				joueurDAO.update(character);
-				character.setClicked(false);
-			}
-		}
+//				if(backgroundd.getCurrentAnimation()==4) {
+//					if (this.isWellPlaced()) {
+//						backgroundd.setCurrentAnimation(1);
+//						Character.setClicked(false);
+//						}}
+//				
+//				if(backgroundd.getCurrentAnimation()==5) {
+//					if (this.isWellPlaced()) {
+//					backgroundd.setCurrentAnimation(1);
+//					Character.setClicked(false);
+//					}}
+//				
+//				if(backgroundd.getCurrentAnimation()==6) {
+//					if (this.isWellPlaced()) {
+//					backgroundd.setCurrentAnimation(1);
+//					Character.setClicked(false);
+//					}}
 	}
 
 	void importEntity() {

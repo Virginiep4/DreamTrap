@@ -94,18 +94,16 @@ public class JoueurDAO extends DAO {
 	@Override
 	public void update(Object obj) {
 		
-		Character character= (Character) obj;
+		Character character= (Character)obj;
 		 int niveau=character.getNiv();
-		 int star=character.getEtoiles();
 		 int id=character.getId();
 
 		
-		String req="UPDATE joueur SET niveau=?, etoiles=? WHERE idnom = ?";
+		String req="UPDATE item SET niveau=? WHERE idnom = ?";
 		this.open(req);
 		try {
 			this.stm.setInt(1, niveau);
-			this.stm.setInt(2, star);
-			this.stm.setInt(3, id);
+			this.stm.setInt(2, id);
 			
 			this.stm.executeUpdate();
 			
@@ -114,7 +112,35 @@ public class JoueurDAO extends DAO {
 		
 			e.printStackTrace();
 		}
+		
+
 	}
+
+public Object updateStar(Object obj) {
+		
+	Character character= (Character)obj;
+	 int star=character.getEtoiles();
+	 int id=character.getId();
+
+	
+	String req="UPDATE item SET etoiles=? WHERE idnom = ?";
+	this.open(req);
+	try {
+		this.stm.setInt(1, star);
+		this.stm.setInt(2, id);
+		
+		this.stm.executeUpdate();
+		
+		
+	} catch (SQLException e) {
+	
+		e.printStackTrace();
+	}
+	
+	return obj;
+	}
+	
+	
 
 	@Override
 	public void delete(Object obj) {

@@ -23,7 +23,7 @@ public class Window extends JFrame {
 		jframe.setResizable(false);
 		jframe.pack(); //choose the preferenced size that I  fix on Screen 
 		jframe.setVisible(true);
-		jframe.setLayout(null);
+	
 		
 		character = screen.getCharacter();
 		
