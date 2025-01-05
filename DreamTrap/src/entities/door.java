@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import DAO.JoueurDAO;
 import dreamTrap.Screen;
 import level.LevelOne;
+import level.LevelTwo;
 
 import static utils.ImageImporter.importImg;
 
