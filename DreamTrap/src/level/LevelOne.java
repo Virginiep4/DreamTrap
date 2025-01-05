@@ -14,7 +14,6 @@ public class LevelOne extends LevelManager {
 		xCharacterSpawn = 4 * Screen.BLOCK_SIZE;
 		character.setPosX(xCharacterSpawn);		
 		yCharacterSpawn = (Screen.BLOCK_PER_HEIGHT - 6) * Screen.BLOCK_SIZE;
-		boss = new Boss(screen.getCharacter());
 	}
 
 	@Override
