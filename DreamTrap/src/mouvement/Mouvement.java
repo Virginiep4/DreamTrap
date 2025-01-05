@@ -6,7 +6,7 @@ public interface Mouvement {
 	void jumping(boolean b);
 	boolean isJumping ();
 	void flying(boolean b);
-	void jumpAnimation();
+	float jumpAnimation(float yMove);
 	boolean isUp();
 	boolean isDown();
 	boolean isRight();
@@ -21,4 +21,4 @@ public interface Mouvement {
 	boolean isFalling();
 	boolean gotWings();
 	void falling(boolean b);
-}	
+}

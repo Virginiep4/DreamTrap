@@ -1,6 +1,5 @@
 package entities;
 
-
 public class Progression {
 
 	    private String nom;
@@ -56,6 +55,4 @@ public class Progression {
 		public String toString() {
 			return "Progression [nom=" + nom + ", tmp=" + tmp + ", win=" + win + "]";
 		}
-		
-	
 }

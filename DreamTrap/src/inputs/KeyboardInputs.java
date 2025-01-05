@@ -2,15 +2,15 @@ package inputs;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Timer;
 
 import dreamTrap.Screen;
 import entities.Character;
 import entities.Item;
 import entities.ShopInt;
 import entities.backgroundd;
-import entities.shop;
-import level.ScoreScreen;
-import mouvement.MouvementNormal;
+import level.GameOverScreen;
+import level.LevelManager;
 
 public class KeyboardInputs implements KeyListener {
 	private Character character;
@@ -35,14 +35,14 @@ public class KeyboardInputs implements KeyListener {
 		// whenever a key is pressed we check if it does something for our game
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_SPACE:
-			if (character.moving instanceof MouvementNormal) {
-				character.moving.jumping(true);
-			} else {
-				character.moving.up(true);
-			}
+			character.moving.jumping(true);
 			break;
 		case KeyEvent.VK_Z:
 			character.moving.up(true);
+			if (backgroundd.getCurrentAnimation() == 9) {
+				GameOverScreen.ShowZ(true);
+				GameOverScreen.ShowS(false);
+			}
 			break;
 		case KeyEvent.VK_D:
 			character.moving.right(true);
@@ -52,11 +52,22 @@ public class KeyboardInputs implements KeyListener {
 			break;
 		case KeyEvent.VK_S:
 			character.moving.down(true);
+			if (backgroundd.getCurrentAnimation() == 9) {
+				GameOverScreen.ShowZ(false);
+				GameOverScreen.ShowS(true);
+			}
 			break;
 		case KeyEvent.VK_ENTER:
-			if (backgroundd.getCurrentAnimation() == 1)
+			if (backgroundd.getCurrentAnimation() == 1) {
 				backgroundd.setCurrentAnimation(2);
-			if (backgroundd.getCurrentAnimation() >= 3) {
+			} else if (backgroundd.getCurrentAnimation() == 9) {
+				if (GameOverScreen.getShowZ()) {
+					backgroundd.setCurrentAnimation(3);
+				} else if (GameOverScreen.getShowS()) {
+					backgroundd.setCurrentAnimation(1);
+					Screen.setGotName(false);
+				}
+			} else if (backgroundd.getCurrentAnimation() >= 3) {
 				character.click();
 				Item.click();
 				ShopInt.click();
@@ -83,17 +94,10 @@ public class KeyboardInputs implements KeyListener {
 		// when a key is released it's the end of movement
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_SPACE:
-			if (character.moving instanceof MouvementNormal) {
-				character.moving.jumping(false);
-				character.moving.releaseJump();
-			} else {
-				character.moving.up(false);
-			}
+			character.moving.jumping(false);
 			break;
 		case KeyEvent.VK_Z:
-			// if(character.moving.isDown())
 			character.moving.up(false);
-
 			break;
 		case KeyEvent.VK_D:
 			character.moving.right(false);

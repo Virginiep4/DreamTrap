@@ -15,8 +15,6 @@ public class Welcome {
 	public final static int BLOCK_PER_WIDTH = 24;
 	public final static int BLOCK_PER_HEIGHT = 13;
 	private final static float SCALE = 1f;
-	private boolean ShowZ = false;
-	private boolean ShowS = false;
 
 	public Welcome(Character character) {
 		this.character = character;
@@ -40,11 +38,6 @@ public class Welcome {
 		g.drawImage(character.getCharacter()[0][0], ((int) ((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE) / 3)), 250, 200, 182,
 				null);
 
-		if (this.character.moving.isUp()) {
-			ShowZ(true);
-			ShowS(false);
-		}
-
 		// Play Again
 		g.setFont(g.getFont().deriveFont(40f));
 		text = "PLAY";
@@ -54,31 +47,8 @@ public class Welcome {
 		g.drawString(">", x - 40, y);
 		// putt current animation variable in a number exp 6
 
-		if (this.character.moving.isDown()) {
-			ShowZ(false);
-			ShowS(true);
-		}
-		// Exit
-		g.setFont(g.getFont().deriveFont(40f));
-		text = "";
-		x = (int) ((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE) / 4);
-		y = 600;
-		g.drawString(text, x, y);
-
-		if (ShowS) {
-			g.drawString(">", x - 40, y);
-			// putt current animation variable in a number exp 7
-
-		}
+		g.drawString(">", x - 40, y);
+		// putt current animation variable in a number exp 7
 
 	}
-
-	public void ShowZ(boolean showZ) {
-		ShowZ = showZ;
-	}
-
-	public void ShowS(boolean showS) {
-		ShowS = showS;
-	}
-
 }

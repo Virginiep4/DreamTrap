@@ -47,7 +47,7 @@ public class JoueurDAO extends DAO {
 		return character;
 	}
 
-	public Character find( String playerName ) {
+	public Character find(String playerName ) {
 	    Character character = null;
 	    
 	    String req = "SELECT * FROM joueur J JOIN avoir A ON J.idnom = A.idnom INNER JOIN progression P ON A.idprogression = P.idprogression WHERE J.nom LIKE ? AND P.win=1";
@@ -76,13 +76,12 @@ public class JoueurDAO extends DAO {
 	        	
 	        }
 	        	
-	        
+	   
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
 	    return character;
 	}
-	
 	
 	public Character loadsave(String name) {
 		// faudrais recuperer le nom joeur 
@@ -95,16 +94,18 @@ public class JoueurDAO extends DAO {
 	@Override
 	public void update(Object obj) {
 		
-		Character character= (Character)obj;
+		Character character= (Character) obj;
 		 int niveau=character.getNiv();
+		 int star=character.getEtoiles();
 		 int id=character.getId();
 
 		
-		String req="UPDATE item SET niveau=? WHERE idnom = ?";
+		String req="UPDATE joueur SET niveau=?, etoiles=? WHERE idnom = ?";
 		this.open(req);
 		try {
 			this.stm.setInt(1, niveau);
-			this.stm.setInt(2, id);
+			this.stm.setInt(2, star);
+			this.stm.setInt(3, id);
 			
 			this.stm.executeUpdate();
 			
@@ -113,38 +114,7 @@ public class JoueurDAO extends DAO {
 		
 			e.printStackTrace();
 		}
-		
-
 	}
-	
-	
-	
-
-public Object updateStar(Object obj) {
-		
-	Character character= (Character)obj;
-	 int star=character.getEtoiles();
-	 int id=character.getId();
-
-	
-	String req="UPDATE item SET etoiles=? WHERE idnom = ?";
-	this.open(req);
-	try {
-		this.stm.setInt(1, star);
-		this.stm.setInt(2, id);
-		
-		this.stm.executeUpdate();
-		
-		
-	} catch (SQLException e) {
-	
-		e.printStackTrace();
-	}
-	
-	return obj;
-	}
-	
-	
 
 	@Override
 	public void delete(Object obj) {

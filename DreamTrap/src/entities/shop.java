@@ -11,10 +11,10 @@ public class shop extends Entities implements Interagiseable {
 	private BufferedImage[][] shop;
 	private int aniTick, aniIndex = 0, aniSpeed = 60;
 	private int currentAnimation = 0;
-	private int sizeX=406;
-	private int sizeY=345;
-	private int placeX=500;
-	private int placeY=339;
+	private static final int sizeX=406;
+	private static final int sizeY=345;
+	private static final int placeX=500;
+	private static final int placeY=339;
 	private Character character;
 	private backgroundd backgroundd;
 	

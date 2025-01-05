@@ -28,7 +28,7 @@ public class backgroundd extends Entities{
 	
 	
 	void importEntity() {
-		backgroundd= new BufferedImage[7][]; // amount of different animations
+		backgroundd= new BufferedImage[10][]; // amount of different animations
 
 		backgroundd[0] = new BufferedImage[2];
 		backgroundd[0][0] = importImg("/PageAccueil R.png");
@@ -71,6 +71,9 @@ public class backgroundd extends Entities{
 		backgroundd[6][0] = importImg("/PageAccueil 4.png");
 		backgroundd[6][1]=importImg("/PageAccueil 4b.png");
 		
+		backgroundd[9] = new BufferedImage[2];
+		backgroundd[9][0] = importImg("/PageAccueil 4.png");
+		backgroundd[9][1]=importImg("/PageAccueil 4b.png");
 	}
 	
 	@Override
