@@ -52,5 +52,4 @@ public class HubLevel extends LevelManager {
 	@Override
 	public void spikesInitializer() {
 	}
-
 }

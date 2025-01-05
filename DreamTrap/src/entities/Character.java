@@ -63,6 +63,14 @@ public class Character extends Entities {
 	public BufferedImage[][] getCharacter() {
 		return character;
 	}
+	
+	public BufferedImage getCurrentCharacter() {
+		return character[getCurrentAnimation()][getAniIndex()];
+	}
+	
+	public void setCurrentCharacter(BufferedImage characterImg) {
+		this.character[getCurrentAnimation()][getAniIndex()] = characterImg;
+	}
 
 	public int getAniIndex() {
 		return aniIndex;

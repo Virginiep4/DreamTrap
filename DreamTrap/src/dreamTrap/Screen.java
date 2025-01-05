@@ -37,7 +37,7 @@ public class Screen extends JPanel {
 	public final static int BLOCK_SIZE = 64;
 	public final static int BLOCK_PER_WIDTH = 24;
 	public final static int BLOCK_PER_HEIGHT = 13;
-	private final static float SCALE = 1f;
+	public final static float SCALE = 1f;
 
 	private Game game;
 	private static Screen screen;
@@ -67,6 +67,7 @@ public class Screen extends JPanel {
 
 	private Clip currentClip; // Clip pour le son actuel
 	private int lastAnimation = 0; // Dernière animation pour vérifier les changements
+	private KeyboardInputs keyboardInputs;
 
 	// getters and setters
 	public Character getCharacter() {
@@ -88,7 +89,8 @@ public class Screen extends JPanel {
 		welcomeScreen2 = new Welcome2();
 		backgroundd = new entities.backgroundd();
 		this.setLayout(null);
-		addKeyListener(new KeyboardInputs(this));
+		keyboardInputs = new KeyboardInputs(this);
+		addKeyListener(keyboardInputs);
 	}
 
 	public void updateGame() {
@@ -110,8 +112,16 @@ public class Screen extends JPanel {
 				&& (backgroundd.getCurrentAnimation() > 5)) {
 			// Game Over
 			levelManager = new HubLevel(screen);
+			character.setLevelManager(levelManager);
+			character.setPosX(Screen.levelManager.getxCharacterSpawn());
+			character.setPosY(0);
+			character.setNbCoeurs(3);
 			backgroundd.setCurrentAnimation(9);
 		}
+	}
+
+	public static void setGotName(boolean gotName) {
+		Screen.gotName = gotName;
 	}
 
 	public static Screen getInstance() {
@@ -222,8 +232,15 @@ public class Screen extends JPanel {
 			g.drawImage(door3.getDoor()[door3.getCurrentAnimation()][door3.getAniIndex()], door3.getPlaceX(),
 					door3.getPlaceY(), null);
 			levelManager.draw(g);
-			g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
-					levelManager.getxCharacterSpawn(), levelManager.getyCharacterSpawn() + character.getPosY(), null);
+
+			BufferedImage characterImage = character.getCurrentCharacter();
+			if (character.isHurting()) {
+				float[] scales = { 1.0f, 0.0f, 0.0f, 1.0f };
+				RescaleOp redFilter = new RescaleOp(scales, new float[4], null);
+				characterImage = (redFilter.filter(characterImage, null));
+			}
+			g.drawImage(characterImage, levelManager.getxCharacterSpawn(),
+					levelManager.getyCharacterSpawn() + character.getPosY(), null);
 		}
 		if (backgroundd.getCurrentAnimation() == 7) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
@@ -243,12 +260,6 @@ public class Screen extends JPanel {
 		if (backgroundd.getCurrentAnimation() == 9) {
 			gameOverScreen.drawGameOverScreen(g, character);
 		}
-
-//		if (character.isHurting()) {
-//	        float[] scales = {1.0f, 0.0f, 0.0f, 1.0f};
-//	        RescaleOp redFilter = new RescaleOp(scales, new float[4], null);
-//	        characterImage = redFilter.filter(characterImage, null);
-//	    }
 	}
 
 	/**
@@ -299,7 +310,6 @@ public class Screen extends JPanel {
 
 				String nom = welcomeText.getText();
 				character = joueur.loadsave(nom);
-				System.out.println(character);
 				initializeScreens();
 				welcomeText.setVisible(false);
 				backgroundd.setCurrentAnimation(3);
@@ -326,7 +336,9 @@ public class Screen extends JPanel {
 		pince = new entities.Item("pince", 50, "popo", 0, 1, character);
 		fleche = new entities.ShopInt(0, this);
 		souris = new entities.ShopInt(1, this);
-		addKeyListener(new KeyboardInputs(this));
+		removeKeyListener(keyboardInputs);
+		keyboardInputs = new KeyboardInputs(this);
+		addKeyListener(keyboardInputs);
 		initializedItems = true;
 	}
 
