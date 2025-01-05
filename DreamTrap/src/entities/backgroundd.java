@@ -56,6 +56,12 @@ public class backgroundd extends Entities{
 		backgroundd[9] = new BufferedImage[2];
 		backgroundd[9][0] = importImg("/PageAccueil 4.png");
 		backgroundd[9][1]=importImg("/PageAccueil 4b.png");
+		
+		// Background FinalLevel
+		
+		backgroundd[8] = new BufferedImage[2];
+		backgroundd[8][0] = importImg("/finalLevel_background.png");
+		backgroundd[8][1]= importImg("/finalLevelB_background.png");
 	}
 	
 	@Override

@@ -108,8 +108,6 @@ public class Boss extends Entities {
 
 	@Override
 	public void update() {
-		bossMoving = !bossMoving;
-		if (bossMoving) {
 
 			if (movingYBlock < Screen.BLOCK_SIZE) {
 				movingYBlock += Screen.BLOCK_SIZE;
@@ -147,7 +145,6 @@ public class Boss extends Entities {
 				movingXBlock -= 1;
 			}
 
-		}
 	}
 
 	public int getxBlock() {

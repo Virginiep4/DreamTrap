@@ -10,6 +10,7 @@ import javax.swing.Timer;
 import dreamTrap.Game;
 import dreamTrap.Screen;
 import entities.Boss;
+import entities.Character;
 import level.LevelManager;
 
 public class HelpMethods {
@@ -62,7 +63,7 @@ public class HelpMethods {
 		// Index de colonne
 		int i = (int) (LevelManager.getLevelHeight() - Screen.BLOCK_PER_HEIGHT
 				+ character.getLevelManager().getyCharacterSpawn() / Screen.BLOCK_SIZE
-				+ character.getPosY() / Screen.BLOCK_SIZE);
+				+ (character.getPosY() + (character.getPosY() % Screen.BLOCK_SIZE)) / Screen.BLOCK_SIZE);
 		// Index de ligne
 		int j = character.getPosX() / Screen.BLOCK_SIZE;
 		if (i < 63 && level.getStars()[i + 1][j] != -1) {
@@ -75,7 +76,7 @@ public class HelpMethods {
 		// Index de colonne
 		int i = (int) (LevelManager.getLevelHeight() - Screen.BLOCK_PER_HEIGHT
 				+ character.getLevelManager().getyCharacterSpawn() / Screen.BLOCK_SIZE
-				+ character.getPosY() / Screen.BLOCK_SIZE);
+				+ (character.getPosY() + (character.getPosY() % Screen.BLOCK_SIZE)) / Screen.BLOCK_SIZE);
 		// Index de ligne
 		int j = character.getPosX() / Screen.BLOCK_SIZE;
 		if (i < 63 && level.getSpikes()[i + 1][j] != -1) {
@@ -88,11 +89,11 @@ public class HelpMethods {
 		// Index de colonne
 		int i = (int) (LevelManager.getLevelHeight() - Screen.BLOCK_PER_HEIGHT
 				+ character.getLevelManager().getyCharacterSpawn() / Screen.BLOCK_SIZE
-				+ character.getPosY() / Screen.BLOCK_SIZE);
+				+ (character.getPosY() + (character.getPosY() % Screen.BLOCK_SIZE)) / Screen.BLOCK_SIZE);
 		// Index de ligne
 		int j = character.getPosX() / Screen.BLOCK_SIZE;
 
-		character.setEtoiles(character.getEtoiles() + 1);
+		character.setLocalEtoiles(character.getLocalEtoiles() + 1);
 		level.stars[i + 1][j] = -1;
 	}
 

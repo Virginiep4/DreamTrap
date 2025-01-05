@@ -49,7 +49,7 @@ public class MouvementAiles implements Mouvement {
 			main.setCurrentAnimation(LEFT);
 		}
 
-		else {
+		else if (move > 0)  {
 			main.setCurrentAnimation(RIGHT);
 		}
 	}

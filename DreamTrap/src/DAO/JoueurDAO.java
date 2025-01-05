@@ -148,5 +148,31 @@ public Object updateStar(Object obj) {
 		
 	}
 	
+	public void updateTable(Character character) {
+		
+		 int niveau=character.getNiv();
+		 int etoiles=character.getEtoiles();
+		 int id=character.getId();
+		 
+		String req="UPDATE joueur"
+				+ " SET niveau = ?,"
+				+ " etoiles = ?"
+				+ " WHERE idnom = ?";
+		this.open(req);
+		try {
+			this.stm.setInt(1, niveau);
+			this.stm.setInt(2, etoiles);
+			this.stm.setInt(3, id);
+			
+			this.stm.executeUpdate();
+			
+			
+		} catch (SQLException e) {
+		
+			e.printStackTrace();
+		}
+		
+
+	}
 
 }

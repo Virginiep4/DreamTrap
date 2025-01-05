@@ -33,6 +33,7 @@ public class Character extends Entities {
 	private String nom = "";
 	private int niv = 0;
 	private int etoiles = 0;
+	private int LocalEtoiles = 0;
 	private int id;
 
 	private int nbCoeurs = 3;
@@ -49,7 +50,7 @@ public class Character extends Entities {
 		// le passage des infos ne marche pas a partir d'ici
 		super();
 		charactere = this;
-		this.moving = new MouvementNormal(this);
+		this.moving = new MouvementAiles(this);
 		new ScoreScreen(this);
 		this.id = id;
 		this.nom = nom;
@@ -63,6 +64,10 @@ public class Character extends Entities {
 	public BufferedImage[][] getCharacter() {
 		return character;
 	}
+	
+	public BufferedImage getCurrentCharacter() {
+        return character[getCurrentAnimation()][getAniIndex()];
+    }
 
 	public int getAniIndex() {
 		return aniIndex;
@@ -78,6 +83,10 @@ public class Character extends Entities {
 
 	public int getNiv() {
 		return niv;
+	}
+	
+	public void setNiv(int niv) {
+		this.niv=niv;
 	}
 
 	public String getNom() {
@@ -123,9 +132,9 @@ public class Character extends Entities {
 	 */
 	public void updatePos() {
 		aniTick++;
-
+				
 		float xMove = 0, yMove = 1; // yMove is set to default value for flying gravity
-
+		
 		if (moving instanceof MouvementNormal) {
 			if (moving.isInJumpingPhase() == -1) {
 				yMove = 5; // default value for walking gravity
@@ -175,8 +184,7 @@ public class Character extends Entities {
 	}
 
 	public void setEtoiles(int etoile) {
-		// TODO Auto-generated method stub
-
+		this.etoiles=etoile;
 	}
 
 	public void setNom(String nom) {
@@ -254,5 +262,13 @@ public class Character extends Entities {
 
 	public String toString() {
 		return "Character{" + "id=" + id + ", nom='" + nom + '\'' + ", niveau=" + niv + ", etoiles=" + etoiles + '}';
+	}
+
+	public int getLocalEtoiles() {
+		return LocalEtoiles;
+	}
+
+	public void setLocalEtoiles(int localEtoiles) {
+		LocalEtoiles = localEtoiles;
 	}
 }
