@@ -5,12 +5,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import dreamTrap.Time;
 import entities.Progression;
 import entities.Character;
 
 public class progressionDAO extends DAO {
 
 	private static Character charactere;
+	private Time timer;
+	private Progression progress;
+	private int TotalTimeElapsed;
 
 	@Override
 	public Object create(Object obj) {
@@ -143,8 +147,7 @@ public class progressionDAO extends DAO {
 	}
 
 	public void setProgressionToWinGameByJoueurId(int joueurId) {
-		String req = "UPDATE progression p " + "SET win = ? " + "WHERE p.idprogression IN ("
-				+ "    SELECT a.idprogression " + "    FROM avoir a " + "    WHERE a.idnom = ? AND p.win = 1";
+		String req = "UPDATE progression p SET win = ? WHERE p.idprogression IN (SELECT a.idprogression FROM avoir a WHERE a.idnom = ? AND p.win = 1)";
 		this.open(req);
 		try {
 			this.stm.setInt(1, 0);
@@ -166,6 +169,19 @@ public class progressionDAO extends DAO {
 	@Override
 	public void delete(Object obj) {
 		// TODO Auto-generated method stub
+
+	}
+
+	public void Save() {
+		Character character = Character.getInstance();
+		timer = Time.getInstance();
+		TotalTimeElapsed = timer.getTotalTimeElapsed();
+		TotalTimeElapsed += getTimeInSeconds(getProgressionByJoueurId(character.getId()).getId());
+		int hour = TotalTimeElapsed / 3600;
+		int minute = (TotalTimeElapsed % 3600) / 60;
+		int second = TotalTimeElapsed % 60;
+		String tmp = String.format("%02d:%02d:%02d", hour, minute, second);
+		this.updateTime(getProgressionByJoueurId(character.getId()).getId(), tmp);
 
 	}
 

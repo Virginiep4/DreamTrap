@@ -217,6 +217,7 @@ public class Screen extends JPanel {
 			welcomeScreen2.draw(g);
 		}
 		if (backgroundd.getCurrentAnimation() == 3) {
+			Window.getInstance().SaveBeforeexit();
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
 					0, null);
 			levelManager.draw(g);
@@ -359,7 +360,9 @@ public class Screen extends JPanel {
 		}
 
 		if (Progression.getInstance().getWin() == 0) {
-			scoreScreen.drawScroreScreen(g);
+			if (scoreScreen != null) {
+				scoreScreen.drawScroreScreen(g);
+			}
 		}
 	}
 

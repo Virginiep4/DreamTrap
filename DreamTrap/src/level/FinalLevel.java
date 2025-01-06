@@ -48,7 +48,7 @@ public class FinalLevel extends LevelManager {
 	}
 	
 	public void bossEvent() {
-		Timer bossTimer = new Timer(60000, e -> { // PAS LE MÊME QUE Time !!!!!!!!!
+		Timer bossTimer = new Timer(3000, e -> { // PAS LE MÊME QUE Time !!!!!!!!!
 			boss=null;
 			setBossOver(true);
 		});

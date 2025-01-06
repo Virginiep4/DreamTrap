@@ -74,32 +74,6 @@ public class ScoreScreen extends ScoreList {
             i++; 
 	    }
 	    
-	    if (character.moving.isUp()) {ShowZ(true); ShowS(false);}
-	    // Play Again 
-	    g.setFont(g.getFont().deriveFont(40f));
-		text="New Partie";
-		x=(int)((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE) / 3);
-		y= 500;
-		g.drawString(text, x, y);
-		if (ShowZ) {
-			g.drawString(">", x-40, y);
-			// set currentanimation to a number 
-			
-		}
-		
-		if(character.moving.isDown()){ShowZ(false); ShowS(true);}
-		//Exit 
-		g.setFont(g.getFont().deriveFont(40f));
-		text="Exit";
-		x=(int)((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE) / 3);
-		y= 600;
-		g.drawString(text, x, y);
-		
-		if (ShowS) {
-			g.drawString(">", x-40, y);
-			//set currentanimation to a number
-		}
-	    
 	    
 	}
 	

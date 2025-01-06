@@ -29,7 +29,7 @@ public class ScoreList {
 	public  List<Progression> getTopfive(){
 
 		List<Progression> topFive = scoreList.stream()
-	            .sorted(Comparator.comparing(Progression::getTmp).reversed())
+	            .sorted(Comparator.comparing(Progression::getTmp))
 	            .limit(5)
 	            .collect(Collectors.toList());
 

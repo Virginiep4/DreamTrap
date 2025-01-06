@@ -39,6 +39,7 @@ public class door extends Entities implements Interagiseable {
 		this.backgroundd = screen.getBackgroundd();
 		joueurDAO = new JoueurDAO();
 		itemDAO = new ItemDAO();
+		progressionDao = new progressionDAO();
 	}
 
 	public boolean isWellPlaced() {
@@ -152,7 +153,7 @@ public class door extends Entities implements Interagiseable {
 								character.setNbCoeurs(3);
 								character.setEtoiles(0);
 								character.setLocalEtoiles(0);
-								progressionDao.setProgressionToWinGameByJoueurId(character.getId());
+								progressionDao.setProgressionToWinGameByJoueurId(Character.getInstance().getId());
 								joueurDAO.updateTable(character);
 								character.setClicked(false);
 							}

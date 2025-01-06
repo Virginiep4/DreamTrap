@@ -141,7 +141,6 @@ public class Character extends Entities {
 	 */
 	public void updatePos() {
 		aniTick++;
-		System.out.println(etoiles);
 
 		float xMove = 0, yMove = 1; // yMove is set to default value for flying gravity
 
