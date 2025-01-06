@@ -40,9 +40,9 @@ import entities.Boss;
 public class Screen extends JPanel {
 	public final static int BLOCK_SIZE = 64;
 	public final static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	public final static int BLOCK_PER_WIDTH =  screenSize.width /BLOCK_SIZE;
-	public final static int BLOCK_PER_HEIGHT = screenSize.height /BLOCK_SIZE;
-	
+	public final static int BLOCK_PER_WIDTH = screenSize.width / BLOCK_SIZE;
+	public final static int BLOCK_PER_HEIGHT = screenSize.height / BLOCK_SIZE;
+
 	private Game game;
 	private static Screen screen;
 	private static boolean gotName = false;
@@ -64,7 +64,7 @@ public class Screen extends JPanel {
 	private entities.ShopInt fleche;
 	private entities.ShopInt souris;
 	private entities.ShopInt stars;
-	
+
 	private JoueurDAO joueur;
 
 	private ScoreScreen scoreScreen;
@@ -87,7 +87,7 @@ public class Screen extends JPanel {
 	}
 
 	public Screen(Game game) {
-		
+
 		setScreenSize();
 		this.game = game;
 		screen = this;
@@ -214,54 +214,60 @@ public class Screen extends JPanel {
 					0, null);
 			levelManager.draw(g);
 			g.drawImage(getDoor0().getDoor()[getDoor0().getCurrentAnimation()][getDoor0().getAniIndex()],
-					(int)(getDoor0().getPlaceX()), (int)(getDoor0().getPlaceY()), null);
-			g.drawImage(shop.getShop()[shop.getCurrentAnimation()][shop.getAniIndex()], shop.getPlacex(), shop.getPlacey(), null);
+					(int) (getDoor0().getPlaceX()), (int) (getDoor0().getPlaceY()), null);
+			g.drawImage(shop.getShop()[shop.getCurrentAnimation()][shop.getAniIndex()], shop.getPlacex(),
+					shop.getPlacey(), null);
 			g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
 					(int) character.getPosX(), levelManager.getyCharacterSpawn() + (int) character.getPosY(), null);
 		}
 		if (backgroundd.getCurrentAnimation() == 4) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
-					0, null);
-			g.drawImage(ailes.getItem()[ailes.getCurrentAnimation()][ailes.getAniIndex()], 500, 400, null);
-			
-			g.setColor(new Color(0,0,0,250));
-			g.fillRect(0, 0, (int)(20),(int)(20));
-			g.setFont(g.getFont().deriveFont(Font.BOLD,20f));
+					0, BLOCK_PER_WIDTH * BLOCK_SIZE, BLOCK_PER_HEIGHT * BLOCK_SIZE, null);
+			g.drawImage(ailes.getItem()[ailes.getCurrentAnimation()][ailes.getAniIndex()],
+					(BLOCK_PER_WIDTH / 2 - 5) * BLOCK_SIZE, (BLOCK_PER_HEIGHT / 2 - 2) * BLOCK_SIZE, null);
+
+			g.setColor(new Color(0, 0, 0, 250));
+			g.fillRect(0, 0, (int) (20), (int) (20));
+			g.setFont(g.getFont().deriveFont(Font.BOLD, 20f));
 			g.setColor(Color.black);
-			g.drawString("prix: "+ailes.getPrix(),520,500);
-			
-			g.drawImage(pince.getItem()[pince.getCurrentAnimation()][pince.getAniIndex()], 1000, 400, null);
-			
-			g.setColor(new Color(0,0,0,250));
-			g.fillRect(0, 0, (int)(20),(int)(20));
-			g.setFont(g.getFont().deriveFont(Font.BOLD,20f));
+			g.drawString("prix: " + ailes.getPrix(), 520, 500);
+
+			g.drawImage(pince.getItem()[pince.getCurrentAnimation()][pince.getAniIndex()],
+					(BLOCK_PER_WIDTH / 2 + 3) * BLOCK_SIZE, (BLOCK_PER_HEIGHT / 2 - 2) * BLOCK_SIZE, null);
+
+			g.setColor(new Color(0, 0, 0, 250));
+			g.fillRect(0, 0, (int) (20), (int) (20));
+			g.setFont(g.getFont().deriveFont(Font.BOLD, 20f));
 			g.setColor(Color.black);
-			g.drawString("prix: "+pince.getPrix(),1000,500);
-			
-			g.drawImage(fleche.getFleche()[fleche.getCurrentAnimation()][fleche.getAniIndex()], 745, 700, null);
+			g.drawString("prix: " + pince.getPrix(), 1000, 500);
+
+			g.drawImage(fleche.getFleche()[fleche.getCurrentAnimation()][fleche.getAniIndex()],
+					(BLOCK_PER_WIDTH / 2 - 1) * BLOCK_SIZE, (BLOCK_PER_HEIGHT / 2 + 3) * BLOCK_SIZE, null);
 			g.drawImage(souris.getFleche()[souris.getCurrentAnimation()][souris.getAniIndex()], souris.bougerX(),
 					souris.bougerY(), null);
-			g.drawImage(stars.getEtoilesImg(), 300,50,null);
-			
-			g.setColor(new Color(0,0,0,250));
-			g.fillRect(0, 0, (int)(20),(int)(20));
-			g.setFont(g.getFont().deriveFont(Font.BOLD,20f));
+			g.drawImage(stars.getEtoilesImg(), 300, 50, null);
+
+			g.setColor(new Color(0, 0, 0, 250));
+			g.fillRect(0, 0, (int) (20), (int) (20));
+			g.setFont(g.getFont().deriveFont(Font.BOLD, 20f));
 			g.setColor(Color.black);
-			g.drawString(""+character.getEtoiles(),350,75);
-			
-			if(Item.getTexte()==1) {
-				g.setColor(new Color(0,0,0,250));
-				g.fillRect(0, 0, (int)(20),(int)(20));
-				int x ; int y ;String text;
-				g.setFont(g.getFont().deriveFont(Font.BOLD,20f));
-				text=Item.achat();
+			g.drawString("" + character.getEtoiles(), 350, 75);
+
+			if (Item.getTexte() == 1) {
+				g.setColor(new Color(0, 0, 0, 250));
+				g.fillRect(0, 0, (int) (20), (int) (20));
+				int x;
+				int y;
+				String text;
+				g.setFont(g.getFont().deriveFont(Font.BOLD, 20f));
+				text = Item.achat();
 				g.setColor(Color.black);
-				x=740;
-				y= 600;
-			
-			    g.drawString(text, x, y);
+				x = 740;
+				y = 600;
+
+				g.drawString(text, x, y);
 			}
-			
+
 		}
 
 		if (backgroundd.getCurrentAnimation() == 5) {
@@ -316,7 +322,7 @@ public class Screen extends JPanel {
 				RescaleOp redFilter = new RescaleOp(scales, new float[4], null);
 				characterImage = (redFilter.filter(characterImage, null));
 			}
-			if (FinalLevel.getInstance()!=null && FinalLevel.getInstance().isBossOver()) {
+			if (FinalLevel.getInstance() != null && FinalLevel.getInstance().isBossOver()) {
 				g.drawImage(
 						doorEndFinalLevel.getDoor()[doorEndFinalLevel.getCurrentAnimation()][doorEndFinalLevel
 								.getAniIndex()],
@@ -329,7 +335,7 @@ public class Screen extends JPanel {
 		if (backgroundd.getCurrentAnimation() == 9) {
 			gameOverScreen.drawGameOverScreen(g, character);
 		}
-		
+
 		if (Progression.getInstance().getWin() == 0) {
 			scoreScreen.drawScroreScreen(g);
 		}
@@ -339,9 +345,9 @@ public class Screen extends JPanel {
 	 * Where the screen size is determined : (1280x720) or (1920x1080)
 	 */
 	private void setScreenSize() {
-	    
-		Dimension size = new Dimension(BLOCK_SIZE * BLOCK_PER_WIDTH,
-				BLOCK_SIZE * BLOCK_PER_HEIGHT); // Screen resolution
+
+		Dimension size = new Dimension(BLOCK_SIZE * BLOCK_PER_WIDTH, BLOCK_SIZE * BLOCK_PER_HEIGHT); // Screen
+																										// resolution
 		setPreferredSize(size);
 
 	}
@@ -409,13 +415,16 @@ public class Screen extends JPanel {
 		gameOverScreen = new GameOverScreen(character);
 		scoreScreen = new ScoreScreen(character);
 		shop = new entities.shop(this);
-		door0 = new entities.door((BLOCK_PER_WIDTH - 2) * BLOCK_SIZE, (int) ((BLOCK_PER_HEIGHT - 4.7) * BLOCK_SIZE), 1, this);
-		
+		door0 = new entities.door((BLOCK_PER_WIDTH - 2) * BLOCK_SIZE, (int) ((BLOCK_PER_HEIGHT - 4.7) * BLOCK_SIZE), 1,
+				this);
+
 		// door room
-		door1 = new entities.door((BLOCK_PER_WIDTH - 9) * BLOCK_SIZE, (int) ((BLOCK_PER_HEIGHT - 4.7) * BLOCK_SIZE), 0, this);
+		door1 = new entities.door((BLOCK_PER_WIDTH - 9) * BLOCK_SIZE, (int) ((BLOCK_PER_HEIGHT - 4.7) * BLOCK_SIZE), 0,
+				this);
 		door2 = new entities.door((BLOCK_PER_WIDTH - 6) * BLOCK_SIZE, BLOCK_SIZE, 0, this);
-		chainedDoor = new entities.door((BLOCK_PER_WIDTH - 3) * BLOCK_SIZE, (int) ((BLOCK_PER_HEIGHT - 4.7) * BLOCK_SIZE), 2, this);
-		
+		chainedDoor = new entities.door((BLOCK_PER_WIDTH - 3) * BLOCK_SIZE,
+				(int) ((BLOCK_PER_HEIGHT - 4.7) * BLOCK_SIZE), 2, this);
+
 		doorEndLevelOne = new entities.door(10376, (int) ((BLOCK_PER_HEIGHT - 6.7) * BLOCK_SIZE), 1, this);
 		doorEndLevelTwo = new entities.door(8390, (int) ((BLOCK_PER_HEIGHT - 6.7) * BLOCK_SIZE), 1, this);
 		doorEndFinalLevel = new entities.door(1118, (int) ((BLOCK_PER_HEIGHT - 12) * BLOCK_SIZE), 2, this);
@@ -424,7 +433,7 @@ public class Screen extends JPanel {
 		pince = new entities.Item("pince", 50, "popo", 0, 1, character);
 		fleche = new entities.ShopInt(0, this);
 		souris = new entities.ShopInt(1, this);
-		stars=new entities.ShopInt();
+		stars = new entities.ShopInt();
 
 		removeKeyListener(keyboardInputs);
 		keyboardInputs = new KeyboardInputs(this);
