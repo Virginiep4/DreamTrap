@@ -94,10 +94,6 @@ public class Screen extends JPanel {
 		
 		ratioheight=((double)screenSize.height/(double)832);
 		ratiowidht=((double)screenSize.width/(double)1440);
-		System.out.println("width" + screenSize.width);
-		System.out.println("height" + screenSize.height);
-		System.out.println("width" + ratiowidht);
-		System.out.println("height" + ratioheight);
 		setScreenSize();
 		this.game = game;
 		screen = this;
@@ -113,7 +109,6 @@ public class Screen extends JPanel {
 	}
 
 	public void updateGame() {
-		System.out.println(character.getPosX());
 		backgroundd.update();
 		if (initializedItems) {
 			shop.update();
