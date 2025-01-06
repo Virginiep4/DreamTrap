@@ -409,13 +409,16 @@ public class Screen extends JPanel {
 		gameOverScreen = new GameOverScreen(character);
 		scoreScreen = new ScoreScreen(character);
 		shop = new entities.shop(this);
-		door0 = new entities.door(1400, 525, 1, this);
-		door1 = new entities.door(500, 525, 0, this);
-		door2 = new entities.door(1000, 150, 0, this);
-		chainedDoor = new entities.door(1000, 525, 2, this);
-		doorEndLevelOne = new entities.door(10376, 397, 1, this);
-		doorEndLevelTwo = new entities.door(8390, 397, 1, this);
-		doorEndFinalLevel = new entities.door(1118, 79, 2, this);
+		door0 = new entities.door((BLOCK_PER_WIDTH - 2) * BLOCK_SIZE, (int) ((BLOCK_PER_HEIGHT - 4.7) * BLOCK_SIZE), 1, this);
+		
+		// door room
+		door1 = new entities.door((BLOCK_PER_WIDTH - 9) * BLOCK_SIZE, (int) ((BLOCK_PER_HEIGHT - 4.7) * BLOCK_SIZE), 0, this);
+		door2 = new entities.door((BLOCK_PER_WIDTH - 6) * BLOCK_SIZE, BLOCK_SIZE, 0, this);
+		chainedDoor = new entities.door((BLOCK_PER_WIDTH - 3) * BLOCK_SIZE, (int) ((BLOCK_PER_HEIGHT - 4.7) * BLOCK_SIZE), 2, this);
+		
+		doorEndLevelOne = new entities.door(10376, (int) ((BLOCK_PER_HEIGHT - 6.7) * BLOCK_SIZE), 1, this);
+		doorEndLevelTwo = new entities.door(8390, (int) ((BLOCK_PER_HEIGHT - 6.7) * BLOCK_SIZE), 1, this);
+		doorEndFinalLevel = new entities.door(1118, (int) ((BLOCK_PER_HEIGHT - 12) * BLOCK_SIZE), 2, this);
 
 		ailes = new entities.Item("ailes", 50, "popo", 0, 0, character);
 		pince = new entities.Item("pince", 50, "popo", 0, 1, character);

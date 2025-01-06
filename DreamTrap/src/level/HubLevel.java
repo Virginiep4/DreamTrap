@@ -9,7 +9,7 @@ public class HubLevel extends LevelManager {
 	public HubLevel(Screen screen) {
 		super(screen, "/blockSprites.png", "/objectSprites.png", "/hubLevel.png");
 		
-		xCharacterSpawn = 200;
+		xCharacterSpawn = Screen.BLOCK_SIZE;
 		yCharacterSpawn = (int) ((Screen.BLOCK_PER_HEIGHT - 5) * Screen.BLOCK_SIZE);
 	}
 

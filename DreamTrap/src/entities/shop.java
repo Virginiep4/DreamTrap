@@ -13,8 +13,8 @@ public class shop extends Entities implements Interagiseable {
 	private int currentAnimation = 0;
 	private static final int sizeX=406;
 	private static final int sizeY=345;
-	private static final int placeX=8 * Screen.BLOCK_SIZE;
-	private static final int placeY=5 * Screen.BLOCK_SIZE;
+	private static final int placeX = (Screen.BLOCK_PER_WIDTH / 2 - 4) * Screen.BLOCK_SIZE;
+	private static final int placeY = (Screen.BLOCK_PER_HEIGHT - 8) * Screen.BLOCK_SIZE;
 	private Character character;
 	private backgroundd backgroundd;
 	
