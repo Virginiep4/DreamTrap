@@ -33,7 +33,7 @@ public class HelpMethods {
 			return false;
 
 		// Index de ligne
-		float j = (character.getPosX() + xMove) / Screen.BLOCK_SIZE;
+		float j = (character.getPosX() + xMove + character.getPosX() % Screen.BLOCK_SIZE) / Screen.BLOCK_SIZE;
 		/*
 		 * 4 * BLOCK_SIZE / Game.TILES_SIZE BLOCK_SIZE = TILE_SIZE pendant le merge
 		 * peut-être uniformiser les noms...

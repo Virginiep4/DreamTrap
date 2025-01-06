@@ -31,7 +31,7 @@ public class Welcome {
 
 		g.drawString(text, x, y);
 
-		g.drawImage(character.getCharacter()[0][0], ((int) ((Screen.BLOCK_SIZE * Screen.BLOCK_PER_WIDTH) / 3)), 250, 200, 182,
+		g.drawImage(character.getCharacter()[0][0], ((int) ((Screen.BLOCK_SIZE * Screen.BLOCK_PER_WIDTH) / 3)), 250, 2000, 2400,
 				null);
 
 		// Play

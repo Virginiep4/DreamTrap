@@ -57,6 +57,7 @@ public class door extends Entities implements Interagiseable {
 				backgroundd.setCurrentAnimation(5);
 				character.setClicked(false);
 				character.setPosX(character.getLevelManager().getxCharacterSpawn());
+				character.setPosY(0);
 			}
 		}
 

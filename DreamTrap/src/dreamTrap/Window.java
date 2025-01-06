@@ -1,6 +1,7 @@
 package dreamTrap;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 
@@ -19,6 +20,7 @@ public class Window extends JFrame {
 		
 		jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jframe.add(screen);
+		jframe.setIconImage(importImg("/logo.png"));
 		
 		jframe.setResizable(false);
 		jframe.pack(); //choose the preferenced size that I  fix on Screen 
@@ -42,5 +44,10 @@ public class Window extends JFrame {
 				
 			}
 		});
+	}
+
+	private Image importImg(String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
