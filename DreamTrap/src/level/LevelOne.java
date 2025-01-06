@@ -6,7 +6,6 @@ import dreamTrap.Screen;
 import entities.Boss;
 
 public class LevelOne extends LevelManager {
-	private Boss boss;
 
 	public LevelOne(Screen screen) {
 		super(screen, "/blockSprites.png", "/objectSprites.png", "/levelOne.png");

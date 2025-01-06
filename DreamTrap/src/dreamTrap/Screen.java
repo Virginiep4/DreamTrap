@@ -18,10 +18,12 @@ import inputs.KeyboardInputs;
 import level.LevelManager;
 import entities.Character;
 import entities.Item;
+import entities.Progression;
 import entities.door;
 
 import DAO.JoueurDAO;
 import DAO.progressionDAO;
+import level.FinalLevel;
 import level.GameOverScreen;
 import level.LevelOne;
 import level.ScoreScreen;
@@ -51,7 +53,10 @@ public class Screen extends JPanel {
 	private static entities.door door0;
 	private static entities.door door1;
 	private static entities.door door2;
-	private static entities.door door3;
+	private entities.door chainedDoor;
+	private entities.door doorEndFinalLevel;
+	private static entities.door doorEndLevelOne;
+	private static entities.door doorEndLevelTwo;
 	private static entities.Item ailes;
 	private static entities.Item pince;
 	private entities.ShopInt fleche;
@@ -98,13 +103,16 @@ public class Screen extends JPanel {
 	}
 
 	public void updateGame() {
+		System.out.println(character.getPosX());
 		backgroundd.update();
 		if (initializedItems) {
 			shop.update();
 			door0.update();
 			door1.update();
 			door2.update();
-			door3.update();
+			chainedDoor.update();
+			doorEndLevelOne.update();
+			doorEndFinalLevel.update();
 			ailes.update();
 			pince.update();
 			fleche.update();
@@ -121,6 +129,7 @@ public class Screen extends JPanel {
 			character.setPosY(0);
 			character.setNbCoeurs(3);
 			backgroundd.setCurrentAnimation(9);
+			character.setLocalEtoiles(0);
 		}
 	}
 
@@ -181,6 +190,8 @@ public class Screen extends JPanel {
 		 * scoreScreen.drawScroreScreen(g); }
 		 */
 
+		BufferedImage characterImage = character.getCurrentCharacter();
+
 		if (backgroundd.getCurrentAnimation() != getLastAnimation()) {
 			stopCurrentSound(); // Arrêter le son actuel
 			playSoundForAnimation(backgroundd.getCurrentAnimation()); // Jouer le son correspondant à la nouvelle
@@ -204,7 +215,7 @@ public class Screen extends JPanel {
 		
 		if (backgroundd.getCurrentAnimation() == 3) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
-					10, null);
+					0, null);
 			levelManager.draw(g);
 			g.drawImage(getDoor0().getDoor()[getDoor0().getCurrentAnimation()][getDoor0().getAniIndex()],
 					getDoor0().getPlaceX(), getDoor0().getPlaceY(), null);
@@ -226,48 +237,72 @@ public class Screen extends JPanel {
 
 		if (backgroundd.getCurrentAnimation() == 5) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
-					10, null);
+					0, null);
 			levelManager.draw(g);
 			g.drawImage(door1.getDoor()[door1.getCurrentAnimation()][door1.getAniIndex()], door1.getPlaceX(),
 					door1.getPlaceY(), null);
 			g.drawImage(door2.getDoor()[door2.getCurrentAnimation()][door2.getAniIndex()], door2.getPlaceX(),
 					door2.getPlaceY(), null);
+			g.drawImage(chainedDoor.getDoor()[chainedDoor.getCurrentAnimation()][chainedDoor.getAniIndex()],
+					chainedDoor.getPlaceX(), chainedDoor.getPlaceY(), null);
 			g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()],
 					(int) character.getPosX(), levelManager.getyCharacterSpawn() + (int) character.getPosY(), null);
 		}
 		if (backgroundd.getCurrentAnimation() == 6) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
-					10, null);
-			g.drawImage(door3.getDoor()[door3.getCurrentAnimation()][door3.getAniIndex()], door3.getPlaceX(),
-					door3.getPlaceY(), null);
+					0, null);
 			levelManager.draw(g);
-
-			BufferedImage characterImage = character.getCurrentCharacter();
 			if (character.isHurting()) {
 				float[] scales = { 1.0f, 0.0f, 0.0f, 1.0f };
 				RescaleOp redFilter = new RescaleOp(scales, new float[4], null);
 				characterImage = (redFilter.filter(characterImage, null));
 			}
+			g.drawImage(doorEndLevelOne.getDoor()[doorEndLevelOne.getCurrentAnimation()][doorEndLevelOne.getAniIndex()],
+					doorEndLevelOne.getPlaceX() - character.getPosX() + levelManager.getxCharacterSpawn(),
+					doorEndLevelOne.getPlaceY(), null);
 			g.drawImage(characterImage, levelManager.getxCharacterSpawn(),
 					levelManager.getyCharacterSpawn() + character.getPosY(), null);
 		}
 		if (backgroundd.getCurrentAnimation() == 7) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
-					10, null);
+					0, null);
 			levelManager.draw(g);
-			g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()], 150,
-					(BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE + character.getPosY() - 40, null);
+			if (character.isHurting()) {
+				float[] scales = { 1.0f, 0.0f, 0.0f, 1.0f };
+				RescaleOp redFilter = new RescaleOp(scales, new float[4], null);
+				characterImage = (redFilter.filter(characterImage, null));
+			}
+			g.drawImage(doorEndLevelTwo.getDoor()[doorEndLevelTwo.getCurrentAnimation()][doorEndLevelTwo.getAniIndex()],
+					doorEndLevelTwo.getPlaceX() - character.getPosX() + levelManager.getxCharacterSpawn(),
+					doorEndLevelTwo.getPlaceY(), null);
+			g.drawImage(characterImage, levelManager.getxCharacterSpawn(),
+					levelManager.getyCharacterSpawn() + character.getPosY(), null);
 		}
 		if (backgroundd.getCurrentAnimation() == 8) {
 			g.drawImage(backgroundd.getBackgroundd()[backgroundd.getCurrentAnimation()][backgroundd.getAniIndex()], 0,
-					10, null);
+					0, null);
 			levelManager.draw(g);
-			// condition for hurt in red
-			g.drawImage(character.getCharacter()[character.getCurrentAnimation()][character.getAniIndex()], 150,
-					(BLOCK_PER_HEIGHT - 2) * BLOCK_SIZE + character.getPosY() - 40, null);
+			if (character.isHurting()) {
+				float[] scales = { 1.0f, 0.0f, 0.0f, 1.0f };
+				RescaleOp redFilter = new RescaleOp(scales, new float[4], null);
+				characterImage = (redFilter.filter(characterImage, null));
+			}
+			if (FinalLevel.getInstance()!=null && FinalLevel.getInstance().isBossOver()) {
+				g.drawImage(
+						doorEndFinalLevel.getDoor()[doorEndFinalLevel.getCurrentAnimation()][doorEndFinalLevel
+								.getAniIndex()],
+						doorEndFinalLevel.getPlaceX() - character.getPosX() + levelManager.getxCharacterSpawn(),
+						doorEndFinalLevel.getPlaceY(), null);
+			}
+			g.drawImage(characterImage, levelManager.getxCharacterSpawn(),
+					levelManager.getyCharacterSpawn() + character.getPosY(), null);
 		}
 		if (backgroundd.getCurrentAnimation() == 9) {
 			gameOverScreen.drawGameOverScreen(g, character);
+		}
+		
+		if (Progression.getInstance().getWin() == 0) {
+			scoreScreen.drawScroreScreen(g);
 		}
 	}
 
@@ -293,8 +328,16 @@ public class Screen extends JPanel {
 		return door2;
 	}
 
-	public static door getDoor3() {
-		return door3;
+	public door getChainedDoor() {
+		return chainedDoor;
+	}
+
+	public static door getdoorEndLevelOne() {
+		return doorEndLevelOne;
+	}
+
+	public door getdoorEndFinalLevel() {
+		return doorEndFinalLevel;
 	}
 
 	public void setTime(int tmp) {
@@ -339,7 +382,10 @@ public class Screen extends JPanel {
 		door0 = new entities.door(1400, 525, 1, this);
 		door1 = new entities.door(500, 525, 0, this);
 		door2 = new entities.door(1000, 150, 0, this);
-		door3 = new entities.door(4080, 570, 1, this);
+		chainedDoor = new entities.door(1000, 525, 2, this);
+		doorEndLevelOne = new entities.door(10376, 397, 1, this);
+		doorEndLevelTwo = new entities.door(8390, 397, 1, this);
+		doorEndFinalLevel = new entities.door(1118, 79, 2, this);
 
 		ailes = new entities.Item("ailes", 50, "popo", 0, 0, character);
 		pince = new entities.Item("pince", 50, "popo", 0, 1, character);
@@ -382,7 +428,7 @@ public class Screen extends JPanel {
 			soundFile = "/sounds/calm.wav"; // Exemple de son pour l'animation 7
 			break;
 		case 8:
-			soundFile = "/sounds/boss.wav"; // Exemple de son pour l'animation 8
+			soundFile = "/sounds/weirdBos.wav"; // Exemple de son pour l'animation 8
 			break;
 		case 9:
 			soundFile = "/sounds/sadWelcometwo.wav"; // Exemple de son pour l'animation 8
@@ -411,11 +457,21 @@ public class Screen extends JPanel {
 		}
 	}
 
+	// Pour les enlever les chaînes
+
+	public void setChainedDoorCurrentAnimation(int currentAnimation) {
+		chainedDoor.setCurrentAnimation(currentAnimation);
+	}
+
 	public int getLastAnimation() {
 		return lastAnimation;
 	}
 
 	public void setLastAnimation(int lastAnimation) {
 		this.lastAnimation = lastAnimation;
+	}
+
+	public static door getdoorEndLevelTwo() {
+		return doorEndLevelTwo;
 	}
 }

@@ -157,9 +157,6 @@ public abstract class LevelManager {
 						spikes[i][j] = 1;
 					else if (value == 255)
 						stars[i][j] = value - 128;
-					else {
-						stars[i][j] = -1;
-					}
 				}
 			}
 	}

@@ -10,6 +10,7 @@ import javax.swing.Timer;
 import dreamTrap.Game;
 import dreamTrap.Screen;
 import entities.Boss;
+import entities.Character;
 import level.LevelManager;
 
 public class HelpMethods {
