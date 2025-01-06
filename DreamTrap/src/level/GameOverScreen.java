@@ -70,6 +70,7 @@ public class GameOverScreen {
 		if (ShowS) {
 			g.drawString(">", x - 40, y);
 		}
+		character.setLocalEtoiles(0);
 
 	}
 

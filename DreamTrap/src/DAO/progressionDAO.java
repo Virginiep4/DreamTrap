@@ -142,6 +142,21 @@ public class progressionDAO extends DAO {
 		return progression; // Retourner la progression trouvée ou null si aucune
 	}
 
+	public void setProgressionToWinGameByJoueurId(int joueurId) {
+		String req = "UPDATE progression p " + "SET win = ? " + "WHERE p.idprogression IN ("
+				+ "    SELECT a.idprogression " + "    FROM avoir a " + "    WHERE a.idnom = ? AND p.win = 1";
+		this.open(req);
+		try {
+			this.stm.setInt(1, 0);
+			this.stm.setInt(2, joueurId);
+			this.stm.executeUpdate();
+
+		} catch (SQLException e) {
+
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public void update(Object obj) {
 		// TODO Auto-generated method stub

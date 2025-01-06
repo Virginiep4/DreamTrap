@@ -2,6 +2,7 @@ package entities;
 
 import java.awt.image.BufferedImage;
 
+import DAO.ItemDAO;
 import dreamTrap.Game;
 import dreamTrap.Screen;
 import level.HelpMethods;
@@ -38,36 +39,44 @@ public class Character extends Entities {
 
 	private int nbCoeurs = 3;
 	private boolean hurting = false;
+	
+	private ItemDAO itemDAO;
 
 	public Character(String nom, int niveau, int etoiles) {
 		this.nom = nom;
 		this.niv = niveau;
 		this.etoiles = etoiles;
+		itemDAO=new ItemDAO();
 
 	}
 
 	public Character(int id, String nom, int niv, int etoiles) {
 		// le passage des infos ne marche pas a partir d'ici
 		super();
+		itemDAO=new ItemDAO();
 		charactere = this;
-		this.moving = new MouvementAiles(this);
+		if (itemDAO.gotItem(this, 1)) {
+			this.moving = new MouvementAiles(this);
+		} else {
+			this.moving = new MouvementNormal(this);
+		}
 		new ScoreScreen(this);
 		this.id = id;
 		this.nom = nom;
 		this.niv = niv;
 		this.etoiles = etoiles;
 		this.levelManager = Screen.levelManager;
-		
+
 		this.posX = levelManager.getxCharacterSpawn();
 	}
 
 	public BufferedImage[][] getCharacter() {
 		return character;
 	}
-	
+
 	public BufferedImage getCurrentCharacter() {
-        return character[getCurrentAnimation()][getAniIndex()];
-    }
+		return character[getCurrentAnimation()][getAniIndex()];
+	}
 
 	public int getAniIndex() {
 		return aniIndex;
@@ -84,9 +93,9 @@ public class Character extends Entities {
 	public int getNiv() {
 		return niv;
 	}
-	
+
 	public void setNiv(int niv) {
-		this.niv=niv;
+		this.niv = niv;
 	}
 
 	public String getNom() {
@@ -100,7 +109,7 @@ public class Character extends Entities {
 	public LevelManager getLevelManager() {
 		return levelManager;
 	}
-	
+
 	public void setLevelManager(LevelManager levelManager) {
 		this.levelManager = levelManager;
 	}
@@ -132,9 +141,10 @@ public class Character extends Entities {
 	 */
 	public void updatePos() {
 		aniTick++;
-				
+		System.out.println(etoiles);
+
 		float xMove = 0, yMove = 1; // yMove is set to default value for flying gravity
-		
+
 		if (moving instanceof MouvementNormal) {
 			if (moving.isInJumpingPhase() == -1) {
 				yMove = 5; // default value for walking gravity
@@ -172,7 +182,7 @@ public class Character extends Entities {
 					xMove = -5.0f;
 			}
 		}
-		
+
 		if (HelpMethods.CanMoveHere(this, (int) xMove, 0)) {
 			moving.xMovement((int) xMove);
 		}
@@ -184,7 +194,7 @@ public class Character extends Entities {
 	}
 
 	public void setEtoiles(int etoile) {
-		this.etoiles=etoile;
+		this.etoiles = etoile;
 	}
 
 	public void setNom(String nom) {
@@ -270,5 +280,13 @@ public class Character extends Entities {
 
 	public void setLocalEtoiles(int localEtoiles) {
 		LocalEtoiles = localEtoiles;
+	}
+
+	public Mouvement getMoving() {
+		return moving;
+	}
+
+	public void setMoving(Mouvement moving) {
+		this.moving = moving;
 	}
 }

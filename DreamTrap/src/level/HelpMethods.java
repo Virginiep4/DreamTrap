@@ -87,11 +87,11 @@ public class HelpMethods {
 
 	public static void gotStar(entities.Character character, LevelManager level, int i, int j) {
 		if (level.stars[i + 1][j] != -1) {
-			character.setEtoiles(character.getEtoiles() + 1);
+			character.setLocalEtoiles(character.getLocalEtoiles() + 1);
 			level.stars[i + 1][j] = -1;
 		}
 		if (level.stars[i][j] != -1) {
-			character.setEtoiles(character.getEtoiles() + 1);
+			character.setLocalEtoiles(character.getLocalEtoiles() + 1);
 			level.stars[i][j] = -1;
 		}
 	}

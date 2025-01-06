@@ -20,7 +20,13 @@ public class ItemDAO extends DAO {
 		String nom = item.getNom();
 		float prix = item.getPrix();
 		String description = item.getDesciption();
-		int Acquis = item.getAcquis();
+		boolean AcquisB = item.getAcquis();
+		int Acquis;
+		if (AcquisB) {
+			Acquis = 1;
+		} else {
+			Acquis = 0;
+		}
 
 		String req = "INSERT INTO item(nom,prix,description,Acquis) VALUES(?,?,?,?)";
 		this.open(req);
@@ -46,8 +52,13 @@ public class ItemDAO extends DAO {
 	public void update(Object obj) {
 
 		Item item = (Item) obj;
-		item.setAcquis(1);
-		int Acquis = item.getAcquis();
+		boolean AcquisB = item.getAcquis();
+		int Acquis;
+		if (AcquisB) {
+			Acquis = 1;
+		} else {
+			Acquis = 0;
+		}
 		System.out.println(Acquis);
 		int id = item.getId();
 		String req = "UPDATE item SET Acquis=? WHERE idItem = ?";
@@ -66,6 +77,7 @@ public class ItemDAO extends DAO {
 	}
 
 	public void addInventory(int pseudo, int itemId) {
+		System.out.println(pseudo + " " + itemId);
 		String req = "INSERT INTO posseder (idnom, idItem) VALUES (?, ?)";
 		this.open(req);
 		try {
@@ -94,8 +106,14 @@ public class ItemDAO extends DAO {
 				prix = rs.getInt("prix");
 				description = rs.getString("description");
 				Acquis = rs.getInt("Acquis");
-
-				item = new Item(itemId, nom, prix, description, Acquis);
+				boolean AcquisB;
+				if (Acquis == 1) {
+					AcquisB = true;
+				}
+				else {
+					AcquisB = false;
+				}
+				item = new Item(itemId, nom, prix, description, AcquisB);
 
 			}
 		} catch (SQLException e) {
