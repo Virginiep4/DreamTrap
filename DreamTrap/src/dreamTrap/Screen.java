@@ -42,10 +42,6 @@ public class Screen extends JPanel {
 	public final static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	public final static int BLOCK_PER_WIDTH =  screenSize.width /BLOCK_SIZE;
 	public final static int BLOCK_PER_HEIGHT = screenSize.height /BLOCK_SIZE;
-	public final static float SCALE = 1f;
-	private static double ratiowidht;
-	private static double ratioheight;
-	
 	
 	private Game game;
 	private static Screen screen;
@@ -92,8 +88,6 @@ public class Screen extends JPanel {
 
 	public Screen(Game game) {
 		
-		ratioheight=((double)screenSize.height/(double)832);
-		ratiowidht=((double)screenSize.width/(double)1440);
 		setScreenSize();
 		this.game = game;
 		screen = this;
@@ -346,8 +340,8 @@ public class Screen extends JPanel {
 	 */
 	private void setScreenSize() {
 	    
-		Dimension size = new Dimension((int) ((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE)*ratiowidht),
-				(int) ((BLOCK_SIZE * BLOCK_PER_HEIGHT * SCALE)*ratioheight)); // Screen resolution
+		Dimension size = new Dimension(BLOCK_SIZE * BLOCK_PER_WIDTH,
+				BLOCK_SIZE * BLOCK_PER_HEIGHT); // Screen resolution
 		setPreferredSize(size);
 
 	}
@@ -386,8 +380,8 @@ public class Screen extends JPanel {
 		welcomeText.setPreferredSize(new Dimension(250, 40));
 		Font font = new Font("SansSerif", Font.BOLD, 20);
 		welcomeText.setFont(font);
-		welcomeText.setBounds((int) ((BLOCK_SIZE * BLOCK_PER_WIDTH * SCALE) / 2.50),
-				(int) ((BLOCK_SIZE * BLOCK_PER_HEIGHT * SCALE) / 1.80), 300, 50);
+		welcomeText.setBounds((int) ((BLOCK_SIZE * BLOCK_PER_WIDTH) / 2.50),
+				(int) ((BLOCK_SIZE * BLOCK_PER_HEIGHT) / 1.80), 300, 50);
 		this.add(welcomeText);
 		this.revalidate();
 		this.repaint();
@@ -511,14 +505,6 @@ public class Screen extends JPanel {
 
 	public static door getdoorEndLevelTwo() {
 		return doorEndLevelTwo;
-	}
-
-	public static double getRatiowidht() {
-		return ratiowidht;
-	}
-
-	public static double getRatioheight() {
-		return ratioheight;
 	}
 
 	public static int getBlockPerWidth() {
