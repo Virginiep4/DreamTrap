@@ -13,8 +13,8 @@ public class shop extends Entities implements Interagiseable {
 	private int currentAnimation = 0;
 	private static final int sizeX=406;
 	private static final int sizeY=345;
-	private static final int placeX=500;
-	private static final int placeY=339;
+	private static final int placeX=8 * Screen.BLOCK_SIZE;
+	private static final int placeY=5 * Screen.BLOCK_SIZE;
 	private Character character;
 	private backgroundd backgroundd;
 	
@@ -27,7 +27,7 @@ public class shop extends Entities implements Interagiseable {
 	public boolean isWellPlaced() {
 	boolean rep=false;
 	int posXChara=character.getPosX();
-	if((posXChara>(placeX-(sizeX/4))) && (posXChara<(placeX+(sizeX/4)))) {
+	if((posXChara>(getPlacex()-(sizeX/3))) && (posXChara<(getPlacex()+(sizeX/3)))) {
 		rep=true;
 	}
 		return rep;
@@ -77,6 +77,14 @@ public class shop extends Entities implements Interagiseable {
 	}
 	public int getAniIndex() {
 		return aniIndex;
+	}
+
+	public static int getPlacex() {
+		return placeX;
+	}
+
+	public static int getPlacey() {
+		return placeY;
 	}
 
 }

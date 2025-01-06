@@ -1,5 +1,6 @@
 package entities;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import dreamTrap.Screen;
@@ -21,6 +22,7 @@ public class ShopInt extends Entities {
 	
 	private static Character character;
 	private static backgroundd backgroundd;
+	private BufferedImage starImg;
 	
 	public ShopInt(int currentAnimation, Screen screen) {
 		super();
@@ -28,6 +30,11 @@ public class ShopInt extends Entities {
 		
 		character = screen.getCharacter();
 		backgroundd = screen.getBackgroundd();
+	}
+	
+	public ShopInt() {
+		super();
+		this.starImg = importImg("/stars.png");
 	}
 	
 	@Override
@@ -131,4 +138,10 @@ public class ShopInt extends Entities {
 		clicking=b;
 	}
 
+	public Image getEtoilesImg() {
+	return starImg;
+	}
+	public static int getPlace() {
+		return place;
+	}
 }

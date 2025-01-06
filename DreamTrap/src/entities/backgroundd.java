@@ -28,25 +28,8 @@ public class backgroundd extends Entities {
 
 	void importEntity() {
 		backgroundd = new BufferedImage[10][]; // amount of different animations
-
-		backgroundd[0] = new BufferedImage[2];
-		backgroundd[0][0] = importImg("/PageAccueil R.png");
-		backgroundd[0][1] = importImg("/PageAccueil Rb.png");
-
-		backgroundd[1] = new BufferedImage[2];
-		backgroundd[1][0] = importImg("/PageAccueil 4.png");
-		backgroundd[1][1] = importImg("/PageAccueil 4b.png");
-
-		backgroundd[2] = new BufferedImage[2];
-		backgroundd[2][0] = importImg("/Boutique int.png");
-		backgroundd[2][1] = importImg("/Boutique int.png");
-
-		backgroundd[4] = new BufferedImage[2];
-		backgroundd[4][0] = importImg("/Boutique int.png");
-		backgroundd[4][1] = importImg("/Boutique int.png");
-
+		
 		// Changer selon le niveau pour le hub avec le shop, pour les trois portes
-
 		BackgroundLevel1 = importImg("/PageAccueil 4.png");
 		BackgroundLevel1b = importImg("/PageAccueil 4b.png");
 		BackgroundLevel2 = importImg("/PageAccueil gris.png");
@@ -54,30 +37,52 @@ public class backgroundd extends Entities {
 		BackgroundLevel3 = importImg("/PageAccueil R.png");
 		BackgroundLevel3b = importImg("/PageAccueil Rb.png");
 
+		// not used
+		backgroundd[0] = new BufferedImage[2];
+		backgroundd[0][0] = BackgroundLevel1;
+		backgroundd[0][1] = BackgroundLevel1b;
+
+		//welcomescreen
+		backgroundd[1] = new BufferedImage[2];
+		backgroundd[1][0] = BackgroundLevel1;
+		backgroundd[1][1] = BackgroundLevel1b;
+
+		//welcomescreen2
+		backgroundd[2] = new BufferedImage[2];
+		backgroundd[2][0] = BackgroundLevel1;
+		backgroundd[2][1] = BackgroundLevel1b;
+		
+		//hub
 		backgroundd[3] = new BufferedImage[2];
 		backgroundd[3][0] = BackgroundLevel1;
 		backgroundd[3][1] = BackgroundLevel1b;
 
+		//shopint
+		backgroundd[4] = new BufferedImage[2];
+		backgroundd[4][0] = importImg("/Boutique int.png");
+		backgroundd[4][1] = importImg("/Boutique int.png");
+
+		//doors
 		backgroundd[5] = new BufferedImage[2];
 		backgroundd[5][0] = BackgroundLevel1;
 		backgroundd[5][1] = BackgroundLevel1b;
 
 		// Premier level (ne change pas)
-
 		backgroundd[6] = new BufferedImage[2];
 		backgroundd[6][0] = importImg("/PageAccueil 4.png");
 		backgroundd[6][1] = importImg("/PageAccueil 4b.png");
 
+		//leveltwo
 		backgroundd[7] = new BufferedImage[2];
 		backgroundd[7][0] = BackgroundLevel2;
 		backgroundd[7][1] = BackgroundLevel2b;
 
 		// Background FinalLevel
-
 		backgroundd[8] = new BufferedImage[2];
 		backgroundd[8][0] = importImg("/finalLevel_background.png");
 		backgroundd[8][1] = importImg("/finalLevelB_background.png");
 
+		//gameover
 		backgroundd[9] = new BufferedImage[2];
 		backgroundd[9][0] = importImg("/PageAccueil 4.png");
 		backgroundd[9][1] = importImg("/PageAccueil 4b.png");
