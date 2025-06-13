@@ -1,9 +1,5 @@
 package dreamTrap;
 
-import entities.Progression;
-import java.time.Duration;
-import java.time.Instant;
-
 public class Game implements Runnable {
 	private Window window;
 	private Screen screen;
@@ -91,25 +87,12 @@ public class Game implements Runnable {
 				timer.update();
 				timeUpdate--;
 			}
-			//System.out.println("win: "+progress.getWin());
-			//System.out.println("time: "+timer.getTotalTimeElapsed());
-			/*if (timer.getTotalTimeElapsed() >= 6) {
-				setTimer();
-				progress.setWin(0);
-			}*/
-			
+		
 			//if enough time spend for repaint my frame (img)
 			if (deltaFrame >= 1) {
 				screen.repaint();
 				deltaFrame--;
 			}		
 		}
-	}
-	
-	// setTimer when we save or finished the game 
-
-	public void setTimer() {
-
-		screen.setTime(timer.getTotalTimeElapsed());
 	}
 }

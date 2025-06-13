@@ -1,17 +1,9 @@
 package level;
 
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
 import java.lang.Math;
-import java.util.TimerTask;
-
 import javax.swing.Timer;
 
-import dreamTrap.Game;
 import dreamTrap.Screen;
-import entities.Boss;
-import entities.Character;
-import level.LevelManager;
 
 public class HelpMethods {
 
@@ -33,7 +25,7 @@ public class HelpMethods {
 			return false;
 
 		// Index de ligne
-		float j = (character.getPosX() + xMove) / Screen.BLOCK_SIZE;
+		float j = (character.getPosX() + xMove + character.getPosX() % Screen.BLOCK_SIZE) / Screen.BLOCK_SIZE;
 		/*
 		 * 4 * BLOCK_SIZE / Game.TILES_SIZE BLOCK_SIZE = TILE_SIZE pendant le merge
 		 * peut-être uniformiser les noms...
@@ -87,11 +79,11 @@ public class HelpMethods {
 
 	public static void gotStar(entities.Character character, LevelManager level, int i, int j) {
 		if (level.stars[i + 1][j] != -1) {
-			character.setEtoiles(character.getEtoiles() + 1);
+			character.setLocalEtoiles(character.getLocalEtoiles() + 1);
 			level.stars[i + 1][j] = -1;
 		}
 		if (level.stars[i][j] != -1) {
-			character.setEtoiles(character.getEtoiles() + 1);
+			character.setLocalEtoiles(character.getLocalEtoiles() + 1);
 			level.stars[i][j] = -1;
 		}
 	}

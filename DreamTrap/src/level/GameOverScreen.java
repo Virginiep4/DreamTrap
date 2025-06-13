@@ -4,10 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
-import dreamTrap.Game;
-import dreamTrap.Screen;
-import entities.Progression;
-import entities.backgroundd;
 import entities.Character;
 
 public class GameOverScreen {
@@ -70,6 +66,7 @@ public class GameOverScreen {
 		if (ShowS) {
 			g.drawString(">", x - 40, y);
 		}
+		character.setLocalEtoiles(0);
 
 	}
 

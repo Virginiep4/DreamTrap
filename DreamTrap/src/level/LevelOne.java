@@ -3,7 +3,6 @@ package level;
 import java.awt.Graphics;
 
 import dreamTrap.Screen;
-import entities.Boss;
 
 public class LevelOne extends LevelManager {
 

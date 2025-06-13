@@ -17,7 +17,7 @@ public class FinalLevel extends LevelManager {
 		super(screen, "/FinalLevelBlock.png", "/objectSprites.png", "/FinalLevelRGB.png");
 		
 		finalLevel=this;
-		xCharacterSpawn = Screen.BLOCK_PER_WIDTH / 2 * Screen.BLOCK_SIZE;
+		xCharacterSpawn = 12 * Screen.BLOCK_SIZE;
 		character.setPosX(xCharacterSpawn);		
 		yCharacterSpawn = (Screen.BLOCK_PER_HEIGHT - 6) * Screen.BLOCK_SIZE;
 		boss = new Boss(screen.getCharacter());
@@ -48,7 +48,7 @@ public class FinalLevel extends LevelManager {
 	}
 	
 	public void bossEvent() {
-		Timer bossTimer = new Timer(60000, e -> { // PAS LE MÊME QUE Time !!!!!!!!!
+		Timer bossTimer = new Timer(30000, e -> { // PAS LE MÊME QUE Time !!!!!!!!!
 			boss=null;
 			setBossOver(true);
 		});

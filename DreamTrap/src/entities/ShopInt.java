@@ -88,13 +88,13 @@ public class ShopInt extends Entities {
 	public int bougerX(){
 		int X=posX;
 		if(place==1) {
-			X= 550;
+			X= (Screen.BLOCK_PER_WIDTH / 2 - 4) * Screen.BLOCK_SIZE;
 		}
 		if(place==2) {
-			X= 1050;
+			X= (Screen.BLOCK_PER_WIDTH / 2 + 4) * Screen.BLOCK_SIZE;;
 		}
 		if(place==3) {
-			X= 815;
+			X= (Screen.BLOCK_PER_WIDTH / 2) * Screen.BLOCK_SIZE;;
 		}
 		return X;
 	}
@@ -102,10 +102,10 @@ public class ShopInt extends Entities {
 	public int bougerY(){
 		int Y=posY;
 		if(place==1||place==2) {
-			Y=400;
+			Y=(Screen.BLOCK_PER_HEIGHT / 2 - 2) * Screen.BLOCK_SIZE;
 		}
 		if(place==3) {
-			Y=700;
+			Y=(Screen.BLOCK_PER_HEIGHT / 2 + 3) * Screen.BLOCK_SIZE;
 		}
 		return Y;
 	}

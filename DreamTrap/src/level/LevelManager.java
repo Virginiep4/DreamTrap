@@ -4,13 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import java.util.Arrays;
 import dreamTrap.Screen;
-import dreamTrap.Time;
-import entities.Boss;
 import entities.Character;
-import utils.ImageImporter;
-
 import static utils.ImageImporter.importImg;
 import static utils.ImageFliper.flipImageVertically;
 

@@ -4,10 +4,10 @@ import java.awt.image.BufferedImage;
 
 import DAO.ItemDAO;
 import DAO.JoueurDAO;
+import DAO.progressionDAO;
 import dreamTrap.Screen;
 import level.FinalLevel;
 import level.HubLevel;
-import level.LevelManager;
 import level.LevelOne;
 import level.LevelTwo;
 
@@ -26,6 +26,7 @@ public class door extends Entities implements Interagiseable {
 	private backgroundd backgroundd;
 	private JoueurDAO joueurDAO;
 	private ItemDAO itemDAO;
+	private progressionDAO progressionDao;
 
 	public door(int placeX, int placeY, int currentAnimation, Screen screen) {
 		super();
@@ -37,6 +38,7 @@ public class door extends Entities implements Interagiseable {
 		this.backgroundd = screen.getBackgroundd();
 		joueurDAO = new JoueurDAO();
 		itemDAO = new ItemDAO();
+		progressionDao = new progressionDAO();
 	}
 
 	public boolean isWellPlaced() {
@@ -57,43 +59,41 @@ public class door extends Entities implements Interagiseable {
 				backgroundd.setCurrentAnimation(5);
 				character.setClicked(false);
 				character.setPosX(character.getLevelManager().getxCharacterSpawn());
+				character.setPosY(0);
 			}
 		}
 
 		if (backgroundd.getCurrentAnimation() == 5) {
 
-			if (character.getPosX() < 600) {
-				if (Screen.getDoor1().isWellPlaced()) {
-					backgroundd.setCurrentAnimation(6);
+			if (Screen.getDoor1().isWellPlaced()) {
+				backgroundd.setCurrentAnimation(6);
 
-					Screen.levelManager = new LevelOne(Screen.getInstance());
-					character.setLevelManager(Screen.levelManager);
+				Screen.levelManager = new LevelOne(Screen.getInstance());
+				character.setLevelManager(Screen.levelManager);
 
-					character.setClicked(false);
-				}
+				character.setClicked(false);
 			}
-			if (character.getPosX() < 1100 && character.getPosX() > 400) {
-				if (Screen.getDoor2().isWellPlaced()) {
-					backgroundd.setCurrentAnimation(7);
-					
-					Screen.levelManager = new LevelTwo(Screen.getInstance());
-					character.setLevelManager(Screen.levelManager);
-					character.setClicked(false);
-				}
-			}
-			if (character.getPosX() < 1100 && character.getPosX() > 400) {
-				if (this.isWellPlaced()) {
-					if (itemDAO.gotItem(character, 2)) {
-						if (this.getCurrentAnimation() == 2) {
-							this.setCurrentAnimation(0);
-							character.setClicked(false);
-						} else {
-							backgroundd.setCurrentAnimation(8);
-							Screen.levelManager = new FinalLevel(Screen.getInstance());
-							character.setLevelManager(Screen.levelManager);
 
-							character.setClicked(false);
-						}
+			if (Screen.getDoor2().isWellPlaced()) {
+				backgroundd.setCurrentAnimation(7);
+
+				Screen.levelManager = new LevelTwo(Screen.getInstance());
+				character.setLevelManager(Screen.levelManager);
+				character.setPosY(0);
+				character.setClicked(false);
+			}
+
+			if (Screen.getInstance().getChainedDoor() != null && Screen.getInstance().getChainedDoor().isWellPlaced()) {
+				if (itemDAO.gotItem(character, 2)) {
+					if (this.getCurrentAnimation() == 2) {
+						this.setCurrentAnimation(0);
+						character.setClicked(false);
+					} else {
+						backgroundd.setCurrentAnimation(8);
+						Screen.levelManager = new FinalLevel(Screen.getInstance());
+						character.setLevelManager(Screen.levelManager);
+
+						character.setClicked(false);
 					}
 				}
 			}
@@ -103,9 +103,9 @@ public class door extends Entities implements Interagiseable {
 		if (backgroundd.getCurrentAnimation() == 6) {
 			if (character.getPosX() < 10430 && character.getPosX() > 10340) {
 				if (dreamTrap.Screen.getdoorEndLevelOne().isWellPlaced()) {
-					System.out.println("trigger door");
 					backgroundd.setCurrentAnimation(3);
 					character.setEtoiles(character.getEtoiles() + character.getLocalEtoiles());
+					character.setLocalEtoiles(0);
 					character.setClicked(false);
 					if (character.getNiv() < 2) {
 						character.setNiv(2);
@@ -124,6 +124,7 @@ public class door extends Entities implements Interagiseable {
 				if (dreamTrap.Screen.getdoorEndLevelTwo().isWellPlaced()) {
 					backgroundd.setCurrentAnimation(3);
 					character.setEtoiles(character.getEtoiles() + character.getLocalEtoiles());
+					character.setLocalEtoiles(0);
 					character.setClicked(false);
 					if (character.getNiv() < 3) {
 						character.setNiv(3);
@@ -147,7 +148,12 @@ public class door extends Entities implements Interagiseable {
 								character.setClicked(false);
 							} else {
 								Progression.getInstance().setWin(0);
-								// Mettre à jour la DAO
+								character.setNiv(1);
+								character.setNbCoeurs(3);
+								character.setEtoiles(0);
+								character.setLocalEtoiles(0);
+								progressionDao.setProgressionToWinGameByJoueurId(Character.getInstance().getId());
+								joueurDAO.updateTable(character);
 								character.setClicked(false);
 							}
 						}
@@ -156,24 +162,6 @@ public class door extends Entities implements Interagiseable {
 			}
 		}
 	}
-
-//				if(backgroundd.getCurrentAnimation()==4) {
-//					if (this.isWellPlaced()) {
-//						backgroundd.setCurrentAnimation(1);
-//						Character.setClicked(false);
-//						}}
-//				
-//				if(backgroundd.getCurrentAnimation()==5) {
-//					if (this.isWellPlaced()) {
-//					backgroundd.setCurrentAnimation(1);
-//					Character.setClicked(false);
-//					}}
-//				
-//				if(backgroundd.getCurrentAnimation()==6) {
-//					if (this.isWellPlaced()) {
-//					backgroundd.setCurrentAnimation(1);
-//					Character.setClicked(false);
-//					}}
 
 	void importEntity() {
 		door = new BufferedImage[3][]; // amount of different animations

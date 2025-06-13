@@ -2,15 +2,12 @@ package inputs;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Timer;
-
 import dreamTrap.Screen;
 import entities.Character;
 import entities.Item;
 import entities.ShopInt;
 import entities.backgroundd;
 import level.GameOverScreen;
-import level.LevelManager;
 
 public class KeyboardInputs implements KeyListener {
 	private Character character;

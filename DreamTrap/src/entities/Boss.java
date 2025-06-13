@@ -2,18 +2,15 @@ package entities;
 
 import static utils.ImageImporter.importImg;
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import dreamTrap.Game;
 import dreamTrap.Screen;
-import level.LevelManager;
 import mouvement.MouvementAiles;
 
 public class Boss extends Entities {
 
 	private BufferedImage[][] boss;
-	private int aniTick, aniIndex = 0, aniSpeed = 30;
+	private int aniIndex = 0;
 	private Character main;
 	public MouvementAiles moving;
 	private int xBlock = 2;
