@@ -1,16 +1,12 @@
-# Eclipse
 .metadata/
 .settings/
 bin/
-
-# Java
 *.class
 *.log
-
-# Autres IDE / systèmes
 .idea/
 *.iml
 .vscode/
 .DS_Store
+out/
 Thumbs.db
 *~
