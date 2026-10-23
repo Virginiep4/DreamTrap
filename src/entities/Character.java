@@ -124,8 +124,8 @@ public class Character extends Entities {
 		character[0][1] = importImg("/Powpow2.png");
 
 		character[1] = new BufferedImage[2];
-		character[1][0] = importImg("/Left-Powpow (1).png");
-		character[1][1] = importImg("/Left-Powpow 2 (1).png");
+		character[1][0] = importImg("/Left-powpow (1).png");
+		character[1][1] = importImg("/Left-powpow 2 (1).png");
 	}
 
 	/**

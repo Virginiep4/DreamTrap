@@ -167,8 +167,8 @@ public class door extends Entities implements Interagiseable {
 		door = new BufferedImage[3][]; // amount of different animations
 
 		door[0] = new BufferedImage[2];
-		door[0][0] = importImg("/door.png");
-		door[0][1] = importImg("/door 2.png");
+		door[0][0] = importImg("/Door.png");
+		door[0][1] = importImg("/Door 2.png");
 
 		door[1] = new BufferedImage[2];
 		door[1][0] = importImg("/Portal1.png");
