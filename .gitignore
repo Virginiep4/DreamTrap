@@ -1,1 +1,16 @@
-/.metadata/
+# Eclipse
+.metadata/
+.settings/
+bin/
+
+# Java
+*.class
+*.log
+
+# Autres IDE / systèmes
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+*~
