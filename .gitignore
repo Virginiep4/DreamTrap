@@ -11,3 +11,5 @@ out/
 Thumbs.db
 *~
 /target/
+.classpath
+.project
